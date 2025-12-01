@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ultimate Lern-Suite V25.0 (Full)</title>
+    <title>Ultimate Lern-Suite V26.0 (Smart Priority)</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -30,6 +30,9 @@
             --lf-badge-text: #0369a1;
             --ap-badge-bg: #f3e8ff;
             --ap-badge-text: #6b21a8;
+            --prio-high: #dc2626; /* Rot für Prio 8-10 */
+            --prio-mid: #d97706;  /* Orange für Prio 5-7 */
+            --prio-low: #16a34a;  /* Grün für Prio 1-4 */
         }
 
         body.dark-mode {
@@ -237,6 +240,7 @@
             padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: bold; 
             background: var(--ap-badge-bg); color: var(--ap-badge-text); margin-left: 5px; text-transform: uppercase;
         }
+        .prio-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:5px; }
 
         .btn-check { font-size: 1.5rem; background: none; border: none; color: var(--border); cursor: pointer; padding: 10px; }
         .btn-check.checked { color: var(--success); }
@@ -283,7 +287,7 @@
     <div class="suite-header">
         <div class="header-top">
             <div class="header-info">
-                <h1>🎓 Lern-Suite V25.0</h1>
+                <h1>🎓 Lern-Suite V26.0</h1>
                 <div class="streak-badge" onclick="initStreak()">
                     🔥 <span id="streakCount">0</span> Tage
                 </div>
@@ -367,22 +371,22 @@
         </table>
         <div id="emptyBacklogMsg" style="text-align:center; padding:40px; display:none;">
             Leerer Katalog.<br>
-            <button onclick="document.getElementById('importModal').style.display='flex'" style="margin-top:10px; padding:10px; background:var(--success); color:white; border:none; border-radius:8px; font-weight:bold;">📋 Daten Einfügen (Copy/Paste)</button>
+            <button onclick="openTemplateModal()" style="margin-top:10px; padding:10px; background:var(--success); color:white; border:none; border-radius:8px; font-weight:bold;">📚 IHK Katalog laden</button>
         </div>
     </div>
 
     <!-- TAB 3: INFO -->
     <div id="tab-howto" class="tab-content">
         <div style="background:var(--card-bg); padding:20px; border-radius:12px;">
-            <h3>🚀 Ultimate Lern-Suite V25.0</h3>
-            <p><strong>IHK Full Integration</strong></p>
-            <p><strong>Status:</strong> Die Daten aus deinem Katalog sind jetzt direkt im Code integriert!</p>
-            <p>Falls du den Katalog nicht siehst:</p>
-            <ol>
-                <li>Klicke unten auf <strong>"📚 Katalog importieren"</strong>.</li>
-                <li>Wähle "AP1 Basis", "WiSo" usw.</li>
-                <li>Der Button "📋 Daten Einfügen" ist weiterhin da für alle Fälle.</li>
-            </ol>
+            <h3>🚀 Ultimate Lern-Suite V26.0</h3>
+            <p><strong>IHK Smart Priority</strong></p>
+            <p>Der Planer setzt die Prioritäten (Prio) jetzt automatisch:</p>
+            <ul>
+                <li><span style="color:var(--danger)">●</span> <strong>Prio 10 (Rot):</strong> Absolute Klassiker (z.B. Subnetting, SQL, Netzplan).</li>
+                <li><span style="color:var(--warning-text)">●</span> <strong>Prio 8 (Orange):</strong> Sehr wichtig (z.B. DSGVO, Firewall, Verträge).</li>
+                <li><span style="color:var(--success)">●</span> <strong>Prio 5 (Grün):</strong> Standard-Stoff.</li>
+            </ul>
+            <p>Klicke unten auf <strong>"📚 Katalog importieren"</strong>, um zu starten.</p>
         </div>
     </div>
 
@@ -409,8 +413,8 @@
 
     <div id="templateModal" class="modal-overlay">
         <div class="modal-card">
-            <h3 style="margin-top:0">📚 IHK Baukasten (Full)</h3>
-            <p style="font-size:0.9em; color:var(--text-muted)">Daten aus deinem Upload sind bereit.</p>
+            <h3 style="margin-top:0">📚 IHK Baukasten (Smart)</h3>
+            <p style="font-size:0.9em; color:var(--text-muted)">Prioritäten werden automatisch berechnet.</p>
             
             <button class="template-btn" style="border-left:5px solid #0052cc" onclick="loadIHKData('AP1')">
                 🟦 <strong>AP1 - BASIS (Alle Berufe)</strong><br>
@@ -433,25 +437,12 @@
         </div>
     </div>
 
-    <!-- PASTE IMPORT MODAL (Fallback) -->
-    <div id="importModal" class="modal-overlay">
-        <div class="modal-card" style="max-width:500px;">
-            <h3 style="margin-top:0">📋 Daten Importieren</h3>
-            <textarea id="pasteArea" style="width:100%; height:200px; padding:10px; border-radius:8px; border:1px solid var(--border); font-family:monospace; font-size:12px;" placeholder="Hier Text einfügen..."></textarea>
-            <div style="margin-top:10px; display:flex; gap:10px;">
-                <button onclick="handlePasteImport()" style="flex:1; background:var(--success); color:white; border:none; padding:12px; border-radius:8px; font-weight:bold;">Import Starten</button>
-                <button onclick="document.getElementById('importModal').style.display='none'" style="flex:1; background:var(--border); border:none; padding:12px; border-radius:8px;">Abbrechen</button>
-            </div>
-        </div>
-    </div>
-
     <!-- TOAST -->
     <div id="toast">Nachricht...</div>
 
     <script>
-        // --- HARDCODED IHK DATA (COMPRESSED STRING TO SAVE SPACE) ---
-        // Format: AP|Modul|Task|Lernfelder (Optional)
-        // I have packed the CSV data you provided into this string block.
+        // --- HARDCODED IHK DATA (COMPRESSED) ---
+        // Format: AP|Modul|Task|Lernfelder
         const IHK_RAW_DATA = `
 AP1|Projektmanagement|Merkmale eines Projektes|LF1, LF2, LF3, LF5, LF6
 AP1|Projektmanagement|Projektplanung mithilfe von Strukturplan, Netzplan und Gantt-Diagramm|LF1, LF2, LF3, LF5, LF6
@@ -772,6 +763,31 @@ WISO|Digital|Ethische Aspekte und Compliance|
             return s;
         }
 
+        // --- SMART PRIORITY LOGIC ---
+        function getAutoPriority(taskName) {
+            const t = taskName.toLowerCase();
+            // PRIO 10: Absolute Basics & Punktegaranten
+            if(t.includes("subnetting") || t.includes("ipv4") || t.includes("netzplan") || 
+               t.includes("kritischer weg") || t.includes("sql") || t.includes("er-modell") ||
+               t.includes("normalisierung") || t.includes("kalkulation") || t.includes("rechtsform") ||
+               t.includes("bbig") || t.includes("betriebsrat") || t.includes("raid") || t.includes("usv") ||
+               t.includes("nutzwertanalyse") || t.includes("firewall") || t.includes("vpn") || t.includes("dsgvo")) {
+                return "10";
+            }
+            // PRIO 8-9: Sehr wichtig
+            if(t.includes("ipv6") || t.includes("vlan") || t.includes("osi") || t.includes("lastenheft") ||
+               t.includes("pflichtenheft") || t.includes("gantt") || t.includes("angebot") || t.includes("vertrag") ||
+               t.includes("agil") || t.includes("scrum") || t.includes("bpmn") || t.includes("epk") ||
+               t.includes("datenschutz") || t.includes("backup") || t.includes("lizenzen") || t.includes("sozial")) {
+                return "8";
+            }
+            // PRIO 3-4: Grundlagen
+            if(t.includes("grundlagen") || t.includes("begriffe") || t.includes("geschichte") || t.includes("einführung")) {
+                return "4";
+            }
+            return "5"; // Standard
+        }
+
         // --- HELPER ---
         function showToast(msg) {
             const t = document.getElementById("toast");
@@ -903,6 +919,11 @@ WISO|Digital|Ethische Aspekte und Compliance|
                     r.lf.forEach(l => badges += `<span class="lf-badge">${l}</span>`);
                 }
 
+                // Prio Dot
+                let prioColor = 'var(--prio-low)';
+                if(r.imp >= 8) prioColor = 'var(--prio-high)';
+                else if(r.imp >= 5) prioColor = 'var(--prio-mid)';
+
                 // DOTS
                 let dots = "";
                 for(let i=0; i<4; i++) dots += (i < r.level) ? "●" : "○";
@@ -912,10 +933,13 @@ WISO|Digital|Ethische Aspekte und Compliance|
                 row.innerHTML = `
                     <td data-label="Modul"><input value="${r.mod}" oninput="updWBS(${globalIdx},'mod',this.value)" placeholder="Modul"></td>
                     <td data-label="Thema">
-                        <input value="${r.task}" oninput="updWBS(${globalIdx},'task',this.value)" onkeydown="checkEnter(event,${globalIdx})" placeholder="Thema">
+                        <div style="display:flex;align-items:center;">
+                            <span class="prio-dot" style="background:${prioColor}" title="Prio ${r.imp}"></span>
+                            <input value="${r.task}" oninput="updWBS(${globalIdx},'task',this.value)" onkeydown="checkEnter(event,${globalIdx})" placeholder="Thema" style="flex-grow:1">
+                        </div>
                         <div style="margin-top:5px;">${badges}</div>
                     </td>
-                    <td data-label="Details"><div style="display:flex;gap:5px;width:100%"><input type="number" value="${r.time}" oninput="updWBS(${globalIdx},'time',this.value)" style="width:50%"><select onchange="updWBS(${globalIdx},'imp',this.value)" style="width:50%"><option value="10" ${r.imp=='10'?'selected':''}>Prio 10</option><option value="5" ${r.imp=='5'?'selected':''}>Prio 5</option><option value="3" ${r.imp=='3'?'selected':''}>Prio 3</option></select></div></td>
+                    <td data-label="Details"><div style="display:flex;gap:5px;width:100%"><input type="number" value="${r.time}" oninput="updWBS(${globalIdx},'time',this.value)" style="width:50%"><select onchange="updWBS(${globalIdx},'imp',this.value)" style="width:50%"><option value="10" ${r.imp=='10'?'selected':''}>Prio 10</option><option value="8" ${r.imp=='8'?'selected':''}>Prio 8</option><option value="5" ${r.imp=='5'?'selected':''}>Prio 5</option><option value="3" ${r.imp=='3'?'selected':''}>Prio 3</option></select></div></td>
                     <td data-label="Status">
                         <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px; width:100%;">
                             <select class="status-select" onchange="updStatus(${globalIdx},this.value)" style="background:${getStatusColor(r.status)}; color:#000;">
@@ -982,102 +1006,6 @@ WISO|Digital|Ethische Aspekte und Compliance|
         function pushToCockpit(idx) { const r = wbsData[idx]; if(cockpitTasks.some(c=>c.originId===r.id)) return alert("Schon drin!"); cockpitTasks.push({ id:Date.now(), originId:r.id, examId:activeExamId, modul:r.mod, task:r.task, imp:r.imp, time:r.time, done:false, score:calcScore(r.imp,r.time,r.decayFlag,'doing', r.level) }); r.status='doing'; saveAll(); renderAll(); }
         function sortBacklogByScore() { wbsData.sort((a,b) => calcScore(b.imp,b.time,b.decayFlag,b.status,b.level) - calcScore(a.imp,a.time,a.decayFlag,a.status,a.level)); saveAll(); renderWBS(); }
 
-        // --- PASTE IMPORT FUNCTIONALITY (V23.0) ---
-        function handlePasteImport() {
-            const rawText = document.getElementById('pasteArea').value;
-            if(!rawText || rawText.trim().length === 0) return alert("Bitte Text einfügen!");
-
-            const lines = rawText.split(/\r\n|\n/);
-            
-            // Detect Separator: Check first line
-            let sep = ';';
-            if (lines[0].includes('\t')) sep = '\t'; // Excel copy support
-
-            let count = 0;
-            let skipped = 0;
-
-            for(let i=0; i<lines.length; i++) {
-                const line = lines[i];
-                if(!line || line.trim()==="") continue;
-                
-                // Use robust parser
-                const cols = parseCSVLine(line, sep);
-                
-                // IHK Structure Check (7 cols usually)
-                if(cols.length < 6) continue;
-
-                // Mapping based on your structure
-                // 0: Prüfungsteil, 3: Themenkreis, 4: Unterpunkt, 5: LF, 6: Typ
-                const examPart = cols[0] ? cols[0].trim() : "Sonstiges";
-                const mod = cols[3] ? cols[3].trim() : "Allgemein";
-                const task = cols[4] ? cols[4].trim() : "";
-                const lfStr = cols[5] ? cols[5].trim() : "";
-                const type = cols[6] ? cols[6].trim() : "";
-
-                // Skip Header or non-tasks
-                if(examPart.toLowerCase().includes("prüfungsteil")) continue;
-                
-                // IMPORTANT: Filter only "Unterpunkt"
-                if(!type.toLowerCase().includes("unterpunkt")) {
-                    skipped++;
-                    continue;
-                }
-                
-                if(!task) continue;
-
-                // Duplicate Check
-                const exists = wbsData.some(existing => existing.examId === activeExamId && existing.task === task);
-                if(exists) continue;
-
-                // Parse LF
-                let lfs = [];
-                if(lfStr) {
-                    lfs = lfStr.replace(/"/g, '').split(',').map(s => s.trim()).filter(s => s.startsWith('LF'));
-                }
-
-                wbsData.push({
-                    id: Date.now() + Math.random(),
-                    examId: activeExamId,
-                    mod: mod, 
-                    task: task, 
-                    time: "30", 
-                    imp: "5",   
-                    status: 'todo',
-                    level: 0,
-                    decayFlag: false,
-                    lf: lfs,
-                    examPart: examPart
-                });
-                count++;
-            }
-
-            saveAll();
-            renderAll();
-            document.getElementById('importModal').style.display = 'none';
-            document.getElementById('pasteArea').value = ""; // Clear
-            alert(`${count} Aufgaben erfolgreich importiert!\n(${skipped} Überschriften übersprungen)`);
-        }
-
-        // Helper: Parses CSV line respecting quotes
-        function parseCSVLine(text, separator) {
-            const res = [];
-            let current = '';
-            let inQuote = false;
-            for(let i=0; i<text.length; i++) {
-                const char = text[i];
-                if(char === '"') {
-                    inQuote = !inQuote;
-                } else if(char === separator && !inQuote) {
-                    res.push(current.trim().replace(/^"|"$/g, '')); 
-                    current = '';
-                } else {
-                    current += char;
-                }
-            }
-            res.push(current.trim().replace(/^"|"$/g, ''));
-            return res;
-        }
-
         // --- IHK DATA LOADER (COMPRESSED) ---
         function loadIHKData(filterPart) {
             if(!confirm("Katalog '" + filterPart + "' importieren?")) return;
@@ -1090,11 +1018,9 @@ WISO|Digital|Ethische Aspekte und Compliance|
                 
                 // Filter by Exam Part (AP1, AP2, WISO) or load all if empty
                 if(filterPart && part !== filterPart && filterPart !== 'AP2' && filterPart !== 'AP1') {
-                    // Special logic for AP2 parts if needed, but for now simple filter
                     if(!part.includes(filterPart)) return;
                 }
                 
-                // For AP2 button, load AP2
                 if(filterPart === 'AP2' && !part.startsWith('AP2')) return;
                 if(filterPart === 'AP1' && !part.startsWith('AP1')) return;
                 if(filterPart === 'WISO' && !part.startsWith('WISO')) return;
@@ -1103,6 +1029,9 @@ WISO|Digital|Ethische Aspekte und Compliance|
                 if(exists) return;
 
                 let lfs = lfStr ? lfStr.split(',').map(s => s.trim()) : [];
+                
+                // SMART PRIORITY CALCULATION
+                const smartImp = getAutoPriority(task);
 
                 wbsData.push({
                     id: Date.now() + Math.random(),
@@ -1110,7 +1039,7 @@ WISO|Digital|Ethische Aspekte und Compliance|
                     mod: mod,
                     task: task,
                     time: "30",
-                    imp: "5",
+                    imp: smartImp,
                     status: "todo",
                     level: 0,
                     decayFlag: false,

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ultimate Lern-Suite V17.13 (Mobile)</title>
+    <title>Ultimate Lern-Suite V17.14 (Dark Mode Fix)</title>
     
     <!-- PWA Settings -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -210,7 +210,14 @@
             }
 
             /* Specific styling for WBS inputs on mobile */
-            .wbs-table input, .wbs-table select { width: 100%; text-align: right; border: none; background: transparent; padding: 5px; }
+            .wbs-table input, .wbs-table select { 
+                width: 100%; 
+                text-align: right; 
+                border: none; 
+                background: transparent; 
+                padding: 5px; 
+                color: var(--text) !important; /* FIX: Force text color for Mobile Dark Mode */
+            }
             .wbs-table input:focus { background: var(--input-bg); }
             
             /* Status Selector Styling */

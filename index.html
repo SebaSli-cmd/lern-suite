@@ -2,98 +2,389 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lernplaner v17.2 (Decay Logic)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ultimate Lern-Suite V17.12 (App Mode)</title>
+    
+    <!-- PWA / App Mode Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0052cc">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/color/180/brain--v1.png">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/brain--v1.png">
+
     <style>
         :root {
-            --bg-color: #f4f4f9;
+            /* LIGHT THEME */
+            --primary: #0052cc;
+            --primary-dark: #003d99;
+            --bg: #f8fafc;
             --card-bg: #ffffff;
-            --text-color: #333;
-            --red: #ff4d4d;
-            --yellow: #ffcc00;
-            --green: #4caf50;
+            --text: #0f172a;
+            --text-muted: #475569;
+            --border: #cbd5e1;
+            --input-bg: #ffffff;
+            --header-cell-bg: #f1f5f9;
+            --hover-bg: #e2e8f0;
+            --success: #15803d;
+            --danger: #b91c1c;
+            --warning-bg: #fff7ed;
+            --warning-text: #9a3412;
+            
+            /* Focus Ring */
+            --focus-ring: 3px solid #facc15; 
+            --focus-offset: 2px;
+
+            /* Status Colors */
+            --status-todo-bg: #fee2e2; 
+            --status-doing-bg: #fef3c7; 
+            --status-done-bg: #dcfce7;
+        }
+
+        /* DARK THEME */
+        body.dark-mode {
+            --primary: #60a5fa;
+            --primary-dark: #3b82f6;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #cbd5e1;
+            --border: #475569;
+            --input-bg: #020617;
+            --header-cell-bg: #1e293b;
+            --hover-bg: #334155;
+            --warning-bg: #451a03;
+            --warning-text: #fb923c;
+            
+            --status-todo-bg: #450a0a;
+            --status-doing-bg: #451a03;
+            --status-done-bg: #052e16;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
             padding: 20px;
-        }
-
-        h1 { text-align: center; font-size: 1.5rem; margin-bottom: 20px; }
-
-        .container {
-            max-width: 600px;
+            max-width: 1200px;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            padding-bottom: 80px; /* Mehr Platz unten für Mobile */
+            line-height: 1.5;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .topic-card {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 8px solid #ccc; /* Standard Grau */
+        *:focus-visible { outline: var(--focus-ring); outline-offset: var(--focus-offset); border-radius: 2px; }
+
+        /* --- Header & Tabs --- */
+        .suite-header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 20px 20px 0 20px;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .topic-info {
-            flex-grow: 1;
+        .header-top {
+            display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;
         }
 
-        .topic-title {
-            font-weight: bold;
-            font-size: 1.1rem;
-            display: block;
-        }
+        .header-info h1 { margin: 0 0 5px 0; font-size: 24px; }
+        .header-info p { margin: 0; opacity: 0.95; font-size: 14px; }
 
-        .topic-meta {
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 4px;
-        }
+        .header-controls-wrapper { display: flex; gap: 10px; align-items: center; }
 
-        /* Status Select Styling */
-        .status-select {
-            padding: 8px 12px;
+        .streak-badge {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 14px;
             border-radius: 8px;
-            border: 1px solid #ddd;
             font-weight: bold;
-            cursor: pointer;
-            margin-left: 10px;
-            appearance: none; /* Entfernt Standard-Pfeil auf iOS */
-            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(4px);
+            font-size: 15px;
+            cursor: help;
         }
+        .streak-fire { font-size: 1.2em; }
 
-        /* Dynamische Farben basierend auf Status */
-        .status-red { background-color: #ffe6e6; color: #cc0000; border-color: var(--red); }
-        .status-yellow { background-color: #fff9e6; color: #b38f00; border-color: var(--yellow); }
-        .status-green { background-color: #e6f7e9; color: #006600; border-color: var(--green); }
+        .btn-dark-mode {
+            background: rgba(255,255,255,0.2); border: 2px solid transparent; color: white; width: 44px; height: 44px; border-radius: 8px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center;
+        }
+        .btn-dark-mode:hover { background: rgba(255,255,255,0.3); }
 
-        /* Border Farben */
-        .border-red { border-left-color: var(--red); }
-        .border-yellow { border-left-color: var(--yellow); }
-        .border-green { border-left-color: var(--green); }
+        .exam-control-group {
+            background: rgba(255,255,255,0.15); padding: 10px; border-radius: 8px; display: flex; flex-direction: column; gap: 5px; min-width: 250px;
+        }
+        .exam-control-label { font-size: 12px; font-weight: bold; letter-spacing: 0.5px; }
+        .exam-controls { display: flex; gap: 5px; }
+        #examSelect { flex-grow: 1; padding: 8px; border-radius: 4px; border: 1px solid white; font-weight: bold; color: #333; }
+        .btn-exam-action { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.5); color: white; width: 36px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        .btn-exam-action:hover { background: rgba(0,0,0,0.4); }
 
+        .tabs { display: flex; gap: 10px; overflow-x: auto; }
+        .tab-btn {
+            background: rgba(255,255,255,0.2); border: none; color: white; padding: 12px 25px; border-radius: 8px 8px 0 0; cursor: pointer; font-weight: 700; font-size: 15px; transition: all 0.2s; white-space: nowrap;
+        }
+        .tab-btn:hover { background: rgba(255,255,255,0.3); }
+        .tab-btn.active { background: var(--bg); color: var(--primary-dark); }
+        body.dark-mode .tab-btn.active { color: #60a5fa; }
+        .tab-content { display: none; padding-top: 20px; }
+        .tab-content.active { display: block; }
+
+        /* --- Phase Display --- */
+        .phase-display {
+            background: var(--card-bg); padding: 20px; border-radius: 8px; border-left: 6px solid var(--primary); margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 15px; color: var(--text); flex-wrap: wrap;
+        }
+        .phase-badge { background: var(--primary); color: white; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; text-transform: uppercase; }
+        .days-left { font-weight: bold; color: var(--danger); font-size: 1.1em; }
+
+        /* --- Cockpit Styles --- */
+        .adhoc-toggle {
+            background: none; border: 2px solid transparent; text-align: left; cursor: pointer; color: var(--text-muted); font-size: 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; padding: 5px; border-radius: 4px; width: 100%; font-weight: 600;
+        }
+        .adhoc-toggle:hover { color: var(--primary); background: var(--hover-bg); }
+        .adhoc-arrow { transition: transform 0.2s; }
+        .adhoc-arrow.open { transform: rotate(90deg); }
+
+        .input-card {
+            background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px dashed var(--border); margin-bottom: 30px; display: none; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; align-items: end;
+        }
+        .input-card.open { display: grid; }
+
+        .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 5px; color: var(--text-muted); }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 15px; background: var(--input-bg); color: var(--text); }
+        
+        .btn-add { background-color: var(--text-muted); color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; white-space: nowrap; }
+        .btn-add:hover { background-color: var(--text); }
+
+        .btn-magic {
+            background: linear-gradient(135deg, #7c3aed, #db2777); color: white; border: none; padding: 14px 24px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.3); margin-bottom: 20px; display: block; width: 100%; text-align: center;
+        }
+        .btn-magic:hover { filter: brightness(1.1); }
+
+        /* Tables */
+        .task-table, .wbs-table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .task-table th, .wbs-table th {
+            background: var(--header-cell-bg); text-align: left; padding: 15px; font-size: 13px; color: var(--text); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border);
+        }
+        .task-table td, .wbs-table td { padding: 12px 15px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+
+        .score-badge { display: inline-block; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 50%; font-weight: bold; font-size: 13px; background: var(--border); color: var(--text); }
+        .score-high { background: #fee2e2; color: #991b1b; }
+        .score-med { background: #fef3c7; color: #92400e; }
+        .score-low { background: #dcfce7; color: #166534; }
+
+        .btn-action { background: none; border: 1px solid transparent; cursor: pointer; font-size: 18px; opacity: 0.7; color: var(--text); padding: 5px; border-radius: 4px; }
+        .btn-action:hover { opacity: 1; background: var(--hover-bg); border-color: var(--border); }
+        .btn-check { color: var(--success); opacity: 0.4; font-size: 22px; margin-right: 10px; background: none; border: none; cursor: pointer; }
+        .btn-check:hover { opacity: 1; transform: scale(1.1); }
+        .task-done { text-decoration: line-through; opacity: 0.6; }
+        /* Smooth Fade Out */
+        .task-done-remove { opacity: 0; transition: opacity 0.5s ease-out; }
+
+        /* WBS Specifics */
+        .wbs-container { background: var(--card-bg); border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow-x: auto; }
+        .wbs-toolbar { margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+        
+        .wbs-btn { background: var(--bg); border: 1px solid var(--border); padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; color: var(--text); }
+        .wbs-btn:hover { background: var(--hover-bg); }
+        .wbs-btn-primary { background: var(--primary); color: white; border-color: var(--primary); }
+        .wbs-btn-primary:hover { background: var(--primary-dark); }
+
+        .wbs-table input, .wbs-table select { width: 100%; padding: 8px; border: 1px solid var(--border); background: var(--input-bg); border-radius: 4px; font-size: 13px; box-sizing: border-box; color: var(--text); }
+        
+        /* Status Styling mit Decay Farben */
+        .status-select { font-weight: bold; cursor: pointer; }
+        .bg-todo { background-color: var(--status-todo-bg) !important; color: var(--danger) !important; }
+        .bg-doing { background-color: var(--status-doing-bg) !important; color: #b45309 !important; }
+        .bg-done { background-color: var(--status-done-bg) !important; color: var(--success) !important; }
+
+        .decay-icon { color: var(--danger); font-size: 1.2em; cursor: help; margin-right: 5px; }
+
+        .btn-bridge { background: var(--hover-bg); border: 1px solid var(--border); color: var(--primary); cursor: pointer; font-size: 18px; padding: 6px 12px; border-radius: 4px; margin-right: 5px; vertical-align: middle; }
+        .btn-bridge:hover { background: var(--primary); color: white; }
+
+        /* Footer */
+        .footer-tools { margin-top: 50px; text-align: center; font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 20px; display:flex; gap:15px; justify-content:center; flex-wrap:wrap; }
+        .footer-link { color: var(--text-muted); text-decoration: underline; cursor: pointer; padding: 5px; }
+
+        /* Install Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-card { background: var(--card-bg); color: var(--text); width: 100%; max-width: 400px; border-radius: 12px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .modal-title { margin: 0 0 15px 0; font-size: 1.2rem; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .modal-close { float: right; cursor: pointer; font-size: 1.5rem; line-height: 1; }
+        .install-steps li { margin-bottom: 10px; font-size: 0.9rem; }
+        .sync-warning { background: var(--warning-bg); color: var(--warning-text); padding: 15px; border-radius: 8px; margin-top: 20px; font-weight: bold; font-size: 0.9rem; border: 1px solid var(--warning-text); display:flex; align-items:center; gap:10px; }
+
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
     </style>
 </head>
 <body>
 
-    <h1>Lernplaner v17.2 📱</h1>
-    
-    <div class="container" id="planner-container">
+    <div class="suite-header">
+        <div class="header-top">
+            <div class="header-info">
+                <h1>🎓 Lern-Suite V17.12</h1>
+                <p>Master-List (App Edition)</p>
+            </div>
+            
+            <div class="header-controls-wrapper">
+                <div class="streak-badge" id="streakBadge" title="Deine tägliche Lern-Serie!">
+                    <span class="streak-fire">🔥</span>
+                    <span id="streakCount">0</span>
+                    <span style="font-size:0.8em; opacity:0.8; margin-left:2px;">Tage</span>
+                </div>
+                <button class="btn-dark-mode" onclick="toggleDarkMode()" aria-label="Dark Mode">
+                    <span aria-hidden="true" id="darkModeIcon">🌙</span>
+                </button>
+                <div class="exam-control-group">
+                    <label for="examSelect" class="exam-control-label">Aktueller Fokus:</label>
+                    <div class="exam-controls">
+                        <select id="examSelect" onchange="switchExam()"></select>
+                        <button class="btn-exam-action" onclick="addExam()">+</button>
+                        <button class="btn-exam-action" onclick="deleteExam()">🗑️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tabs" role="tablist">
+            <button class="tab-btn active" onclick="switchTab('cockpit')" id="tab-btn-cockpit">🚀 Cockpit</button>
+            <button class="tab-btn" onclick="switchTab('backlog')" id="tab-btn-backlog">📋 Stoff-Katalog</button>
+            <button class="tab-btn" onclick="switchTab('howto')" id="tab-btn-howto">📘 How To</button>
+        </div>
+    </div>
+
+    <!-- TAB 1: COCKPIT -->
+    <div id="tab-cockpit" class="tab-content active">
+        <div class="phase-display" id="phaseDisplayBox">
+            <div><span class="phase-badge" id="currentPhaseBadge">Lade...</span></div>
+            <div>
+                Noch <span class="days-left" id="daysLeft">0</span> Tage. 
+                Fokus: <strong id="phaseFocus">...</strong>
+            </div>
         </div>
 
-<script>
-    // --- DATENSTRUKTUR (Initial Data) ---
-    // Hier simulieren wir alte Daten, um den Decay-Effekt zu testen
-    let topics = [
-        { 
-            id: 1, 
-            title: "HTML Grundlagen",
+        <button class="btn-magic" onclick="autoFillCockpit()">🪄 Auto-Fill: Top 3 Aufgaben (Priorität & Verfall)</button>
+
+        <button class="adhoc-toggle" onclick="toggleAdhoc()" id="adhocToggleBtn">
+            <span class="adhoc-arrow" id="adhocArrow">▶</span> 
+            <span>Blitz-Aufgabe hinzufügen (Ad-hoc / Notfall)</span>
+        </button>
+
+        <div class="input-card" id="adhocInput">
+            <div class="form-group"><label>Modul</label><input type="text" id="inModul" placeholder="z.B. Orga"></div>
+            <div class="form-group"><label>Aufgabe</label><input type="text" id="inTask" placeholder="Was brennt?"></div>
+            <div class="form-group">
+                <label>Wichtigkeit</label>
+                <select id="inImp">
+                    <option value="10">10 (Extrem)</option>
+                    <option value="8">8 (Hoch)</option>
+                    <option value="5" selected>5 (Mittel)</option>
+                    <option value="3">3 (Niedrig)</option>
+                </select>
+            </div>
+            <div class="form-group"><label>Dauer (Min)</label><input type="number" id="inTime" value="30"></div>
+            <button class="btn-add" onclick="addCockpitTask()">+ Speichern</button>
+        </div>
+
+        <table class="task-table">
+            <thead>
+                <tr>
+                    <th width="5%">✔</th>
+                    <th width="15%">Modul</th>
+                    <th width="35%">Aufgabe</th>
+                    <th width="10%">Zeit</th>
+                    <th width="10%">Prio</th>
+                    <th width="10%">Score</th>
+                    <th width="10%"></th>
+                </tr>
+            </thead>
+            <tbody id="cockpitTableBody"></tbody>
+        </table>
+        <div id="emptyCockpitMsg" style="text-align:center; padding:40px; color:var(--text-muted); display:none;">
+            Dein Teller ist leer. <br>Nutze den Zauberstab 🪄 oder hole Aufgaben aus dem Katalog.
+        </div>
+    </div>
+
+
+    <!-- TAB 2: MASTER LIST (BACKLOG) -->
+    <div id="tab-backlog" class="tab-content">
+        <div class="wbs-container">
+            <div class="wbs-toolbar">
+                <button class="wbs-btn wbs-btn-primary" onclick="addWbsRow()">+ Neues Thema</button>
+                <div style="display:flex; gap:10px;">
+                    <button class="wbs-btn" onclick="sortBacklogByScore()">🔽 Nach Score sortieren</button>
+                    <button class="wbs-btn" onclick="checkDecayManually()">♻️ Decay prüfen</button>
+                    <button class="wbs-btn" onclick="exportWBS()">💾 CSV</button>
+                </div>
+            </div>
+
+            <table class="wbs-table" id="wbsTable">
+                <thead>
+                    <tr>
+                        <th width="5%">!</th>
+                        <th width="20%">Modul/Kategorie</th>
+                        <th width="35%">Thema / Aufgabe</th>
+                        <th width="10%">Zeit</th>
+                        <th width="10%">Prio</th>
+                        <th width="5%">Score</th>
+                        <th width="15%">Status (Ampel)</th>
+                        <th width="10%">Zuletzt</th>
+                        <th width="10%">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="wbsTableBody"></tbody>
+            </table>
+            <div id="emptyBacklogMsg" style="text-align:center; padding:30px; color:var(--text-muted); display:none;">
+                Keine Themen eingetragen. Klicke auf <strong>+ Neues Thema</strong>.
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 3: HOW TO -->
+    <div id="tab-howto" class="tab-content">
+        <div style="background:var(--card-bg); padding:30px; border-radius:12px;">
+            <h2>♻️ Dein Master-Katalog</h2>
+            <p><strong>Die neue Logik:</strong> Es gibt nur noch EINE Liste für alles. Keine Phasen mehr.</p>
+            <ul>
+                <li><strong>🔥 Streak:</strong> Öffne die App jeden Tag, um deine Flamme am Leben zu erhalten!</li>
+                <li><strong>Erfassen:</strong> Trage Themen ein. Standard ist <span style="color:#b91c1c">🔴 Offen</span>.</li>
+                <li><strong>Turbo-Modus:</strong> Drücke im Aufgaben-Feld, Zeit-Feld oder Prio-Feld <strong>ENTER</strong>, um sofort eine neue Zeile zu erstellen!</li>
+                <li><strong>Lernen:</strong> Schiebe sie ins Cockpit (🚀) und setze sie auf <span style="color:#15803d">🟢 Fertig</span>.</li>
+                <li><strong>Vergessen:</strong> Nach 3 Tagen werden sie automatisch <span style="color:#b45309">🟡 Wiederholen</span>, nach 7 Tagen <span style="color:#b91c1c">🔴 Offen</span>.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-tools">
+        <a class="footer-link" onclick="openInstallModal()" style="font-weight:bold; color:var(--primary);">📱 App installieren</a>
+        <a class="footer-link" onclick="downloadBackup()">Backup speichern</a>
+        <a class="footer-link" onclick="restoreBackup()">Backup laden</a>
+        <a class="footer-link" style="color:var(--danger)" onclick="hardReset()">Reset</a>
+        <input type="file" id="fileInput" style="display:none" onchange="handleFileSelect(event)">
+    </div>
+
+    <!-- INSTALL MODAL -->
+    <div id="installModal" class="modal-overlay">
+        <div class="modal-card">
+            <span class="modal-close" onclick="closeInstallModal()">&times;</span>
+            <h3 class="modal-title">📱 App installieren</h3>
+            
+            <div class="sync-warning">
+                <span style="font-size:1.5em">⚠️</span>
+                <div>
+                    <strong>WICHTIG: Kein Cloud-Sync!</strong><br>
+                    Entscheide dich für EIN Gerät (Handy oder Laptop). Daten werden nur auf diesem Gerät gespeichert!
+                </div>
+            </div>
+
+            <p style="margin-top:20px;">Füge die App zum Home-Bildschirm hinzu, um sie im Vollbild ohne Browser-Leiste zu nutzen:</p>
+            
+            <ul class="install-steps">
+                <li><strong> iOS (Safari):</strong><br>Tippe unten auf "Teilen" <i class="fas fa-share-square"></i> und dann auf "Zum Home-Bildschirm".</li>
+                <li><strong>🤖 Android (Chrome):</strong><br>Tippe oben rechts auf das Men

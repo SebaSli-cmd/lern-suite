@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ultimate Lern-Suite V19.1 (IHK Wizard)</title>
+    <title>Ultimate Lern-Suite V25.0 (Full)</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -26,6 +26,10 @@
             --danger: #b91c1c;
             --warning-bg: #fff7ed;
             --warning-text: #9a3412;
+            --lf-badge-bg: #e0f2fe;
+            --lf-badge-text: #0369a1;
+            --ap-badge-bg: #f3e8ff;
+            --ap-badge-text: #6b21a8;
         }
 
         body.dark-mode {
@@ -41,6 +45,10 @@
             --hover-bg: #334155;
             --warning-bg: #451a03;
             --warning-text: #fb923c;
+            --lf-badge-bg: #0c4a6e;
+            --lf-badge-text: #bae6fd;
+            --ap-badge-bg: #4c1d95;
+            --ap-badge-text: #e9d5ff;
         }
 
         body {
@@ -221,7 +229,15 @@
         }
 
         .score-badge { padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.85rem; background: var(--hover-bg); border:1px solid var(--border); }
-        
+        .lf-badge { 
+            padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: bold; 
+            background: var(--lf-badge-bg); color: var(--lf-badge-text); margin-left: 5px; text-transform: uppercase;
+        }
+        .ap-badge { 
+            padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: bold; 
+            background: var(--ap-badge-bg); color: var(--ap-badge-text); margin-left: 5px; text-transform: uppercase;
+        }
+
         .btn-check { font-size: 1.5rem; background: none; border: none; color: var(--border); cursor: pointer; padding: 10px; }
         .btn-check.checked { color: var(--success); }
         .task-done { text-decoration: line-through; opacity: 0.5; }
@@ -230,16 +246,9 @@
         .level-dots .active { opacity: 1; }
         .level-dots .inactive { opacity: 0.2; }
 
-        /* TOAST Notification */
-        #toast {
-            visibility: hidden; min-width: 250px; background-color: var(--text); color: var(--bg);
-            text-align: center; border-radius: 50px; padding: 16px; position: fixed; z-index: 9999;
-            left: 50%; bottom: 80px; transform: translateX(-50%); 
-            font-weight: 500; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 80px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 80px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        /* Filter Row */
+        .filter-row { display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap; background: var(--header-cell-bg); padding:10px; border-radius:12px; border:1px solid var(--border); }
+        .filter-select { flex-grow:1; padding:10px; border-radius:8px; border:1px solid var(--border); background:var(--card-bg); color:var(--text); font-weight:bold;}
 
         /* Footer */
         .footer-tools {
@@ -257,10 +266,16 @@
         .template-btn { width:100%; padding:15px; margin-bottom:10px; border:1px solid var(--border); border-radius:8px; background:var(--bg); text-align:left; cursor:pointer; color:var(--text); font-weight:bold; }
         .template-btn:hover { background:var(--hover-bg); border-color:var(--primary); }
         
-        .wizard-section { margin-bottom: 15px; }
-        .wizard-section h4 { margin-bottom: 5px; }
-        .wizard-checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; }
-        .wizard-checkbox-label { background: var(--hover-bg); padding: 5px 10px; border-radius: 6px; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        /* TOAST Notification */
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: var(--text); color: var(--bg);
+            text-align: center; border-radius: 50px; padding: 16px; position: fixed; z-index: 9999;
+            left: 50%; bottom: 80px; transform: translateX(-50%); 
+            font-weight: 500; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 80px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 80px; opacity: 1;} to {bottom: 0; opacity: 0;} }
     </style>
 </head>
 <body>
@@ -268,7 +283,7 @@
     <div class="suite-header">
         <div class="header-top">
             <div class="header-info">
-                <h1>🎓 Lern-Suite V19.1</h1>
+                <h1>🎓 Lern-Suite V25.0</h1>
                 <div class="streak-badge" onclick="initStreak()">
                     🔥 <span id="streakCount">0</span> Tage
                 </div>
@@ -288,7 +303,7 @@
         
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('cockpit')" id="tab-btn-cockpit">🚀 Cockpit</button>
-            <button class="tab-btn" onclick="switchTab('backlog')" id="tab-btn-backlog">📋 Katalog</button>
+            <button class="tab-btn" onclick="switchTab('backlog')" id="tab-btn-backlog">📋 Katalog <span id="backlogCount" style="font-size:0.8em; opacity:0.7"></span></button>
             <button class="tab-btn" onclick="switchTab('howto')" id="tab-btn-howto">ℹ️ Info</button>
         </div>
     </div>
@@ -308,7 +323,7 @@
         </button>
 
         <div class="input-card" id="adhocInput">
-            <div class="form-group"><input type="text" id="inModul" placeholder="Modul (z.B. Orga)"></div>
+            <div class="form-group"><input type="text" id="inModul" placeholder="Modul (Tag, z.B. WiSo)"></div>
             <div class="form-group"><input type="text" id="inTask" placeholder="Aufgabe"></div>
             <div class="form-group">
                 <select id="inImp">
@@ -331,11 +346,20 @@
     </div>
 
 
-    <!-- TAB 2: BACKLOG -->
+    <!-- TAB 2: BACKLOG (MIT TAG-FILTER) -->
     <div id="tab-backlog" class="tab-content">
-        <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-            <button class="wbs-btn" style="background:var(--primary); color:white; flex-grow:1; padding:10px; border-radius:8px; border:none;" onclick="addWbsRow()">+ Neues Thema</button>
-            <button class="wbs-btn" style="flex-grow:1; padding:10px; border-radius:8px; border:1px solid var(--border);" onclick="sortBacklogByScore()">🔽 Sortieren</button>
+        
+        <div class="filter-row">
+            <select id="filterExamPart" class="filter-select" onchange="renderWBS()">
+                <option value="all">📚 Alle Prüfungen</option>
+            </select>
+            <select id="filterModul" class="filter-select" onchange="renderWBS()">
+                <option value="all">🌍 Alle Themen</option>
+            </select>
+            <select id="filterLF" class="filter-select" onchange="renderWBS()">
+                <option value="all">🏫 Alle Lernfelder</option>
+            </select>
+            <button class="wbs-btn" style="background:var(--primary); color:white; border:none; padding:0 15px; border-radius:8px;" onclick="addWbsRow()">+</button>
         </div>
 
         <table class="wbs-table">
@@ -343,29 +367,29 @@
         </table>
         <div id="emptyBacklogMsg" style="text-align:center; padding:40px; display:none;">
             Leerer Katalog.<br>
-            <small>Nutze den CSV Import unten.</small>
+            <button onclick="document.getElementById('importModal').style.display='flex'" style="margin-top:10px; padding:10px; background:var(--success); color:white; border:none; border-radius:8px; font-weight:bold;">📋 Daten Einfügen (Copy/Paste)</button>
         </div>
     </div>
 
     <!-- TAB 3: INFO -->
     <div id="tab-howto" class="tab-content">
         <div style="background:var(--card-bg); padding:20px; border-radius:12px;">
-            <h3>🧠 IHK-Katalog Import</h3>
-            <p><strong>Option A: Einfache Liste</strong></p>
-            <p>Spalten: <code>Modul; Thema; Zeit; Prio</code></p>
-            <hr>
-            <p><strong>Option B: IHK Katalog (KMS)</strong></p>
-            <p>Lädt automatisch die IHK-Struktur. Wähle beim Import einfach deinen Beruf (z.B. FISI) und Prüfungsteil (z.B. AP1) aus.</p>
+            <h3>🚀 Ultimate Lern-Suite V25.0</h3>
+            <p><strong>IHK Full Integration</strong></p>
+            <p><strong>Status:</strong> Die Daten aus deinem Katalog sind jetzt direkt im Code integriert!</p>
+            <p>Falls du den Katalog nicht siehst:</p>
+            <ol>
+                <li>Klicke unten auf <strong>"📚 Katalog importieren"</strong>.</li>
+                <li>Wähle "AP1 Basis", "WiSo" usw.</li>
+                <li>Der Button "📋 Daten Einfügen" ist weiterhin da für alle Fälle.</li>
+            </ol>
         </div>
     </div>
 
     <!-- FOOTER -->
     <div class="footer-tools">
-        <!-- CSV BUTTON -->
-        <a class="footer-link" onclick="document.getElementById('csvInput').click()" style="border-color:var(--success); color:var(--success); font-weight:bold;">📊 CSV Import (Wizard)</a>
-        <input type="file" id="csvInput" style="display:none" accept=".csv, .txt" onchange="handleCsvImport(event)">
-
-        <a class="footer-link" onclick="openTemplateModal()">📚 Standard Vorlagen</a>
+        <a class="footer-link" onclick="openTemplateModal()" style="border-color:var(--success); color:var(--success); font-weight:bold;">📚 Katalog importieren (IHK FULL)</a>
+        
         <a class="footer-link" onclick="openInstallModal()">📲 App Installieren (Info)</a>
         <a class="footer-link" onclick="downloadBackup()">💾 Backup speichern</a>
         <a class="footer-link" onclick="restoreBackup()">📂 Backup laden</a>
@@ -385,30 +409,38 @@
 
     <div id="templateModal" class="modal-overlay">
         <div class="modal-card">
-            <h3 style="margin-top:0">📚 Katalog importieren</h3>
-            <button class="template-btn" onclick="loadTemplate('fisi_ap1')">💻 FISI - AP1 (Netzwerk & IT)</button>
-            <button class="template-btn" onclick="loadTemplate('kaufmann_ap1')">📊 Kaufmann - AP1 (Beschaffung)</button>
-            <button class="template-btn" onclick="loadTemplate('empty')">⚪ Leeres Projekt</button>
-            <button onclick="document.getElementById('templateModal').style.display='none'" style="width:100%; padding:10px; margin-top:10px;">Abbrechen</button>
+            <h3 style="margin-top:0">📚 IHK Baukasten (Full)</h3>
+            <p style="font-size:0.9em; color:var(--text-muted)">Daten aus deinem Upload sind bereit.</p>
+            
+            <button class="template-btn" style="border-left:5px solid #0052cc" onclick="loadIHKData('AP1')">
+                🟦 <strong>AP1 - BASIS (Alle Berufe)</strong><br>
+                <small>Projekt, Hardware, Netze (LF 1, 2, 3, 5, 6)</small>
+            </button>
+            
+            <button class="template-btn" style="border-left:5px solid #eab308" onclick="loadIHKData('WISO')">
+                ⚖️ <strong>WiSo (Komplett)</strong><br>
+                <small>Recht, Sozialkunde, Betrieb (LF 1)</small>
+            </button>
+
+            <hr style="border:0; border-top:1px solid var(--border); margin:15px 0;">
+
+            <button class="template-btn" style="border-left:5px solid #a855f7" onclick="loadIHKData('AP2')">
+                🟪 <strong>AP2 - Komplett</strong><br>
+                <small>Security, Datenschutz, Prozesse, Spezialisierung</small>
+            </button>
+            
+            <button onclick="document.getElementById('templateModal').style.display='none'" style="width:100%; padding:10px; margin-top:10px;">Schließen</button>
         </div>
     </div>
 
-    <!-- CSV WIZARD MODAL -->
-    <div id="csvWizardModal" class="modal-overlay">
-        <div class="modal-card">
-            <h3 style="margin-top:0">📊 IHK Import Wizard</h3>
-            <div class="wizard-section">
-                <h4>1. Dein Beruf (Filter)</h4>
-                <select id="wizBeruf" style="width:100%; padding:10px; border-radius:6px;"></select>
-                <small style="color:var(--text-muted)">Wählt auch Zeilen wie "KDIG + FISI"</small>
-            </div>
-            <div class="wizard-section">
-                <h4>2. Prüfungsteil</h4>
-                <div id="wizExamType" class="wizard-checkbox-group"></div>
-            </div>
-            <div style="margin-top:20px; display:flex; gap:10px;">
-                <button onclick="executeWizardImport()" style="background:var(--success); color:white; border:none; padding:12px; border-radius:8px; flex-grow:1; font-weight:bold;">Import Starten</button>
-                <button onclick="document.getElementById('csvWizardModal').style.display='none'" style="background:var(--border); border:none; padding:12px; border-radius:8px;">Abbruch</button>
+    <!-- PASTE IMPORT MODAL (Fallback) -->
+    <div id="importModal" class="modal-overlay">
+        <div class="modal-card" style="max-width:500px;">
+            <h3 style="margin-top:0">📋 Daten Importieren</h3>
+            <textarea id="pasteArea" style="width:100%; height:200px; padding:10px; border-radius:8px; border:1px solid var(--border); font-family:monospace; font-size:12px;" placeholder="Hier Text einfügen..."></textarea>
+            <div style="margin-top:10px; display:flex; gap:10px;">
+                <button onclick="handlePasteImport()" style="flex:1; background:var(--success); color:white; border:none; padding:12px; border-radius:8px; font-weight:bold;">Import Starten</button>
+                <button onclick="document.getElementById('importModal').style.display='none'" style="flex:1; background:var(--border); border:none; padding:12px; border-radius:8px;">Abbrechen</button>
             </div>
         </div>
     </div>
@@ -417,21 +449,249 @@
     <div id="toast">Nachricht...</div>
 
     <script>
-        // --- TEMPLATES (Fallback) ---
-        const TEMPLATES = {
-            fisi_ap1: [
-                {mod: "Netzwerk", task: "IPv4 Subnetting & CIDR", time: "45", imp: "10"},
-                {mod: "Netzwerk", task: "IPv6 Grundlagen", time: "30", imp: "8"},
-                {mod: "Hardware", task: "RAID Level", time: "30", imp: "10"}
-            ],
-            kaufmann_ap1: [
-                {mod: "Beschaffung", task: "ABC-Analyse", time: "30", imp: "10"}
-            ]
-        };
+        // --- HARDCODED IHK DATA (COMPRESSED STRING TO SAVE SPACE) ---
+        // Format: AP|Modul|Task|Lernfelder (Optional)
+        // I have packed the CSV data you provided into this string block.
+        const IHK_RAW_DATA = `
+AP1|Projektmanagement|Merkmale eines Projektes|LF1, LF2, LF3, LF5, LF6
+AP1|Projektmanagement|Projektplanung mithilfe von Strukturplan, Netzplan und Gantt-Diagramm|LF1, LF2, LF3, LF5, LF6
+AP1|Projektmanagement|Kritischer Weg|LF1, LF2, LF3, LF5, LF6
+AP1|Projektmanagement|Pufferzeiten|LF1, LF2, LF3, LF5, LF6
+AP1|Projektmanagement|Fristgerechte Terminierung|LF1, LF2, LF3, LF5, LF6
+AP1|Projektmanagement|Lösungen bei Terminproblemen|LF1, LF2, LF3, LF5, LF6
+AP1|Projektmanagement|SMART-Prinzip|LF1, LF2, LF3, LF5, LF6
+AP1|Projektmanagement|Meilensteine|LF1, LF2, LF3, LF5, LF6
+AP1|Projektmanagement|Projektphasen (Wasserfall / SCRUM) definieren|LF1, LF2, LF3, LF5, LF6
+AP1|Projektmanagement|Phasen der Teambildung und -entwicklung kennen|LF1, LF2, LF3, LF5, LF6
+AP1|Projektmanagement|Reflexionsmethoden (Feedback-Kultur, Lessons Learned) kennen|LF1, LF2, LF3, LF5, LF6
+AP1|Projektmanagement|Machbarkeitsanalyse mithilfe einer Budgetvorgabe|LF1, LF2, LF3, LF5, LF6
+AP1|Projektmanagement|Vor- und Nachkalkulation|LF1, LF2, LF3, LF5, LF6
+AP1|Projektmanagement|Einfluss der Stakeholder beurteilen können|LF1, LF2, LF3, LF5, LF6
+AP1|Projektmanagement|Risikoanalyse|LF1, LF2, LF3, LF5, LF6
+AP1|Service & Support|Kundenkommunikation|LF1, LF2, LF3, LF5, LF6
+AP1|Service & Support|Fehlermanagement|LF1, LF2, LF3, LF5, LF6
+AP1|Service & Support|Störungs-Management|LF1, LF2, LF3, LF5, LF6
+AP1|Service & Support|Bearbeitungsstatus (z. B. Ticketsystem)|LF1, LF2, LF3, LF5, LF6
+AP1|Service & Support|KI-Unterstützung|LF1, LF2, LF3, LF5, LF6
+AP1|Service & Support|Support- und Serviceanfragen|LF1, LF2, LF3, LF5, LF6
+AP1|Service & Support|First-, Second- und Third-Level-Support|LF1, LF2, LF3, LF5, LF6
+AP1|Markt & Kunden|Marktformen (Monopol, Oligopol, Polypol, Käufer-/Verkäufermarkt)|LF1, LF2
+AP1|Markt & Kunden|Zielgruppendefinition und -abgrenzung|LF1, LF2
+AP1|Markt & Kunden|Quantitative und qualitative Angebotsbewertung|LF1, LF2
+AP1|Markt & Kunden|Eigene Datenerhebung (z. B. Kundenbefragung)|LF1, LF2
+AP1|Markt & Kunden|Auswertung vorhandener Daten (z. B. Anforderungen an Büroarbeitsplätze)|LF1, LF2
+AP1|Markt & Kunden|Situationsgerechte Kundenkommunikation|LF1, LF2
+AP1|Markt & Kunden|Kommunikationsmodelle (4-Ohren-Modell, Sender-Empfänger)|LF1, LF2
+AP1|Markt & Kunden|Kundenbedarf ermitteln und Angebote unterbreiten|LF1, LF2
+AP1|Markt & Kunden|Interpretation englischsprachiger Texte|LF1, LF2
+AP1|Markt & Kunden|Technische und kaufmännische Texte (deutsch/englisch)|LF1, LF2
+AP1|Markt & Kunden|Präsentation und Medienkompetenz|LF1, LF2
+AP1|Markt & Kunden|Nutzwertanalyse|LF1, LF2
+AP1|Markt & Kunden|Vertriebsformen (direkter/indirekter Vertrieb)|LF1, LF2
+AP1|IT-Systeme|Funktionale, ökonomische und ökologische Aspekte (Ergonomie, Kosten, Nutzungsdauer, Energie)|LF2, LF3
+AP1|IT-Systeme|Hardwareprodukte (CPU, Motherboard, Speicher, Datenträger, Netzteile, GPU, Peripherie, Sensoren, Netzwerkkarten, Router/Switch/AP)|LF2, LF3
+AP1|IT-Systeme|Softwareprodukte (Anwendungen, Betriebssysteme, Standard-/Branchensoftware, DBMS, Browser, ERP/CRM/SCM, Entwicklungsumgebungen)|LF2, LF3
+AP1|IT-Systeme|Cloudlösungen (SaaS, DaaS)|LF2, LF3
+AP1|IT-Systeme|KI-Software|LF2, LF3
+AP1|IT-Systeme|Virtuelle Desktops (Cloud oder lokal)|LF2, LF3
+AP1|IT-Systeme|Kommunikationssysteme (Videokonferenz, Social Media)|LF2, LF3
+AP1|IT-Systeme|Client-Server-Systeme|LF2, LF3
+AP1|IT-Systeme|Einbindung in einer Domäne|LF2, LF3
+AP1|IT-Systeme|Mobile Geräte (Smartphone, Tablet)|LF2, LF3
+AP1|IT-Systeme|Netzwerkprotokolle (Ethernet, IP, DNS) und OSI-Modell|LF2, LF3
+AP1|IT-Systeme|Kenngrößen, Leistungsdaten, Funktionsumfang|LF2, LF3
+AP1|IT-Systeme|Einstellmöglichkeiten (BIOS/UEFI, CPU, RAM, SSD/HDD, Dateisysteme)|LF2, LF3
+AP1|IT-Systeme|Grafik-/Netzwerkkarte, Gateway, Router, Switch, WLAN/Ethernet-Standards|LF2, LF3
+AP1|IT-Systeme|Barrierefreier Zugriff am Arbeitsplatz|LF2, LF3
+AP1|IT-Systeme|Einstellmöglichkeiten auf Webseiten|LF2, LF3
+AP1|IT-Systeme|Gütesiegel für Energieeffizienz|LF2, LF3
+AP1|IT-Systeme|Übertragungsraten/zeiten, Datenmengen (Dokumente/Videos), Strom/Leistung/Wirkungsgrad/Energiekosten|LF2, LF3
+AP1|IT-Systeme|Anschaffungs-/Betriebs-/Lizenz-/Finanzierungskosten, fixe/variable Kosten|LF2, LF3
+AP1|IT-Systeme|Einfacher Kostenvergleich (Leasing, Kauf, Finanzierung, Pay-per-Use)|LF2, LF3
+AP1|IT-Systeme|Preis-Leistungs-Verhältnis|LF2, LF3
+AP1|IT-Systeme|Qualitativer/quantitativer Angebotsvergleich|LF2, LF3
+AP1|IT-Systeme|Wertschöpfung|LF2, LF3
+AP1|IT-Lösungen|Bedarfsanalyse|LF5
+AP1|IT-Lösungen|Lasten- und Pflichtenheft (Zweck, Urheber, Inhalt)|LF5
+AP1|IT-Lösungen|Installation/Einrichtung (OS, BIOS/UEFI, Partitionierungen/Formatierungen, Netzwerkanbindung, IPv4/v6, Remote-Desktop, KI-Software)|LF5
+AP1|IT-Lösungen|Gerätekategorien (Desktop, Notebook, All-in-One, Thin Client, Tablet, Smartphone)|LF5
+AP1|IT-Lösungen|Mobile/stationäre Arbeitsplatzsysteme (PC, Terminals, LAN, WLAN)|LF5
+AP1|IT-Lösungen|Barrierefreiheit, Unterstützung durch zusätzliche Hardware (Monitor, Tastatur, Lautsprecher/Mikrofon)|LF5
+AP1|IT-Lösungen|Anwendungssoftware|LF5
+AP1|IT-Lösungen|Betriebssysteme (Einsatzzweck, Dateiverwaltung, Freigaben managen)|LF5
+AP1|IT-Lösungen|Integrierte Entwicklungsumgebung (IDE)|LF5
+AP1|IT-Lösungen|Standard- oder Individualsoftware|LF5
+AP1|IT-Lösungen|Open Source / proprietär|LF5
+AP1|IT-Lösungen|Beurteilungskriterien (Anpassbarkeit, Wartbarkeit, Schnittstellen)|LF5
+AP1|IT-Lösungen|Grundlagen des Schutzes der Urheber|LF5
+AP1|IT-Lösungen|Lizenzarten (EULA, OEM, GNU)|LF5
+AP1|IT-Lösungen|Pay-per-Use|LF5
+AP1|IT-Lösungen|Installation/Konfiguration Hardware|LF5
+AP1|IT-Lösungen|Installation/Konfiguration Betriebssystem|LF5
+AP1|IT-Lösungen|Arbeiten mit der Kommandozeile (Befehlssyntax, Parameter)|LF5
+AP1|IT-Lösungen|Anpassung von Software|LF5
+AP1|IT-Lösungen|Konfiguration, Test, Troubleshooting und Dokumentation von Netzwerkverbindungen (IP, DHCP, WLAN, VPN)|LF5
+AP1|IT-Lösungen|Konsolenbefehle Datei/Netz (dir, ls, mkdir, ipconfig, ifconfig/ip, ping, traceroute, nslookup)|LF5
+AP1|Programmierung|Compiler, Linker, Interpreter|LF5
+AP1|Programmierung|Prozedurale und objektorientierte Herangehensweise|LF5
+AP1|Programmierung|Variablen, Datentypen, Datenstrukturen|LF5
+AP1|Programmierung|Kontrollstrukturen (Verzweigung, Schleife)|LF5
+AP1|Programmierung|Prozeduren, Funktionen|LF5
+AP1|Programmierung|Klassen, Attribute, Objekte, Methoden, Sichtbarkeit|LF5
+AP1|Programmierung|Bibliotheken, Frameworks|LF5
+AP1|Programmierung|Skriptsprachen (z. B. Shell)|LF5
+AP1|Programmierung|Debugging, formale und inhaltliche Fehler|LF5
+AP1|Programmierung|Kontrollstrukturen als Pseudocode abbilden|LF5
+AP1|Programmierung|UML (Use Case, Klassen-, Aktivitätsdiagramm)|LF5
+AP1|Programmierung|Entwurf von Ausgabemasken (Ergonomie, CI, Barrierefreiheit)|LF5
+AP1|Programmierung|Fehler in gegebenem Quellcode finden|LF5
+AP1|Programmierung|Schreibtischtest mit gegebenem Quellcode|LF5
+AP1|Datenbanken|Einfache ER-Modelle|LF5
+AP1|Qualitätssicherung|Betriebliche QM-Systeme|LF3, LF5, LF6
+AP1|Qualitätssicherung|QS-Normen|LF3, LF5, LF6
+AP1|Qualitätssicherung|Zertifizierung|LF3, LF5, LF6
+AP1|Qualitätssicherung|Qualitätsplanung und Qualitätsziele (Ist-/Soll-Zustand)|LF3, LF5, LF6
+AP1|Qualitätssicherung|Qualitätslenkung (Umsetzung der Planphase)|LF3, LF5, LF6
+AP1|Qualitätssicherung|PDCA-Zyklus (Plan, Do, Check, Act)|LF3, LF5, LF6
+AP1|Qualitätssicherung|Testprotokoll für das Einrichten eines Arbeitsplatzes|LF3, LF5, LF6
+AP1|Sicherheit & Datenschutz|Verfügbarkeit, Vertraulichkeit, Integrität gewährleisten|LF4
+AP1|Sicherheit & Datenschutz|TOM; IT-Sicherheitsbeauftragte/r vs. Datenschutzbeauftragte/r|LF4
+AP1|Sicherheit & Datenschutz|IT-Sicherheitsrichtlinien (z. B. Passwort-Policy)|LF4
+AP1|Sicherheit & Datenschutz|Technische Maßnahmen (Virenschutz, Firewall, Verschlüsselung)|LF4
+AP1|Sicherheit & Datenschutz|Personelle Maßnahmen, Sicherheitsbewusstsein|LF4
+AP1|Sicherheit & Datenschutz|Ausschnitte BSI IT-Grundschutz|LF4
+AP1|Sicherheit & Datenschutz|Grundzüge DSGVO/BDSG; personenbezogene Daten; Rechte; Anonymisierung/Pseudonymisierung|LF4
+AP1|Sicherheit & Datenschutz|Schutzbedarf: Anwendungen, IT-Systeme, Räume/Infrastruktur, Kommunikationsverbindungen|LF4
+AP1|Sicherheit & Datenschutz|Bausteine aus dem Grundschutzkatalog|LF4
+AP1|Sicherheit & Datenschutz|Schutzbedarfskategorien (normal/hoch/sehr hoch) ableiten und begründen|LF4
+AP1|Sicherheit & Datenschutz|Risikoklassifikation (z. B. Matrix)|LF4
+AP1|Sicherheit & Datenschutz|ISMS kennen und unterstützen|LF4
+AP1|Sicherheit & Datenschutz|Sicherheitsbewusstsein schaffen (Security by Design/Default)|LF4
+AP1|Sicherheit & Datenschutz|IT-Sicherheitsmanagement|LF4
+AP1|Sicherheit & Datenschutz|Härtung des Betriebssystems|LF4
+AP1|Sicherheit & Datenschutz|Datensicherung / Backup-Verfahren|LF4
+AP1|Sicherheit & Datenschutz|Sicherung der Verfügbarkeit (z. B. NAS)|LF4
+AP1|Sicherheit & Datenschutz|Zugangs- und Zugriffskontrolle|LF4
+AP1|Sicherheit & Datenschutz|Verschlüsselung (symmetrisch, asymmetrisch, hybrid)|LF4
+AP1|Sicherheit & Datenschutz|Hashwerte, Zertifikate, digitale Signaturen|LF4
+AP1|Sicherheit & Datenschutz|Authentifizierung (z. B. Zwei-Faktor), Passwort-Policy bewerten|LF4
+AP1|Sicherheit & Datenschutz|Personal Firewall anpassen|LF4
+AP1|Vertragswesen|Kaufvertrag, Mietvertrag, Leasing|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Lizenzvertrag|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Servicevertrag, SLA|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Werkvertrag, Dienstvertrag|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Vertragsbestandteile (Leistungsbeschreibung, Termine, Entgelte, Sanktionen)|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Vertragsstörungen|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Unternehmensziele (Ökonomisch, Ökologisch, Sozial)|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Leistungserbringung vor Ort vs. Remote|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Ticketsystem|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Kundenvorgaben (Termin/Ort, technische Voraussetzungen, Betriebssystem, Hersteller)|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Mehrliniensystem, Einliniensystem, Matrixorganisation|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Handlungs- und Entscheidungsspielräume/Vollmachten|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Veränderungsprozesse begleiten und unterstützen können|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Inhalt des Abnahmeprotokolls|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Mängelarten: Schlechtleistung, Falschlieferung, Minderlieferung|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Soll-Ist-Vergleich, Abweichungsanalyse|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Nachkalkulation|LF2, LF3, LF6, LF7
+AP1|Vertragswesen|Lessons Learned|LF2, LF3, LF6, LF7
+AP2|Kundenbeziehungen|BGB / HGB|LF3, LF6, LF9, LF12
+AP2|Kundenbeziehungen|Gesetz gegen unlauteren Wettbewerb (UWG)|LF3, LF6, LF9, LF12
+AP2|Kundenbeziehungen|AGB-Gesetz|LF3, LF6, LF9, LF12
+AP2|Kundenbeziehungen|Compliance|LF3, LF6, LF9, LF12
+AP2|Kundenbeziehungen|Customer Relationship Management (CRM)|LF3, LF6, LF9, LF12
+AP2|Kundenbeziehungen|Präsentationstechnik|LF3, LF6, LF9, LF12
+AP2|Kundenbeziehungen|Grafische Darstellung (Diagramme, Bildbearbeitung)|LF3, LF6, LF9, LF12
+AP2|Kundenbeziehungen|Tabellenkalkulation|LF3, LF6, LF9, LF12
+AP2|Kundenbeziehungen|Präsentationsprogramme|LF3, LF6, LF9, LF12
+AP2|Kundenbeziehungen|Corporate Identity (CI)|LF3, LF6, LF9, LF12
+AP2|IT-Entwicklung|Debugging, Breakpoint|LF5, LF6, LF7, LF8, LF10, LF11, LF12
+AP2|IT-Entwicklung|Software-Test (Black Box, White Box, Review, Extremwerttest)|LF5, LF6, LF7, LF8, LF10, LF11, LF12
+AP2|IT-Entwicklung|Testdaten|LF5, LF6, LF7, LF8, LF10, LF11, LF12
+AP2|IT-Entwicklung|Komponententest, Integrationstest, Systemtest|LF5, LF6, LF7, LF8, LF10, LF11, LF12
+AP2|IT-Entwicklung|Versionsmanagement des Quellcodes|LF5, LF6, LF7, LF8, LF10, LF11, LF12
+AP2|IT-Entwicklung|Algorithmen formulieren (Aktivitätsdiagramm, Pseudocode)|LF5, LF6, LF7, LF8, LF10, LF11, LF12
+AP2|IT-Entwicklung|UML (Use Case, Klassen-, Aktivitätsdiagramme)|LF5, LF6, LF7, LF8, LF10, LF11, LF12
+AP2|IT-Entwicklung|Entwurf der Bildschirmausgabemasken (Software-Ergonomie, Barrierefreiheit)|LF5, LF6, LF7, LF8, LF10, LF11, LF12
+AP2|Datenbanken|Relationale und nicht-relationale Datenbanken, NoSQL|LF5, LF6, LF7, LF8, LF10, LF11, LF12
+AP2|Datenbanken|Datentypen (Boolean, Integer, BLOB, etc.)|LF5, LF6, LF7, LF8, LF10, LF11, LF12
+AP2|Datenbanken|Anomalien / Redundanzen erkennen|LF5, LF6, LF7, LF8, LF10, LF11, LF12
+AP2|Datenbanken|Normalisieren (1. bis 3. Normalform)|LF5, LF6, LF7, LF8, LF10, LF11, LF12
+AP2|Datenbanken|ER-Modell, Attribute, Beziehungen, Kardinalitäten, referenzielle Integrität|LF5, LF6, LF7, LF8, LF10, LF11, LF12
+AP2|Datenbanken|SQL: Tabellenstruktur, Index, Select, Sortieren, Gruppieren|LF5, LF6, LF7, LF8, LF10, LF11, LF12
+AP2|Datenbanken|Abfrage über mehrere Tabellen (Joins)|LF5, LF6, LF7, LF8, LF10, LF11, LF12
+AP2|Datenbanken|Open Data, API-Schnittstellen|LF5, LF6, LF7, LF8, LF10, LF11, LF12
+AP2|IT-Sicherheit|TCSEC, ITSEC, Common Criteria|LF4, LF5, LF9, LF11
+AP2|IT-Sicherheit|BSI-Standards / IT-Grundschutz|LF4, LF5, LF9, LF11
+AP2|IT-Sicherheit|ISO/IEC 2700x|LF4, LF5, LF9, LF11
+AP2|IT-Sicherheit|Relevante rechtliche Vorschriften (GoBD, DSGVO)|LF4, LF5, LF9, LF11
+AP2|IT-Sicherheit|Datensicherheitsmanagement|LF4, LF5, LF9, LF11
+AP2|IT-Sicherheit|Datensicherungsstrategien (RAID, Vollsicherung, inkrementell, differentiell)|LF4, LF5, LF9, LF11
+AP2|IT-Sicherheit|Verschlüsselung (Symmetrisch, asymmetrisch, hybrid; Hashwerte; Zertifikate; Digitale Signaturen)|LF4, LF5, LF9, LF11
+AP2|IT-Sicherheit|Benutzer-, Gruppen- und Zugriffsrechte|LF4, LF5, LF9, LF11
+AP2|IT-Sicherheit|Netzwerksicherheit; IDS- und IDP-Systeme|LF4, LF5, LF9, LF11
+AP2|IT-Sicherheit|Social Engineering (Phishing, Deepfake)|LF4, LF5, LF9, LF11
+AP2|Datenschutz|DSGVO, BDSG, E-Privacy, Urheberrecht, Recht am eigenen Bild|LF2, LF4, LF5, LF9, LF11, LF12
+AP2|Datenschutz|Standard-Datenschutzmodell; ISO 27701, 27001|LF2, LF4, LF5, LF9, LF11, LF12
+AP2|Datenschutz|Schutzbedarfsfeststellung (Daten klassifizieren, Schutzziele definieren)|LF2, LF4, LF5, LF9, LF11, LF12
+AP2|Datenschutz|Datenschutzbeauftragte; BSI, TÜV; Datenschutzzertifizierung|LF2, LF4, LF5, LF9, LF11, LF12
+AP2|Netzwerke|IPv4/IPv6, MAC, Routing, Switching, ARP, TCP/UDP|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Netzwerke|Netzwerkkomponenten (Switch, Bridge, Router, Firewall)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Netzwerke|Netzwerkkonzepte (LAN/WAN/MAN/GAN)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Netzwerke|Zugriffskontrolle im Netzwerk (RADIUS, Kerberos)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Netzwerke|Verschlüsselung auf Netzwerkebene, VPN|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Netzwerke|VLAN|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Netzwerke|Drahtlos: PAN/WLAN/Mesh/Bluetooth|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Netzwerke|Peer-to-Peer vs. Client-Server|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Netzwerke|Übertragungsprotokolle (HTTP/HTTPS, TCP/UDP)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Netzwerke|VPN-Modelle (Tunneling, IPsec)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Netzwerke|Dienste (DNS, DHCP, Proxy)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Netzwerke|Server-Dienste (Mailserver, Webserver, Groupware, Datenbanken)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Netzwerke|Ausfallwahrscheinlichkeiten (MTBF)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Netzwerke|Notfallkonzept (Disaster Recovery)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Netzwerke|Sicherstellung des Betriebes (USV, RAID, Backups)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Netzwerke|Monitoring (SNMP, Systemlast, Schwellwerte)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Netzwerke|Incident Management (Ticketsystem, SLA, Eskalation)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
+AP2|Speicher|NAS, SAN, iSCSI, SMB, NFS|LF4, LF5, LF8, LF9
+AP2|Speicher|Backup-Strategien (On-Premises, Cloud, SaaS, IaaS)|LF4, LF5, LF8, LF9
+AP2|Konzeption|Schutzziele der Informationssicherheit (Integrität, Verfügbarkeit)|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
+AP2|Konzeption|Cloud vs. On-Premises|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
+AP2|Konzeption|Virtualisierung vs. Bare-Metal|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
+AP2|Konzeption|Server Hardware/OS/Anwendungen|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
+AP2|Konzeption|Cloud-Anbieter Auswahl|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
+AP2|Konzeption|Kompatibilitätsprobleme (Zeichensätze, Formate)|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
+AP2|Konzeption|Lifecycle-Betrachtung (Support, Updates)|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
+AP2|Konzeption|Tests (Performance, Penetration, Integration, System)|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
+AP2|Konzeption|Migration planen|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
+WISO|Ausbildung|Inhalte des Ausbildungsvertrages|
+WISO|Ausbildung|Rechte und Pflichten Azubi/Ausbilder|
+WISO|Ausbildung|Probezeit, Vergütung, Urlaub, Kündigung|
+WISO|Ausbildung|Duales System (Vorteile/Lernorte)|
+WISO|Ausbildung|Aufgaben Kammern/Betrieb/Schule|
+WISO|Recht|Arbeitsrechtliche Gesetze (BBiG, ArbSchG)|
+WISO|Recht|Arbeitgeberverbände/Gewerkschaften|
+WISO|Recht|Betriebsrat (Wahl, Rechte)|
+WISO|Recht|JAV (Jugend-Auszubildendenvertretung)|
+WISO|Recht|Tarifrecht (Verträge, Autonomie, Arbeitskampf)|
+WISO|Lohn|Lohnformen, Brutto/Netto, Lohnsteuer|
+WISO|Lohn|Sozialversicherungen|
+WISO|Betrieb|Rechtsformen (GmbH, KG, AG)|
+WISO|Betrieb|Unternehmensstrukturen (Matrix, Sparte)|
+WISO|Betrieb|Wirtschaftliche Verflechtungen (Konzern)|
+WISO|Schutz|Arbeitsschutzgesetz, Arbeitssicherheitsgesetz|
+WISO|Schutz|Unfallverhütungsvorschriften (UVV)|
+WISO|Schutz|Bildschirmarbeitsplatzverordnung|
+WISO|Schutz|Gefährdungen am Arbeitsplatz|
+WISO|Schutz|Erste-Hilfe-Maßnahmen, Meldeketten|
+WISO|Schutz|Brandschutz|
+WISO|Umwelt|Rationelle Energieverwendung|
+WISO|Umwelt|Abfalltrennung und Recycling|
+WISO|Digital|Vernetztes Zusammenarbeiten|
+WISO|Digital|Datenschutz bei Kommunikation|
+WISO|Digital|Ethische Aspekte und Compliance|
+`;
 
         // --- DATA ---
         let exams = [], activeExamId = null, cockpitTasks = [], wbsData = [];
-        let rawCsvLines = []; // Temporary storage for wizard
 
         function initApp() {
             try {
@@ -442,7 +702,7 @@
 
                 if(exams.length === 0) {
                     const id = 'def-'+Date.now();
-                    exams.push({id, name:'Beispiel-Prüfung', date:'', startDate: new Date().toISOString().split('T')[0]});
+                    exams.push({id, name:'Meine IHK Prüfung', date:'', startDate: new Date().toISOString().split('T')[0]});
                     activeExamId = id;
                     saveAll();
                 } else if(!activeExamId) activeExamId = exams[0].id;
@@ -450,7 +710,9 @@
                 wbsData.forEach(t => { 
                     if(!t.id) t.id = Date.now()+Math.random(); 
                     if(t.decayFlag===undefined) t.decayFlag=false;
-                    if(t.level===undefined) t.level = (t.status === 'done') ? 1 : 0; 
+                    if(t.level===undefined) t.level = (t.status === 'done') ? 1 : 0;
+                    if(!t.lf) t.lf = []; 
+                    if(!t.examPart) t.examPart = "IHK";
                 });
 
                 initStreak();
@@ -610,13 +872,37 @@
         // --- BACKLOG ---
         function renderWBS() {
             const tb = document.getElementById('wbsTableBody'); tb.innerHTML = "";
-            const ds = wbsData.filter(t => t.examId === activeExamId);
+            let ds = wbsData.filter(t => t.examId === activeExamId);
+
+            // Update Counter
+            const countEl = document.getElementById('backlogCount');
+            if(countEl) countEl.innerText = `(${ds.length})`;
+
+            // Populate Filters
+            populateFilters(ds);
+            
+            // Apply Filters
+            const filterExam = document.getElementById('filterExamPart').value;
+            const filterMod = document.getElementById('filterModul').value;
+            const filterLF = document.getElementById('filterLF').value;
+
+            if(filterExam !== 'all') ds = ds.filter(t => t.examPart === filterExam);
+            if(filterMod !== 'all') ds = ds.filter(t => t.mod === filterMod);
+            if(filterLF !== 'all') ds = ds.filter(t => t.lf && t.lf.includes(filterLF));
+
             if(ds.length===0) document.getElementById('emptyBacklogMsg').style.display='block'; else document.getElementById('emptyBacklogMsg').style.display='none';
 
             ds.forEach((r, idx) => {
                 const globalIdx = wbsData.indexOf(r);
                 const score = calcScore(r.imp, r.time, r.decayFlag, r.status, r.level);
                 
+                // Badges
+                let badges = "";
+                if(r.examPart) badges += `<span class="ap-badge">${r.examPart}</span>`;
+                if(r.lf && r.lf.length > 0) {
+                    r.lf.forEach(l => badges += `<span class="lf-badge">${l}</span>`);
+                }
+
                 // DOTS
                 let dots = "";
                 for(let i=0; i<4; i++) dots += (i < r.level) ? "●" : "○";
@@ -625,7 +911,10 @@
                 
                 row.innerHTML = `
                     <td data-label="Modul"><input value="${r.mod}" oninput="updWBS(${globalIdx},'mod',this.value)" placeholder="Modul"></td>
-                    <td data-label="Thema"><input value="${r.task}" oninput="updWBS(${globalIdx},'task',this.value)" onkeydown="checkEnter(event,${globalIdx})" placeholder="Thema"></td>
+                    <td data-label="Thema">
+                        <input value="${r.task}" oninput="updWBS(${globalIdx},'task',this.value)" onkeydown="checkEnter(event,${globalIdx})" placeholder="Thema">
+                        <div style="margin-top:5px;">${badges}</div>
+                    </td>
                     <td data-label="Details"><div style="display:flex;gap:5px;width:100%"><input type="number" value="${r.time}" oninput="updWBS(${globalIdx},'time',this.value)" style="width:50%"><select onchange="updWBS(${globalIdx},'imp',this.value)" style="width:50%"><option value="10" ${r.imp=='10'?'selected':''}>Prio 10</option><option value="5" ${r.imp=='5'?'selected':''}>Prio 5</option><option value="3" ${r.imp=='3'?'selected':''}>Prio 3</option></select></div></td>
                     <td data-label="Status">
                         <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px; width:100%;">
@@ -646,6 +935,31 @@
             });
         }
 
+        function populateFilters(data) {
+            const selExam = document.getElementById('filterExamPart');
+            const selMod = document.getElementById('filterModul');
+            const selLF = document.getElementById('filterLF');
+            
+            const currExam = selExam.value;
+            const currMod = selMod.value;
+            const currLF = selLF.value;
+
+            const exams = [...new Set(data.map(i => i.examPart || 'Sonstiges'))].sort();
+            const mods = [...new Set(data.map(i => i.mod))].sort();
+            const lfs = [...new Set(data.flatMap(i => i.lf || []))].sort();
+
+            selExam.innerHTML = '<option value="all">📚 Alle Prüfungen</option>';
+            exams.forEach(e => selExam.innerHTML += `<option value="${e}" ${e===currExam?'selected':''}>${e}</option>`);
+
+            selMod.innerHTML = '<option value="all">🌍 Alle Themen</option>';
+            mods.forEach(m => selMod.innerHTML += `<option value="${m}" ${m===currMod?'selected':''}>${m}</option>`);
+
+            selLF.innerHTML = '<option value="all">🏫 Alle Lernfelder</option>';
+            lfs.forEach(l => {
+                selLF.innerHTML += `<option value="${l}" ${l===currLF?'selected':''}>${l}</option>`;
+            });
+        }
+
         function getStatusColor(s) { if(s==='done') return '#dcfce7'; if(s==='doing') return '#fef3c7'; return '#fee2e2'; }
         function updWBS(idx, f, v) { wbsData[idx][f] = v; saveAll(); }
         function updStatus(idx, val) { 
@@ -662,147 +976,154 @@
             }
             saveAll(); renderWBS(); 
         }
-        function addWbsRow() { wbsData.push({ id:Date.now()+Math.random(), examId:activeExamId, mod:"", task:"", time:"30", imp:"5", status:"todo", level:0 }); saveAll(); renderWBS(); }
-        function checkEnter(e, idx) { if(e.key==='Enter') { wbsData.splice(idx+1, 0, { id:Date.now()+Math.random(), examId:activeExamId, mod:wbsData[idx].mod, task:"", time:"30", imp:"5", status:"todo", level:0 }); saveAll(); renderWBS(); } }
+        function addWbsRow() { wbsData.push({ id:Date.now()+Math.random(), examId:activeExamId, mod:"", task:"", time:"30", imp:"5", status:"todo", level:0, lf:[], examPart:"Sonstiges" }); saveAll(); renderWBS(); }
+        function checkEnter(e, idx) { if(e.key==='Enter') { wbsData.splice(idx+1, 0, { id:Date.now()+Math.random(), examId:activeExamId, mod:wbsData[idx].mod, task:"", time:"30", imp:"5", status:"todo", level:0, lf:[], examPart:"Sonstiges" }); saveAll(); renderWBS(); } }
         function delWBS(idx) { if(confirm("Löschen?")) { wbsData.splice(idx,1); saveAll(); renderWBS(); } }
         function pushToCockpit(idx) { const r = wbsData[idx]; if(cockpitTasks.some(c=>c.originId===r.id)) return alert("Schon drin!"); cockpitTasks.push({ id:Date.now(), originId:r.id, examId:activeExamId, modul:r.mod, task:r.task, imp:r.imp, time:r.time, done:false, score:calcScore(r.imp,r.time,r.decayFlag,'doing', r.level) }); r.status='doing'; saveAll(); renderAll(); }
         function sortBacklogByScore() { wbsData.sort((a,b) => calcScore(b.imp,b.time,b.decayFlag,b.status,b.level) - calcScore(a.imp,a.time,a.decayFlag,a.status,a.level)); saveAll(); renderWBS(); }
 
-        // --- INTELLIGENT IHK IMPORT WIZARD ---
-        function handleCsvImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        // --- PASTE IMPORT FUNCTIONALITY (V23.0) ---
+        function handlePasteImport() {
+            const rawText = document.getElementById('pasteArea').value;
+            if(!rawText || rawText.trim().length === 0) return alert("Bitte Text einfügen!");
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const text = e.target.result;
-                const lines = text.split('\n');
-                
-                // Detect Format: Check Header
-                if(lines.length > 0 && lines[0].toLowerCase().includes("ausbildungsberuf") && lines[0].toLowerCase().includes("prüfungsteil")) {
-                    // IHK FORMAT -> WIZARD
-                    rawCsvLines = lines; // Save for later
-                    showWizard(lines);
-                } else {
-                    // FALLBACK SIMPLE
-                    processSimpleCsv(lines);
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        function showWizard(lines) {
-            const berufe = new Set();
-            const examTypes = new Set();
-
-            // Scan Data (Skip Header)
-            for(let i=1; i<lines.length; i++) {
-                const cols = lines[i].split(';');
-                if(cols.length > 5) {
-                    if(cols[0]) examTypes.add(cols[0].trim());
-                    if(cols[1]) {
-                        // Split combined like "KDIG + FISI"
-                        const parts = cols[1].split('+');
-                        parts.forEach(p => berufe.add(p.trim()));
-                    }
-                }
-            }
-
-            // Populate DOM
-            const selBeruf = document.getElementById('wizBeruf');
-            selBeruf.innerHTML = "";
-            Array.from(berufe).sort().forEach(b => {
-                selBeruf.innerHTML += `<option value="${b}">${b}</option>`;
-            });
-
-            const divExam = document.getElementById('wizExamType');
-            divExam.innerHTML = "";
-            Array.from(examTypes).sort().forEach(e => {
-                divExam.innerHTML += `
-                    <label class="wizard-checkbox-label">
-                        <input type="checkbox" value="${e}" checked> ${e}
-                    </label>`;
-            });
-
-            document.getElementById('csvWizardModal').style.display = 'flex';
-        }
-
-        function executeWizardImport() {
-            const selectedBeruf = document.getElementById('wizBeruf').value;
-            const checkedBoxes = document.querySelectorAll('#wizExamType input:checked');
-            const selectedExams = Array.from(checkedBoxes).map(cb => cb.value);
+            const lines = rawText.split(/\r\n|\n/);
+            
+            // Detect Separator: Check first line
+            let sep = ';';
+            if (lines[0].includes('\t')) sep = '\t'; // Excel copy support
 
             let count = 0;
-            
-            // Loop RAW Data
-            for(let i=1; i<rawCsvLines.length; i++) {
-                const line = rawCsvLines[i];
+            let skipped = 0;
+
+            for(let i=0; i<lines.length; i++) {
+                const line = lines[i];
                 if(!line || line.trim()==="") continue;
-                const cols = line.split(';');
+                
+                // Use robust parser
+                const cols = parseCSVLine(line, sep);
+                
+                // IHK Structure Check (7 cols usually)
                 if(cols.length < 6) continue;
 
-                // COL MAPPING (Based on IHK CSV)
-                const examType = cols[0].trim(); // AP1
-                const berufStr = cols[1].trim(); // KDIG + FISI
-                const mod = cols[3].trim(); // Themenkreis (e.g. Projectmanagement)
-                const task = cols[4].trim(); // Unterpunkt (e.g. Gantt)
-                const type = cols[6].trim(); // Typ (Themenkreis, Unterpunkt...)
+                // Mapping based on your structure
+                // 0: Prüfungsteil, 3: Themenkreis, 4: Unterpunkt, 5: LF, 6: Typ
+                const examPart = cols[0] ? cols[0].trim() : "Sonstiges";
+                const mod = cols[3] ? cols[3].trim() : "Allgemein";
+                const task = cols[4] ? cols[4].trim() : "";
+                const lfStr = cols[5] ? cols[5].trim() : "";
+                const type = cols[6] ? cols[6].trim() : "";
 
-                // FILTER LOGIC
-                const matchesBeruf = berufStr.includes(selectedBeruf);
-                const matchesExam = selectedExams.includes(examType);
-                const isTask = type.toLowerCase().includes("unterpunkt");
-
-                if(matchesBeruf && matchesExam && isTask) {
-                    wbsData.push({
-                        id: Date.now() + Math.random(),
-                        examId: activeExamId,
-                        mod: mod, // Themenkreis as Module
-                        task: task, // Unterpunkt as Task
-                        time: "30", // Default
-                        imp: "5",   // Default
-                        status: 'todo',
-                        level: 0,
-                        decayFlag: false
-                    });
-                    count++;
+                // Skip Header or non-tasks
+                if(examPart.toLowerCase().includes("prüfungsteil")) continue;
+                
+                // IMPORTANT: Filter only "Unterpunkt"
+                if(!type.toLowerCase().includes("unterpunkt")) {
+                    skipped++;
+                    continue;
                 }
+                
+                if(!task) continue;
+
+                // Duplicate Check
+                const exists = wbsData.some(existing => existing.examId === activeExamId && existing.task === task);
+                if(exists) continue;
+
+                // Parse LF
+                let lfs = [];
+                if(lfStr) {
+                    lfs = lfStr.replace(/"/g, '').split(',').map(s => s.trim()).filter(s => s.startsWith('LF'));
+                }
+
+                wbsData.push({
+                    id: Date.now() + Math.random(),
+                    examId: activeExamId,
+                    mod: mod, 
+                    task: task, 
+                    time: "30", 
+                    imp: "5",   
+                    status: 'todo',
+                    level: 0,
+                    decayFlag: false,
+                    lf: lfs,
+                    examPart: examPart
+                });
+                count++;
             }
 
             saveAll();
             renderAll();
-            document.getElementById('csvWizardModal').style.display = 'none';
-            alert(`${count} passende Themen für ${selectedBeruf} importiert!`);
+            document.getElementById('importModal').style.display = 'none';
+            document.getElementById('pasteArea').value = ""; // Clear
+            alert(`${count} Aufgaben erfolgreich importiert!\n(${skipped} Überschriften übersprungen)`);
         }
 
-        function processSimpleCsv(lines) {
-            let count = 0;
-            lines.forEach(line => {
-                if(!line || line.trim() === "") return;
-                const delim = line.includes(';') ? ';' : ',';
-                const cols = line.split(delim);
-                if(cols.length >= 2) {
-                    const mod = cols[0].trim();
-                    const task = cols[1].trim();
-                    if(mod.toLowerCase() === 'modul' || task.toLowerCase() === 'thema') return;
-
-                    wbsData.push({
-                        id: Date.now() + Math.random(),
-                        examId: activeExamId,
-                        mod: mod,
-                        task: task,
-                        time: cols[2] ? cols[2].trim() : "30",
-                        imp: cols[3] ? cols[3].trim() : "5",
-                        status: 'todo',
-                        level: 0,
-                        decayFlag: false
-                    });
-                    count++;
+        // Helper: Parses CSV line respecting quotes
+        function parseCSVLine(text, separator) {
+            const res = [];
+            let current = '';
+            let inQuote = false;
+            for(let i=0; i<text.length; i++) {
+                const char = text[i];
+                if(char === '"') {
+                    inQuote = !inQuote;
+                } else if(char === separator && !inQuote) {
+                    res.push(current.trim().replace(/^"|"$/g, '')); 
+                    current = '';
+                } else {
+                    current += char;
                 }
+            }
+            res.push(current.trim().replace(/^"|"$/g, ''));
+            return res;
+        }
+
+        // --- IHK DATA LOADER (COMPRESSED) ---
+        function loadIHKData(filterPart) {
+            if(!confirm("Katalog '" + filterPart + "' importieren?")) return;
+            
+            const lines = IHK_RAW_DATA.trim().split('\n');
+            let added = 0;
+
+            lines.forEach(line => {
+                const [part, mod, task, lfStr] = line.split('|');
+                
+                // Filter by Exam Part (AP1, AP2, WISO) or load all if empty
+                if(filterPart && part !== filterPart && filterPart !== 'AP2' && filterPart !== 'AP1') {
+                    // Special logic for AP2 parts if needed, but for now simple filter
+                    if(!part.includes(filterPart)) return;
+                }
+                
+                // For AP2 button, load AP2
+                if(filterPart === 'AP2' && !part.startsWith('AP2')) return;
+                if(filterPart === 'AP1' && !part.startsWith('AP1')) return;
+                if(filterPart === 'WISO' && !part.startsWith('WISO')) return;
+
+                const exists = wbsData.some(e => e.examId === activeExamId && e.task === task);
+                if(exists) return;
+
+                let lfs = lfStr ? lfStr.split(',').map(s => s.trim()) : [];
+
+                wbsData.push({
+                    id: Date.now() + Math.random(),
+                    examId: activeExamId,
+                    mod: mod,
+                    task: task,
+                    time: "30",
+                    imp: "5",
+                    status: "todo",
+                    level: 0,
+                    decayFlag: false,
+                    lf: lfs,
+                    examPart: part
+                });
+                added++;
             });
+
             saveAll();
             renderAll();
-            alert(`${count} Themen importiert (Einfacher Modus)!`);
+            document.getElementById('templateModal').style.display='none';
+            showToast(`${added} Aufgaben aus ${filterPart} geladen.`);
         }
 
         // --- EXTRAS ---
@@ -817,14 +1138,7 @@
             document.getElementById('streakCount').innerText = s.count;
         }
         function openTemplateModal() { document.getElementById('templateModal').style.display='flex'; }
-        function loadTemplate(key) {
-            if(key==='empty') { addExam(); document.getElementById('templateModal').style.display='none'; return; }
-            const data = TEMPLATES[key]; if(!data) return;
-            const choice = confirm("Hinzufügen (OK) oder Ersetzen (Abbrechen)?");
-            if(!choice) wbsData = wbsData.filter(t => t.examId !== activeExamId);
-            data.forEach(i => wbsData.push({ id:Date.now()+Math.random(), examId:activeExamId, mod:i.mod, task:i.task, time:i.time, imp:i.imp, status:'todo', level:0 }));
-            saveAll(); renderAll(); document.getElementById('templateModal').style.display='none';
-        }
+        
         function openInstallModal() { document.getElementById('installModal').style.display='flex'; }
         function hardReset() { if(confirm("⚠️ Alles löschen?")) { localStorage.clear(); location.reload(); } }
         function downloadBackup() { const d={exams,activeExamId,cockpitTasks,wbsData,streak:JSON.parse(localStorage.getItem('streakData'))}; const b=new Blob([JSON.stringify(d)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='backup.json'; a.click(); }

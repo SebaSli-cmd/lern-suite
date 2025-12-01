@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lernplaner v17.2 (Decay Logic)</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --red: #ff4d4d;
+            --yellow: #ffcc00;
+            --green: #4caf50;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 { text-align: center; font-size: 1.5rem; margin-bottom: 20px; }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .topic-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 8px solid #ccc; /* Standard Grau */
+        }
+
+        .topic-info {
+            flex-grow: 1;
+        }
+
+        .topic-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: block;
+        }
+
+        .topic-meta {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* Status Select Styling */
+        .status-select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 10px;
+            appearance: none; /* Entfernt Standard-Pfeil auf iOS */
+            text-align: center;
+        }
+
+        /* Dynamische Farben basierend auf Status */
+        .status-red { background-color: #ffe6e6; color: #cc0000; border-color: var(--red); }
+        .status-yellow { background-color: #fff9e6; color: #b38f00; border-color: var(--yellow); }
+        .status-green { background-color: #e6f7e9; color: #006600; border-color: var(--green); }
+
+        /* Border Farben */
+        .border-red { border-left-color: var(--red); }
+        .border-yellow { border-left-color: var(--yellow); }
+        .border-green { border-left-color: var(--green); }
+
+    </style>
+</head>
+<body>
+
+    <h1>Lernplaner v17.2 📱</h1>
+    
+    <div class="container" id="planner-container">
+        </div>
+
+<script>
+    // --- DATENSTRUKTUR (Initial Data) ---
+    // Hier simulieren wir alte Daten, um den Decay-Effekt zu testen
+    let topics = [
+        { 
+            id: 1, 
+            title: "HTML Grundlagen",

@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ultimate Lern-Suite V17.14 (Dark Mode Fix)</title>
+    <title>Ultimate Lern-Suite V19.1 (IHK Wizard)</title>
     
-    <!-- PWA Settings -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0052cc">
@@ -49,13 +48,12 @@
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
-            padding: 15px; /* Weniger Padding für Mobile */
-            padding-bottom: 100px; /* Platz für Footer auf Handy */
+            padding: 15px; 
+            padding-bottom: 140px; 
             line-height: 1.5;
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Prevent Zoom on iOS inputs */
         input, select, textarea { font-size: 16px !important; }
 
         /* --- Header --- */
@@ -68,11 +66,7 @@
             margin-bottom: 20px;
         }
 
-        .header-top {
-            display: flex;
-            flex-direction: column; /* Stack on mobile default */
-            gap: 15px;
-        }
+        .header-top { display: flex; flex-direction: column; gap: 15px; }
 
         @media (min-width: 600px) {
             .header-top { flex-direction: row; justify-content: space-between; align-items: center; }
@@ -81,14 +75,8 @@
         .header-info h1 { margin: 0; font-size: 1.5rem; }
         .header-info p { margin: 5px 0 0 0; opacity: 0.9; font-size: 0.9rem; }
 
-        .header-controls-wrapper {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+        .header-controls-wrapper { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
-        /* Streak Badge */
         .streak-badge {
             background: rgba(255,255,255,0.2);
             padding: 6px 12px;
@@ -96,13 +84,13 @@
             font-weight: bold;
             display: flex; align-items: center; gap: 5px;
             font-size: 0.9rem;
+            cursor: pointer;
         }
 
-        /* Buttons Bigger Touch Targets */
         .btn-dark-mode, .btn-exam-action {
             background: rgba(255,255,255,0.2);
             border: none; color: white;
-            width: 44px; height: 44px; /* Apple Standard Min Size */
+            width: 44px; height: 44px;
             border-radius: 10px;
             font-size: 1.2rem;
             display: flex; align-items: center; justify-content: center;
@@ -117,7 +105,7 @@
         .exam-controls { display: flex; gap: 8px; }
         #examSelect { 
             flex-grow: 1; padding: 8px; border-radius: 6px; border: none; font-weight: bold; color: #333;
-            height: 44px; /* Touch target */
+            height: 44px;
         }
 
         /* Tabs */
@@ -145,18 +133,19 @@
             background: linear-gradient(135deg, #7c3aed, #db2777); color: white; border: none; 
             padding: 15px; border-radius: 12px; font-weight: bold; font-size: 1rem; width: 100%;
             margin-bottom: 20px; box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
+            cursor: pointer;
         }
 
         .adhoc-toggle {
             background: var(--hover-bg); border: none; width: 100%; padding: 12px; border-radius: 8px;
             text-align: left; font-weight: 600; color: var(--text); margin-bottom: 10px;
-            display: flex; align-items: center; gap: 10px;
+            display: flex; align-items: center; gap: 10px; cursor: pointer;
         }
         
         .input-card {
             background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border);
             margin-bottom: 20px; display: none; gap: 10px;
-            grid-template-columns: 1fr; /* Stack on mobile */
+            grid-template-columns: 1fr;
         }
         .input-card.open { display: grid; }
         @media (min-width: 600px) { .input-card.open { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); } }
@@ -167,18 +156,15 @@
             box-sizing: border-box;
         }
         .btn-add {
-            width: 100%; padding: 12px; background: var(--text); color: var(--bg); border: none; border-radius: 8px; font-weight: bold;
+            width: 100%; padding: 12px; background: var(--text); color: var(--bg); border: none; border-radius: 8px; font-weight: bold; cursor: pointer;
         }
 
         /* --- RESPONSIVE TABLES / LISTS --- */
-        
-        /* Cockpit List Style (No Table on Mobile) */
         .task-table { width: 100%; border-collapse: collapse; }
         
-        /* Mobile Card View for Tables */
         @media (max-width: 768px) {
             .task-table, .wbs-table, tbody, tr, td, th { display: block; width: 100%; box-sizing: border-box; }
-            .task-table thead, .wbs-table thead { display: none; } /* Hide headers */
+            .task-table thead, .wbs-table thead { display: none; }
             
             .task-table tr, .wbs-table tr {
                 background: var(--card-bg);
@@ -199,7 +185,6 @@
                 text-align: right;
             }
 
-            /* Labels for card view */
             .wbs-table td::before {
                 content: attr(data-label);
                 font-weight: bold;
@@ -207,57 +192,75 @@
                 font-size: 0.85rem;
                 text-align: left;
                 margin-right: 10px;
+                min-width: 60px;
             }
 
-            /* Specific styling for WBS inputs on mobile */
             .wbs-table input, .wbs-table select { 
-                width: 100%; 
-                text-align: right; 
-                border: none; 
-                background: transparent; 
-                padding: 5px; 
-                color: var(--text) !important; /* FIX: Force text color for Mobile Dark Mode */
+                width: 100%; text-align: right; border: none; background: transparent; padding: 5px; color: var(--text) !important;
             }
             .wbs-table input:focus { background: var(--input-bg); }
             
-            /* Status Selector Styling */
-            .status-select { width: auto; padding: 5px 10px; border-radius: 20px; text-align-last: right; }
+            .status-select { 
+                width: auto; 
+                padding: 6px 12px; 
+                border-radius: 8px; 
+                text-align-last: center; 
+                border: none;
+                font-weight: bold;
+                -webkit-appearance: none;
+                appearance: none;
+            }
             
-            /* Action Buttons Row */
             .action-cell { justify-content: flex-end !important; margin-top: 10px; border-top: 1px solid var(--border) !important; padding-top: 10px !important;}
         }
 
-        /* Desktop Table Styles override */
         @media (min-width: 769px) {
             .task-table th, .wbs-table th { background: var(--header-cell-bg); padding: 15px; text-align: left; border-bottom: 2px solid var(--border); }
             .task-table td, .wbs-table td { padding: 12px; border-bottom: 1px solid var(--border); }
             .wbs-container { background: var(--card-bg); padding: 20px; border-radius: 12px; }
         }
 
-        /* Common Elements */
-        .score-badge { padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.85rem; }
-        .score-high { background: #fee2e2; color: #991b1b; }
-        .score-med { background: #fef3c7; color: #92400e; }
-        .score-low { background: #dcfce7; color: #166534; }
-
-        .btn-check { 
-            font-size: 1.5rem; background: none; border: none; color: var(--border); cursor: pointer; padding: 10px;
-        }
+        .score-badge { padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.85rem; background: var(--hover-bg); border:1px solid var(--border); }
+        
+        .btn-check { font-size: 1.5rem; background: none; border: none; color: var(--border); cursor: pointer; padding: 10px; }
         .btn-check.checked { color: var(--success); }
         .task-done { text-decoration: line-through; opacity: 0.5; }
+
+        .level-dots { font-size: 0.7rem; color: var(--primary); letter-spacing: 2px; margin-right: 5px;}
+        .level-dots .active { opacity: 1; }
+        .level-dots .inactive { opacity: 0.2; }
+
+        /* TOAST Notification */
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: var(--text); color: var(--bg);
+            text-align: center; border-radius: 50px; padding: 16px; position: fixed; z-index: 9999;
+            left: 50%; bottom: 80px; transform: translateX(-50%); 
+            font-weight: 500; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 80px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 80px; opacity: 1;} to {bottom: 0; opacity: 0;} }
 
         /* Footer */
         .footer-tools {
             margin-top: 40px; text-align: center; display: flex; flex-direction: column; gap: 15px;
         }
         .footer-link { 
-            color: var(--text-muted); text-decoration: none; padding: 10px; 
-            border: 1px solid var(--border); border-radius: 8px; background: var(--card-bg);
+            color: var(--text-muted); text-decoration: none; padding: 12px; 
+            border: 1px solid var(--border); border-radius: 8px; background: var(--card-bg); font-weight: 500;
+            cursor: pointer;
         }
 
         /* Modal */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-card { background: var(--card-bg); width: 100%; max-width: 350px; padding: 25px; border-radius: 16px; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+        .modal-card { background: var(--card-bg); width: 100%; max-width: 400px; padding: 25px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .template-btn { width:100%; padding:15px; margin-bottom:10px; border:1px solid var(--border); border-radius:8px; background:var(--bg); text-align:left; cursor:pointer; color:var(--text); font-weight:bold; }
+        .template-btn:hover { background:var(--hover-bg); border-color:var(--primary); }
+        
+        .wizard-section { margin-bottom: 15px; }
+        .wizard-section h4 { margin-bottom: 5px; }
+        .wizard-checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; }
+        .wizard-checkbox-label { background: var(--hover-bg); padding: 5px 10px; border-radius: 6px; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -265,7 +268,7 @@
     <div class="suite-header">
         <div class="header-top">
             <div class="header-info">
-                <h1>🎓 Lern-Suite App</h1>
+                <h1>🎓 Lern-Suite V19.1</h1>
                 <div class="streak-badge" onclick="initStreak()">
                     🔥 <span id="streakCount">0</span> Tage
                 </div>
@@ -298,7 +301,7 @@
             <div style="margin-top:5px; font-size:0.9em; opacity:0.8" id="phaseFocus">...</div>
         </div>
 
-        <button class="btn-magic" onclick="autoFillCockpit()">🪄 Auto-Fill (Top 3)</button>
+        <button class="btn-magic" onclick="autoFillCockpit()">🪄 Smart Auto-Fill (SRS)</button>
 
         <button class="adhoc-toggle" onclick="toggleAdhoc()">
             + Blitz-Aufgabe (Manuell)
@@ -331,31 +334,38 @@
     <!-- TAB 2: BACKLOG -->
     <div id="tab-backlog" class="tab-content">
         <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-            <button class="wbs-btn" style="background:var(--primary); color:white; flex-grow:1;" onclick="addWbsRow()">+ Neues Thema</button>
-            <button class="wbs-btn" style="flex-grow:1;" onclick="sortBacklogByScore()">🔽 Sortieren</button>
+            <button class="wbs-btn" style="background:var(--primary); color:white; flex-grow:1; padding:10px; border-radius:8px; border:none;" onclick="addWbsRow()">+ Neues Thema</button>
+            <button class="wbs-btn" style="flex-grow:1; padding:10px; border-radius:8px; border:1px solid var(--border);" onclick="sortBacklogByScore()">🔽 Sortieren</button>
         </div>
 
         <table class="wbs-table">
             <tbody id="wbsTableBody"></tbody>
         </table>
-        <div id="emptyBacklogMsg" style="text-align:center; padding:40px; display:none;">Leerer Katalog.</div>
+        <div id="emptyBacklogMsg" style="text-align:center; padding:40px; display:none;">
+            Leerer Katalog.<br>
+            <small>Nutze den CSV Import unten.</small>
+        </div>
     </div>
 
     <!-- TAB 3: INFO -->
     <div id="tab-howto" class="tab-content">
         <div style="background:var(--card-bg); padding:20px; border-radius:12px;">
-            <h3>📱 App Mode</h3>
-            <p>Diese Version ist für Handys optimiert. Tabellen werden als Karten angezeigt.</p>
-            <ul>
-                <li><strong>Turbo:</strong> Enter im Katalog erstellt neue Zeile.</li>
-                <li><strong>Sync:</strong> Haken im Cockpit = Grün im Katalog.</li>
-                <li><strong>Clean:</strong> Erledigtes verschwindet nach 0.8s.</li>
-            </ul>
+            <h3>🧠 IHK-Katalog Import</h3>
+            <p><strong>Option A: Einfache Liste</strong></p>
+            <p>Spalten: <code>Modul; Thema; Zeit; Prio</code></p>
+            <hr>
+            <p><strong>Option B: IHK Katalog (KMS)</strong></p>
+            <p>Lädt automatisch die IHK-Struktur. Wähle beim Import einfach deinen Beruf (z.B. FISI) und Prüfungsteil (z.B. AP1) aus.</p>
         </div>
     </div>
 
     <!-- FOOTER -->
     <div class="footer-tools">
+        <!-- CSV BUTTON -->
+        <a class="footer-link" onclick="document.getElementById('csvInput').click()" style="border-color:var(--success); color:var(--success); font-weight:bold;">📊 CSV Import (Wizard)</a>
+        <input type="file" id="csvInput" style="display:none" accept=".csv, .txt" onchange="handleCsvImport(event)">
+
+        <a class="footer-link" onclick="openTemplateModal()">📚 Standard Vorlagen</a>
         <a class="footer-link" onclick="openInstallModal()">📲 App Installieren (Info)</a>
         <a class="footer-link" onclick="downloadBackup()">💾 Backup speichern</a>
         <a class="footer-link" onclick="restoreBackup()">📂 Backup laden</a>
@@ -363,25 +373,65 @@
         <input type="file" id="fileInput" style="display:none" onchange="handleFileSelect(event)">
     </div>
 
-    <!-- INSTALL MODAL -->
+    <!-- MODALS -->
     <div id="installModal" class="modal-overlay">
         <div class="modal-card">
             <h3 style="margin-top:0">App installieren</h3>
             <p>Für Vollbild ohne Browser-Leiste:</p>
-            <ul>
-                <li><strong>iOS:</strong> Teilen-Button -> "Zum Home-Bildschirm".</li>
-                <li><strong>Android:</strong> Menü -> "App installieren".</li>
-            </ul>
-            <p style="background:#fff3cd; color:#856404; padding:10px; border-radius:6px; font-size:0.9em;">
-                ⚠️ <strong>Achtung:</strong> Daten werden nur auf diesem Gerät gespeichert!
-            </p>
+            <ul><li>iOS: Teilen -> Home-Bildschirm</li><li>Android: Menü -> App installieren</li></ul>
             <button onclick="document.getElementById('installModal').style.display='none'" style="width:100%; padding:10px; margin-top:10px;">Verstanden</button>
         </div>
     </div>
 
+    <div id="templateModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 style="margin-top:0">📚 Katalog importieren</h3>
+            <button class="template-btn" onclick="loadTemplate('fisi_ap1')">💻 FISI - AP1 (Netzwerk & IT)</button>
+            <button class="template-btn" onclick="loadTemplate('kaufmann_ap1')">📊 Kaufmann - AP1 (Beschaffung)</button>
+            <button class="template-btn" onclick="loadTemplate('empty')">⚪ Leeres Projekt</button>
+            <button onclick="document.getElementById('templateModal').style.display='none'" style="width:100%; padding:10px; margin-top:10px;">Abbrechen</button>
+        </div>
+    </div>
+
+    <!-- CSV WIZARD MODAL -->
+    <div id="csvWizardModal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 style="margin-top:0">📊 IHK Import Wizard</h3>
+            <div class="wizard-section">
+                <h4>1. Dein Beruf (Filter)</h4>
+                <select id="wizBeruf" style="width:100%; padding:10px; border-radius:6px;"></select>
+                <small style="color:var(--text-muted)">Wählt auch Zeilen wie "KDIG + FISI"</small>
+            </div>
+            <div class="wizard-section">
+                <h4>2. Prüfungsteil</h4>
+                <div id="wizExamType" class="wizard-checkbox-group"></div>
+            </div>
+            <div style="margin-top:20px; display:flex; gap:10px;">
+                <button onclick="executeWizardImport()" style="background:var(--success); color:white; border:none; padding:12px; border-radius:8px; flex-grow:1; font-weight:bold;">Import Starten</button>
+                <button onclick="document.getElementById('csvWizardModal').style.display='none'" style="background:var(--border); border:none; padding:12px; border-radius:8px;">Abbruch</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast">Nachricht...</div>
+
     <script>
+        // --- TEMPLATES (Fallback) ---
+        const TEMPLATES = {
+            fisi_ap1: [
+                {mod: "Netzwerk", task: "IPv4 Subnetting & CIDR", time: "45", imp: "10"},
+                {mod: "Netzwerk", task: "IPv6 Grundlagen", time: "30", imp: "8"},
+                {mod: "Hardware", task: "RAID Level", time: "30", imp: "10"}
+            ],
+            kaufmann_ap1: [
+                {mod: "Beschaffung", task: "ABC-Analyse", time: "30", imp: "10"}
+            ]
+        };
+
         // --- DATA ---
         let exams = [], activeExamId = null, cockpitTasks = [], wbsData = [];
+        let rawCsvLines = []; // Temporary storage for wizard
 
         function initApp() {
             try {
@@ -397,8 +447,11 @@
                     saveAll();
                 } else if(!activeExamId) activeExamId = exams[0].id;
 
-                // Migration
-                wbsData.forEach(t => { if(!t.id) t.id = Date.now()+Math.random(); if(t.decayFlag===undefined) t.decayFlag=false; });
+                wbsData.forEach(t => { 
+                    if(!t.id) t.id = Date.now()+Math.random(); 
+                    if(t.decayFlag===undefined) t.decayFlag=false;
+                    if(t.level===undefined) t.level = (t.status === 'done') ? 1 : 0; 
+                });
 
                 initStreak();
                 applyDecay();
@@ -414,24 +467,16 @@
             localStorage.setItem('wbsData', JSON.stringify(wbsData));
         }
 
-        function renderAll() {
-            renderHeader();
-            renderCockpit();
-            renderWBS();
-        }
+        function renderAll() { renderHeader(); renderCockpit(); renderWBS(); }
 
-        // --- STREAK & DECAY ---
-        function initStreak() {
-            const today = new Date().toISOString().split('T')[0];
-            let s = JSON.parse(localStorage.getItem('streakData')) || { count: 0, lastLogin: null };
-            if(s.lastLogin !== today) {
-                const yest = new Date(); yest.setDate(yest.getDate()-1);
-                if(s.lastLogin === yest.toISOString().split('T')[0]) s.count++;
-                else s.count = 1;
-                s.lastLogin = today;
-                localStorage.setItem('streakData', JSON.stringify(s));
-            }
-            document.getElementById('streakCount').innerText = s.count;
+        // --- SRS LOGIC ---
+        function getInterval(level) {
+            if(level === 0) return 1; 
+            if(level === 1) return 3;  
+            if(level === 2) return 7;  
+            if(level === 3) return 14; 
+            if(level >= 4) return 30;  
+            return 3;
         }
 
         function getDaysDiff(d) {
@@ -444,18 +489,32 @@
             wbsData.forEach(t => {
                 if(t.examId !== activeExamId) return;
                 const diff = getDaysDiff(t.lastReviewed);
-                if(t.status==='done' && diff>3) { t.status='doing'; t.decayFlag=true; changed=true; }
-                if(t.status!=='todo' && diff>7) { t.status='todo'; t.decayFlag=true; changed=true; }
+                const limit = getInterval(t.level);
+
+                if(t.status==='done' && diff > limit) { 
+                    t.status='doing'; t.decayFlag=true; changed=true; 
+                }
+                if(t.status!=='todo' && diff > (limit * 2.5)) { 
+                    t.status='todo'; t.decayFlag=true; changed=true; 
+                }
             });
             if(changed) saveAll();
         }
 
-        function calcScore(imp, min, decay, status) {
+        function calcScore(imp, min, decay, status, level) {
             if(status === 'done') return 0;
             let s = (parseInt(imp||5) * 10);
             if(parseInt(min||60) <= 30) s += 5;
             if(decay) s += 20;
+            if(level > 0 && decay) s += (level * 5); 
             return s;
+        }
+
+        // --- HELPER ---
+        function showToast(msg) {
+            const t = document.getElementById("toast");
+            t.className = "show"; t.innerText = msg;
+            setTimeout(function(){ t.className = t.className.replace("show", ""); }, 3000);
         }
 
         // --- HEADER ---
@@ -467,17 +526,11 @@
                 sel.innerHTML += `<option value="${e.id}" ${e.id===activeExamId?'selected':''}>${e.name}${d}</option>`;
             });
             
-            // Phase Display
             const ex = exams.find(e=>e.id===activeExamId);
             const daysLeft = ex && ex.date ? Math.ceil((new Date(ex.date) - new Date())/864e5) : "?";
             document.getElementById('daysLeft').innerText = daysLeft;
             const badge = document.getElementById('currentPhaseBadge');
-            
-            if(daysLeft === "?") badge.innerText = "SETUP";
-            else if(daysLeft > 42) badge.innerText = "1. VERSTEHEN";
-            else if(daysLeft > 21) badge.innerText = "2. ENCODIEREN";
-            else if(daysLeft > 7) badge.innerText = "3. ABRUF";
-            else badge.innerText = "4. TRANSFER";
+            if(daysLeft > 42) badge.innerText = "1. VERSTEHEN"; else if(daysLeft > 7) badge.innerText = "3. ABRUF"; else badge.innerText = "4. TRANSFER";
         }
 
         function addExam() {
@@ -492,42 +545,24 @@
         function deleteExam() { if(exams.length>1 && confirm("Löschen?")) { exams = exams.filter(e=>e.id!==activeExamId); activeExamId=exams[0].id; saveAll(); renderAll(); } }
         function switchExam() { activeExamId = document.getElementById('examSelect').value; saveAll(); renderAll(); }
         function toggleDarkMode() { document.body.classList.toggle('dark-mode'); localStorage.setItem('darkMode', document.body.classList.contains('dark-mode')?'on':'off'); }
-
-        // --- TABS (added) ---
-        function switchTab(name) {
-            document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active'));
-            document.getElementById('tab-'+name).classList.add('active');
-            document.getElementById('tab-btn-'+name).classList.add('active');
-        }
+        function switchTab(name) { document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active')); document.getElementById('tab-'+name).classList.add('active'); document.getElementById('tab-btn-'+name).classList.add('active'); }
 
         // --- COCKPIT ---
         function autoFillCockpit() {
             const pool = wbsData.filter(t => t.examId === activeExamId && t.status !== 'done' && !cockpitTasks.some(ct => ct.originId === t.id));
             if(pool.length === 0) return alert("Alles erledigt!");
-            
-            pool.sort((a,b) => calcScore(b.imp, b.time, b.decayFlag, b.status) - calcScore(a.imp, a.time, a.decayFlag, a.status));
-            
+            pool.sort((a,b) => calcScore(b.imp, b.time, b.decayFlag, b.status, b.level) - calcScore(a.imp, a.time, a.decayFlag, a.status, a.level));
             pool.slice(0, 3).forEach(src => {
-                cockpitTasks.push({
-                    id: Date.now() + Math.random(), originId: src.id, examId: activeExamId,
-                    modul: src.mod, task: src.task, imp: src.imp, time: src.time, done: false,
-                    score: calcScore(src.imp, src.time, src.decayFlag, src.status)
-                });
+                cockpitTasks.push({ id: Date.now() + Math.random(), originId: src.id, examId: activeExamId, modul: src.mod, task: src.task, imp: src.imp, time: src.time, done: false, score: calcScore(src.imp, src.time, src.decayFlag, src.status, src.level) });
                 src.status = 'doing';
             });
             saveAll(); renderAll();
         }
 
         function addCockpitTask() {
-            const m = document.getElementById('inModul').value;
-            const t = document.getElementById('inTask').value;
+            const m = document.getElementById('inModul').value, t = document.getElementById('inTask').value;
             if(!t) return;
-            cockpitTasks.push({
-                id: Date.now(), examId: activeExamId, modul: m, task: t, 
-                imp: document.getElementById('inImp').value, time: document.getElementById('inTime').value,
-                done: false, score: 50
-            });
+            cockpitTasks.push({ id: Date.now(), examId: activeExamId, modul: m, task: t, imp: document.getElementById('inImp').value, time: document.getElementById('inTime').value, done: false, score: 50 });
             saveAll(); renderCockpit(); toggleAdhoc(); document.getElementById('inTask').value="";
         }
 
@@ -535,26 +570,10 @@
             const tb = document.getElementById('cockpitTableBody'); tb.innerHTML = "";
             const ts = cockpitTasks.filter(t => t.examId === activeExamId);
             ts.sort((a,b) => a.done===b.done ? b.score-a.score : a.done?1:-1);
-            
-            if(ts.length===0) document.getElementById('emptyCockpitMsg').style.display='block';
-            else document.getElementById('emptyCockpitMsg').style.display='none';
-
+            if(ts.length===0) document.getElementById('emptyCockpitMsg').style.display='block'; else document.getElementById('emptyCockpitMsg').style.display='none';
             ts.forEach(t => {
-                const row = document.createElement('tr');
-                if(t.done) row.className = 'task-done';
-                row.innerHTML = `
-                    <td>
-                        <div style="font-weight:bold; font-size:0.9em; color:var(--primary)">${t.modul||'-'}</div>
-                        <div style="font-size:1.1em; margin-top:2px;">${t.task}</div>
-                        <div style="margin-top:5px; font-size:0.85em; color:var(--text-muted); display:flex; gap:10px;">
-                            <span>⏱ ${t.time}m</span> <span>⚡ ${t.imp}</span> <span>🏆 ${t.score}</span>
-                        </div>
-                    </td>
-                    <td style="text-align:right; min-width:60px;">
-                        <button class="btn-check ${t.done?'checked':''}" onclick="toggleDone(${t.id})">✔</button>
-                        ${!t.done ? `<button onclick="delTask(${t.id})" style="background:none;border:none;font-size:1.2rem;opacity:0.5;">🗑️</button>` : ''}
-                    </td>
-                `;
+                const row = document.createElement('tr'); if(t.done) row.className = 'task-done';
+                row.innerHTML = `<td><div style="font-weight:bold;color:var(--primary)">${t.modul||'-'}</div><div style="font-size:1.1em">${t.task}</div><div style="font-size:0.85em;color:var(--text-muted)">⏱ ${t.time}m ⚡ ${t.imp} 🏆 ${t.score}</div></td><td style="text-align:right"><button class="btn-check ${t.done?'checked':''}" onclick="toggleDone(${t.id})">✔</button> ${!t.done ? `<button onclick="delTask(${t.id})" style="background:none;border:none;font-size:1.2rem;opacity:0.5;">🗑️</button>` : ''}</td>`;
                 tb.appendChild(row);
             });
         }
@@ -566,8 +585,18 @@
                 if(t.originId) {
                     const master = wbsData.find(w => w.id === t.originId);
                     if(master) {
-                        master.status = t.done ? 'done' : 'doing';
-                        if(t.done) { master.lastReviewed = new Date().toISOString().split('T')[0]; master.decayFlag = false; }
+                        if(t.done) {
+                            master.status = 'done';
+                            master.lastReviewed = new Date().toISOString().split('T')[0];
+                            master.decayFlag = false;
+                            master.level = (master.level || 0) + 1; // SRS LEVEL UP
+                            
+                            // TOAST MESSAGE
+                            const nextInterval = getInterval(master.level);
+                            showToast(`👍 Super! Level ${master.level} erreicht.\nWiedervorlage in ${nextInterval} Tagen.`);
+                        } else {
+                            master.status = 'doing';
+                        }
                         saveAll(); renderWBS();
                     }
                 }
@@ -582,100 +611,226 @@
         function renderWBS() {
             const tb = document.getElementById('wbsTableBody'); tb.innerHTML = "";
             const ds = wbsData.filter(t => t.examId === activeExamId);
-            
-            if(ds.length===0) document.getElementById('emptyBacklogMsg').style.display='block';
-            else document.getElementById('emptyBacklogMsg').style.display='none';
+            if(ds.length===0) document.getElementById('emptyBacklogMsg').style.display='block'; else document.getElementById('emptyBacklogMsg').style.display='none';
 
             ds.forEach((r, idx) => {
                 const globalIdx = wbsData.indexOf(r);
-                const score = calcScore(r.imp, r.time, r.decayFlag, r.status);
+                const score = calcScore(r.imp, r.time, r.decayFlag, r.status, r.level);
+                
+                // DOTS
+                let dots = "";
+                for(let i=0; i<4; i++) dots += (i < r.level) ? "●" : "○";
+                
                 const row = document.createElement('tr');
                 
-                // Mobile Optimized Row Layout via data-labels
                 row.innerHTML = `
                     <td data-label="Modul"><input value="${r.mod}" oninput="updWBS(${globalIdx},'mod',this.value)" placeholder="Modul"></td>
                     <td data-label="Thema"><input value="${r.task}" oninput="updWBS(${globalIdx},'task',this.value)" onkeydown="checkEnter(event,${globalIdx})" placeholder="Thema"></td>
-                    <td data-label="Details">
-                        <div style="display:flex; gap:5px; width:100%;">
-                            <input type="number" value="${r.time}" oninput="updWBS(${globalIdx},'time',this.value)" style="width:50%" placeholder="Min">
-                            <select onchange="updWBS(${globalIdx},'imp',this.value)" style="width:50%">
-                                <option value="10" ${r.imp=='10'?'selected':''}>Prio 10</option>
-                                <option value="5" ${r.imp=='5'?'selected':''}>Prio 5</option>
-                                <option value="3" ${r.imp=='3'?'selected':''}>Prio 3</option>
+                    <td data-label="Details"><div style="display:flex;gap:5px;width:100%"><input type="number" value="${r.time}" oninput="updWBS(${globalIdx},'time',this.value)" style="width:50%"><select onchange="updWBS(${globalIdx},'imp',this.value)" style="width:50%"><option value="10" ${r.imp=='10'?'selected':''}>Prio 10</option><option value="5" ${r.imp=='5'?'selected':''}>Prio 5</option><option value="3" ${r.imp=='3'?'selected':''}>Prio 3</option></select></div></td>
+                    <td data-label="Status">
+                        <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px; width:100%;">
+                            <select class="status-select" onchange="updStatus(${globalIdx},this.value)" style="background:${getStatusColor(r.status)}; color:#000;">
+                                <option value="todo" ${r.status=='todo'?'selected':''}>🔴 Offen</option>
+                                <option value="doing" ${r.status=='doing'?'selected':''}>🟡 Doing</option>
+                                <option value="done" ${r.status=='done'?'selected':''}>🟢 Sitzt</option>
                             </select>
+                            <div style="display:flex; align-items:center; gap:5px;">
+                                <span class="level-dots" title="Level ${r.level}">${dots}</span>
+                                <span class="score-badge">${score} Pkt</span>
+                            </div>
                         </div>
                     </td>
-                    <td data-label="Status">
-                        <select class="status-select" onchange="updStatus(${globalIdx},this.value)" style="background:${getStatusColor(r.status)}; color:#000;">
-                            <option value="todo" ${r.status=='todo'?'selected':''}>🔴 Offen</option>
-                            <option value="doing" ${r.status=='doing'?'selected':''}>🟡 Doing</option>
-                            <option value="done" ${r.status=='done'?'selected':''}>🟢 Sitzt</option>
-                        </select>
-                        <span class="score-badge" style="margin-left:10px;">${score} Pkt</span>
-                    </td>
-                    <td class="action-cell">
-                        <button class="wbs-btn" onclick="pushToCockpit(${globalIdx})">🚀 Laden</button>
-                        <button class="wbs-btn" style="color:red; margin-left:10px;" onclick="delWBS(${globalIdx})">×</button>
-                    </td>
+                    <td class="action-cell"><button class="wbs-btn" onclick="pushToCockpit(${globalIdx})">🚀</button><button class="wbs-btn" style="color:red;margin-left:10px;" onclick="delWBS(${globalIdx})">×</button></td>
                 `;
                 tb.appendChild(row);
             });
         }
 
-        function getStatusColor(s) {
-            if(s==='done') return '#dcfce7'; // green
-            if(s==='doing') return '#fef3c7'; // yellow
-            return '#fee2e2'; // red
-        }
-
-        function updWBS(idx, field, val) { wbsData[idx][field] = val; saveAll(); }
+        function getStatusColor(s) { if(s==='done') return '#dcfce7'; if(s==='doing') return '#fef3c7'; return '#fee2e2'; }
+        function updWBS(idx, f, v) { wbsData[idx][f] = v; saveAll(); }
         function updStatus(idx, val) { 
-            wbsData[idx].status = val; 
-            if(val==='done') { wbsData[idx].lastReviewed = new Date().toISOString().split('T')[0]; wbsData[idx].decayFlag=false; }
+            const task = wbsData[idx];
+            task.status = val; 
+            if(val==='done') { 
+                task.lastReviewed = new Date().toISOString().split('T')[0]; task.decayFlag=false; 
+                task.level = (task.level || 0) + 1;
+                showToast(`👍 Manuell gelernt! Level ${task.level} erreicht.`);
+            } else if (val === 'todo') {
+                if(confirm("Hast du das Thema vergessen? Level wird auf 0 zurückgesetzt.")) {
+                    task.level = 0;
+                }
+            }
             saveAll(); renderWBS(); 
         }
-        function addWbsRow() { wbsData.push({ id:Date.now()+Math.random(), examId:activeExamId, mod:"", task:"", time:"30", imp:"5", status:"todo" }); saveAll(); renderWBS(); }
-        function checkEnter(e, idx) { 
-            if(e.key==='Enter') { 
-                wbsData.splice(idx+1, 0, { id:Date.now()+Math.random(), examId:activeExamId, mod:wbsData[idx].mod, task:"", time:"30", imp:"5", status:"todo" });
-                saveAll(); renderWBS(); 
-            } 
-        }
+        function addWbsRow() { wbsData.push({ id:Date.now()+Math.random(), examId:activeExamId, mod:"", task:"", time:"30", imp:"5", status:"todo", level:0 }); saveAll(); renderWBS(); }
+        function checkEnter(e, idx) { if(e.key==='Enter') { wbsData.splice(idx+1, 0, { id:Date.now()+Math.random(), examId:activeExamId, mod:wbsData[idx].mod, task:"", time:"30", imp:"5", status:"todo", level:0 }); saveAll(); renderWBS(); } }
         function delWBS(idx) { if(confirm("Löschen?")) { wbsData.splice(idx,1); saveAll(); renderWBS(); } }
-        function pushToCockpit(idx) {
-            const r = wbsData[idx];
-            if(cockpitTasks.some(c=>c.originId===r.id)) return alert("Schon drin!");
-            cockpitTasks.push({ id:Date.now(), originId:r.id, examId:activeExamId, modul:r.mod, task:r.task, imp:r.imp, time:r.time, done:false, score:calcScore(r.imp,r.time,r.decayFlag,'doing') });
-            r.status='doing'; saveAll(); renderAll();
-        }
-        function sortBacklogByScore() {
-            wbsData.sort((a,b) => calcScore(b.imp,b.time,b.decayFlag,b.status) - calcScore(a.imp,a.time,a.decayFlag,a.status));
-            saveAll(); renderWBS();
+        function pushToCockpit(idx) { const r = wbsData[idx]; if(cockpitTasks.some(c=>c.originId===r.id)) return alert("Schon drin!"); cockpitTasks.push({ id:Date.now(), originId:r.id, examId:activeExamId, modul:r.mod, task:r.task, imp:r.imp, time:r.time, done:false, score:calcScore(r.imp,r.time,r.decayFlag,'doing', r.level) }); r.status='doing'; saveAll(); renderAll(); }
+        function sortBacklogByScore() { wbsData.sort((a,b) => calcScore(b.imp,b.time,b.decayFlag,b.status,b.level) - calcScore(a.imp,a.time,a.decayFlag,a.status,a.level)); saveAll(); renderWBS(); }
+
+        // --- INTELLIGENT IHK IMPORT WIZARD ---
+        function handleCsvImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const lines = text.split('\n');
+                
+                // Detect Format: Check Header
+                if(lines.length > 0 && lines[0].toLowerCase().includes("ausbildungsberuf") && lines[0].toLowerCase().includes("prüfungsteil")) {
+                    // IHK FORMAT -> WIZARD
+                    rawCsvLines = lines; // Save for later
+                    showWizard(lines);
+                } else {
+                    // FALLBACK SIMPLE
+                    processSimpleCsv(lines);
+                }
+            };
+            reader.readAsText(file);
         }
 
-        // --- BACKUP & INSTALL ---
-        function downloadBackup() {
-            const data = { exams, activeExamId, cockpitTasks, wbsData, streak: JSON.parse(localStorage.getItem('streakData')) };
-            const blob = new Blob([JSON.stringify(data)], {type:'application/json'});
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'backup.json'; a.click();
+        function showWizard(lines) {
+            const berufe = new Set();
+            const examTypes = new Set();
+
+            // Scan Data (Skip Header)
+            for(let i=1; i<lines.length; i++) {
+                const cols = lines[i].split(';');
+                if(cols.length > 5) {
+                    if(cols[0]) examTypes.add(cols[0].trim());
+                    if(cols[1]) {
+                        // Split combined like "KDIG + FISI"
+                        const parts = cols[1].split('+');
+                        parts.forEach(p => berufe.add(p.trim()));
+                    }
+                }
+            }
+
+            // Populate DOM
+            const selBeruf = document.getElementById('wizBeruf');
+            selBeruf.innerHTML = "";
+            Array.from(berufe).sort().forEach(b => {
+                selBeruf.innerHTML += `<option value="${b}">${b}</option>`;
+            });
+
+            const divExam = document.getElementById('wizExamType');
+            divExam.innerHTML = "";
+            Array.from(examTypes).sort().forEach(e => {
+                divExam.innerHTML += `
+                    <label class="wizard-checkbox-label">
+                        <input type="checkbox" value="${e}" checked> ${e}
+                    </label>`;
+            });
+
+            document.getElementById('csvWizardModal').style.display = 'flex';
         }
-        function restoreBackup() { document.getElementById('fileInput').click(); }
-        function handleFileSelect(e) {
-            const fr = new FileReader();
-            fr.onload = (ev) => {
-                const d = JSON.parse(ev.target.result);
-                localStorage.setItem('exams', JSON.stringify(d.exams));
-                localStorage.setItem('activeExamId', d.activeExamId);
-                localStorage.setItem('wbsData', JSON.stringify(d.wbsData));
-                localStorage.setItem('cockpitTasks', JSON.stringify(d.cockpitTasks));
-                if(d.streak) localStorage.setItem('streakData', JSON.stringify(d.streak));
-                location.reload();
-            };
-            fr.readAsText(e.target.files[0]);
+
+        function executeWizardImport() {
+            const selectedBeruf = document.getElementById('wizBeruf').value;
+            const checkedBoxes = document.querySelectorAll('#wizExamType input:checked');
+            const selectedExams = Array.from(checkedBoxes).map(cb => cb.value);
+
+            let count = 0;
+            
+            // Loop RAW Data
+            for(let i=1; i<rawCsvLines.length; i++) {
+                const line = rawCsvLines[i];
+                if(!line || line.trim()==="") continue;
+                const cols = line.split(';');
+                if(cols.length < 6) continue;
+
+                // COL MAPPING (Based on IHK CSV)
+                const examType = cols[0].trim(); // AP1
+                const berufStr = cols[1].trim(); // KDIG + FISI
+                const mod = cols[3].trim(); // Themenkreis (e.g. Projectmanagement)
+                const task = cols[4].trim(); // Unterpunkt (e.g. Gantt)
+                const type = cols[6].trim(); // Typ (Themenkreis, Unterpunkt...)
+
+                // FILTER LOGIC
+                const matchesBeruf = berufStr.includes(selectedBeruf);
+                const matchesExam = selectedExams.includes(examType);
+                const isTask = type.toLowerCase().includes("unterpunkt");
+
+                if(matchesBeruf && matchesExam && isTask) {
+                    wbsData.push({
+                        id: Date.now() + Math.random(),
+                        examId: activeExamId,
+                        mod: mod, // Themenkreis as Module
+                        task: task, // Unterpunkt as Task
+                        time: "30", // Default
+                        imp: "5",   // Default
+                        status: 'todo',
+                        level: 0,
+                        decayFlag: false
+                    });
+                    count++;
+                }
+            }
+
+            saveAll();
+            renderAll();
+            document.getElementById('csvWizardModal').style.display = 'none';
+            alert(`${count} passende Themen für ${selectedBeruf} importiert!`);
         }
-        function hardReset() { if(confirm("Alles löschen?")) { localStorage.clear(); location.reload(); } }
+
+        function processSimpleCsv(lines) {
+            let count = 0;
+            lines.forEach(line => {
+                if(!line || line.trim() === "") return;
+                const delim = line.includes(';') ? ';' : ',';
+                const cols = line.split(delim);
+                if(cols.length >= 2) {
+                    const mod = cols[0].trim();
+                    const task = cols[1].trim();
+                    if(mod.toLowerCase() === 'modul' || task.toLowerCase() === 'thema') return;
+
+                    wbsData.push({
+                        id: Date.now() + Math.random(),
+                        examId: activeExamId,
+                        mod: mod,
+                        task: task,
+                        time: cols[2] ? cols[2].trim() : "30",
+                        imp: cols[3] ? cols[3].trim() : "5",
+                        status: 'todo',
+                        level: 0,
+                        decayFlag: false
+                    });
+                    count++;
+                }
+            });
+            saveAll();
+            renderAll();
+            alert(`${count} Themen importiert (Einfacher Modus)!`);
+        }
+
+        // --- EXTRAS ---
+        function initStreak() {
+            const today = new Date().toISOString().split('T')[0];
+            let s = JSON.parse(localStorage.getItem('streakData')) || { count: 0, lastLogin: null };
+            if(s.lastLogin !== today) {
+                const yest = new Date(); yest.setDate(yest.getDate()-1);
+                if(s.lastLogin === yest.toISOString().split('T')[0]) s.count++; else s.count = 1;
+                s.lastLogin = today; localStorage.setItem('streakData', JSON.stringify(s));
+            }
+            document.getElementById('streakCount').innerText = s.count;
+        }
+        function openTemplateModal() { document.getElementById('templateModal').style.display='flex'; }
+        function loadTemplate(key) {
+            if(key==='empty') { addExam(); document.getElementById('templateModal').style.display='none'; return; }
+            const data = TEMPLATES[key]; if(!data) return;
+            const choice = confirm("Hinzufügen (OK) oder Ersetzen (Abbrechen)?");
+            if(!choice) wbsData = wbsData.filter(t => t.examId !== activeExamId);
+            data.forEach(i => wbsData.push({ id:Date.now()+Math.random(), examId:activeExamId, mod:i.mod, task:i.task, time:i.time, imp:i.imp, status:'todo', level:0 }));
+            saveAll(); renderAll(); document.getElementById('templateModal').style.display='none';
+        }
         function openInstallModal() { document.getElementById('installModal').style.display='flex'; }
-        
+        function hardReset() { if(confirm("⚠️ Alles löschen?")) { localStorage.clear(); location.reload(); } }
+        function downloadBackup() { const d={exams,activeExamId,cockpitTasks,wbsData,streak:JSON.parse(localStorage.getItem('streakData'))}; const b=new Blob([JSON.stringify(d)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='backup.json'; a.click(); }
+        function restoreBackup() { document.getElementById('fileInput').click(); }
+        function handleFileSelect(e) { const fr=new FileReader(); fr.onload=(ev)=>{ const d=JSON.parse(ev.target.result); localStorage.setItem('exams',JSON.stringify(d.exams)); localStorage.setItem('activeExamId',d.activeExamId); localStorage.setItem('wbsData',JSON.stringify(d.wbsData)); localStorage.setItem('cockpitTasks',JSON.stringify(d.cockpitTasks)); location.reload(); }; fr.readAsText(e.target.files[0]); }
+
         window.onload = initApp;
     </script>
 </body>

@@ -3,19 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ultimate Lern-Suite V17.12 (App Mode)</title>
+    <title>Ultimate Lern-Suite V17.13 (Mobile)</title>
     
-    <!-- PWA / App Mode Meta Tags -->
+    <!-- PWA Settings -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0052cc">
     <link rel="apple-touch-icon" href="https://img.icons8.com/color/180/brain--v1.png">
-    <link rel="icon" type="image/png" href="https://img.icons8.com/color/96/brain--v1.png">
 
     <style>
         :root {
-            /* LIGHT THEME */
             --primary: #0052cc;
             --primary-dark: #003d99;
             --bg: #f8fafc;
@@ -30,18 +27,8 @@
             --danger: #b91c1c;
             --warning-bg: #fff7ed;
             --warning-text: #9a3412;
-            
-            /* Focus Ring */
-            --focus-ring: 3px solid #facc15; 
-            --focus-offset: 2px;
-
-            /* Status Colors */
-            --status-todo-bg: #fee2e2; 
-            --status-doing-bg: #fef3c7; 
-            --status-done-bg: #dcfce7;
         }
 
-        /* DARK THEME */
         body.dark-mode {
             --primary: #60a5fa;
             --primary-dark: #3b82f6;
@@ -55,171 +42,215 @@
             --hover-bg: #334155;
             --warning-bg: #451a03;
             --warning-text: #fb923c;
-            
-            --status-todo-bg: #450a0a;
-            --status-doing-bg: #451a03;
-            --status-done-bg: #052e16;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding-bottom: 80px; /* Mehr Platz unten für Mobile */
+            padding: 15px; /* Weniger Padding für Mobile */
+            padding-bottom: 100px; /* Platz für Footer auf Handy */
             line-height: 1.5;
             -webkit-tap-highlight-color: transparent;
         }
 
-        *:focus-visible { outline: var(--focus-ring); outline-offset: var(--focus-offset); border-radius: 2px; }
+        /* Prevent Zoom on iOS inputs */
+        input, select, textarea { font-size: 16px !important; }
 
-        /* --- Header & Tabs --- */
+        /* --- Header --- */
         .suite-header {
             background: linear-gradient(135deg, var(--primary-dark), var(--primary));
             color: white;
-            padding: 20px 20px 0 20px;
-            border-radius: 12px 12px 0 0;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
         }
 
         .header-top {
-            display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;
+            display: flex;
+            flex-direction: column; /* Stack on mobile default */
+            gap: 15px;
         }
 
-        .header-info h1 { margin: 0 0 5px 0; font-size: 24px; }
-        .header-info p { margin: 0; opacity: 0.95; font-size: 14px; }
+        @media (min-width: 600px) {
+            .header-top { flex-direction: row; justify-content: space-between; align-items: center; }
+        }
 
-        .header-controls-wrapper { display: flex; gap: 10px; align-items: center; }
+        .header-info h1 { margin: 0; font-size: 1.5rem; }
+        .header-info p { margin: 5px 0 0 0; opacity: 0.9; font-size: 0.9rem; }
 
+        .header-controls-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* Streak Badge */
         .streak-badge {
             background: rgba(255,255,255,0.2);
-            color: white;
-            padding: 8px 14px;
-            border-radius: 8px;
+            padding: 6px 12px;
+            border-radius: 20px;
             font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            border: 1px solid rgba(255,255,255,0.3);
-            backdrop-filter: blur(4px);
-            font-size: 15px;
-            cursor: help;
+            display: flex; align-items: center; gap: 5px;
+            font-size: 0.9rem;
         }
-        .streak-fire { font-size: 1.2em; }
 
-        .btn-dark-mode {
-            background: rgba(255,255,255,0.2); border: 2px solid transparent; color: white; width: 44px; height: 44px; border-radius: 8px; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center;
+        /* Buttons Bigger Touch Targets */
+        .btn-dark-mode, .btn-exam-action {
+            background: rgba(255,255,255,0.2);
+            border: none; color: white;
+            width: 44px; height: 44px; /* Apple Standard Min Size */
+            border-radius: 10px;
+            font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
         }
-        .btn-dark-mode:hover { background: rgba(255,255,255,0.3); }
-
-        .exam-control-group {
-            background: rgba(255,255,255,0.15); padding: 10px; border-radius: 8px; display: flex; flex-direction: column; gap: 5px; min-width: 250px;
-        }
-        .exam-control-label { font-size: 12px; font-weight: bold; letter-spacing: 0.5px; }
-        .exam-controls { display: flex; gap: 5px; }
-        #examSelect { flex-grow: 1; padding: 8px; border-radius: 4px; border: 1px solid white; font-weight: bold; color: #333; }
-        .btn-exam-action { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.5); color: white; width: 36px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 16px; }
-        .btn-exam-action:hover { background: rgba(0,0,0,0.4); }
-
-        .tabs { display: flex; gap: 10px; overflow-x: auto; }
-        .tab-btn {
-            background: rgba(255,255,255,0.2); border: none; color: white; padding: 12px 25px; border-radius: 8px 8px 0 0; cursor: pointer; font-weight: 700; font-size: 15px; transition: all 0.2s; white-space: nowrap;
-        }
-        .tab-btn:hover { background: rgba(255,255,255,0.3); }
-        .tab-btn.active { background: var(--bg); color: var(--primary-dark); }
-        body.dark-mode .tab-btn.active { color: #60a5fa; }
-        .tab-content { display: none; padding-top: 20px; }
-        .tab-content.active { display: block; }
-
-        /* --- Phase Display --- */
-        .phase-display {
-            background: var(--card-bg); padding: 20px; border-radius: 8px; border-left: 6px solid var(--primary); margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 15px; color: var(--text); flex-wrap: wrap;
-        }
-        .phase-badge { background: var(--primary); color: white; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; text-transform: uppercase; }
-        .days-left { font-weight: bold; color: var(--danger); font-size: 1.1em; }
-
-        /* --- Cockpit Styles --- */
-        .adhoc-toggle {
-            background: none; border: 2px solid transparent; text-align: left; cursor: pointer; color: var(--text-muted); font-size: 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; padding: 5px; border-radius: 4px; width: 100%; font-weight: 600;
-        }
-        .adhoc-toggle:hover { color: var(--primary); background: var(--hover-bg); }
-        .adhoc-arrow { transition: transform 0.2s; }
-        .adhoc-arrow.open { transform: rotate(90deg); }
-
-        .input-card {
-            background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px dashed var(--border); margin-bottom: 30px; display: none; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; align-items: end;
-        }
-        .input-card.open { display: grid; }
-
-        .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 5px; color: var(--text-muted); }
-        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 15px; background: var(--input-bg); color: var(--text); }
         
-        .btn-add { background-color: var(--text-muted); color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; white-space: nowrap; }
-        .btn-add:hover { background-color: var(--text); }
+        .exam-control-group {
+            background: rgba(255,255,255,0.15);
+            padding: 8px; border-radius: 10px;
+            flex-grow: 1;
+        }
+        .exam-controls { display: flex; gap: 8px; }
+        #examSelect { 
+            flex-grow: 1; padding: 8px; border-radius: 6px; border: none; font-weight: bold; color: #333;
+            height: 44px; /* Touch target */
+        }
+
+        /* Tabs */
+        .tabs { display: flex; gap: 8px; overflow-x: auto; margin-top: 15px; padding-bottom: 5px; }
+        .tab-btn {
+            background: rgba(255,255,255,0.2); border: none; color: white; 
+            padding: 12px 20px; border-radius: 25px;
+            font-weight: 600; font-size: 0.95rem; white-space: nowrap;
+        }
+        .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+
+        /* --- Cockpit & Cards --- */
+        .phase-display {
+            background: var(--card-bg); padding: 15px; border-radius: 12px; border-left: 5px solid var(--primary);
+            margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-size: 0.95rem;
+        }
+        .phase-badge { background: var(--primary); color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; margin-right: 8px; }
 
         .btn-magic {
-            background: linear-gradient(135deg, #7c3aed, #db2777); color: white; border: none; padding: 14px 24px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.3); margin-bottom: 20px; display: block; width: 100%; text-align: center;
+            background: linear-gradient(135deg, #7c3aed, #db2777); color: white; border: none; 
+            padding: 15px; border-radius: 12px; font-weight: bold; font-size: 1rem; width: 100%;
+            margin-bottom: 20px; box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
         }
-        .btn-magic:hover { filter: brightness(1.1); }
 
-        /* Tables */
-        .task-table, .wbs-table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-        .task-table th, .wbs-table th {
-            background: var(--header-cell-bg); text-align: left; padding: 15px; font-size: 13px; color: var(--text); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border);
+        .adhoc-toggle {
+            background: var(--hover-bg); border: none; width: 100%; padding: 12px; border-radius: 8px;
+            text-align: left; font-weight: 600; color: var(--text); margin-bottom: 10px;
+            display: flex; align-items: center; gap: 10px;
         }
-        .task-table td, .wbs-table td { padding: 12px 15px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+        
+        .input-card {
+            background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border);
+            margin-bottom: 20px; display: none; gap: 10px;
+            grid-template-columns: 1fr; /* Stack on mobile */
+        }
+        .input-card.open { display: grid; }
+        @media (min-width: 600px) { .input-card.open { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); } }
 
-        .score-badge { display: inline-block; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 50%; font-weight: bold; font-size: 13px; background: var(--border); color: var(--text); }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px;
+            background: var(--input-bg); color: var(--text);
+            box-sizing: border-box;
+        }
+        .btn-add {
+            width: 100%; padding: 12px; background: var(--text); color: var(--bg); border: none; border-radius: 8px; font-weight: bold;
+        }
+
+        /* --- RESPONSIVE TABLES / LISTS --- */
+        
+        /* Cockpit List Style (No Table on Mobile) */
+        .task-table { width: 100%; border-collapse: collapse; }
+        
+        /* Mobile Card View for Tables */
+        @media (max-width: 768px) {
+            .task-table, .wbs-table, tbody, tr, td, th { display: block; width: 100%; box-sizing: border-box; }
+            .task-table thead, .wbs-table thead { display: none; } /* Hide headers */
+            
+            .task-table tr, .wbs-table tr {
+                background: var(--card-bg);
+                margin-bottom: 15px;
+                border-radius: 12px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                border: 1px solid var(--border);
+                padding: 15px;
+                position: relative;
+            }
+
+            .task-table td, .wbs-table td {
+                padding: 5px 0;
+                border: none;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                text-align: right;
+            }
+
+            /* Labels for card view */
+            .wbs-table td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                color: var(--text-muted);
+                font-size: 0.85rem;
+                text-align: left;
+                margin-right: 10px;
+            }
+
+            /* Specific styling for WBS inputs on mobile */
+            .wbs-table input, .wbs-table select { width: 100%; text-align: right; border: none; background: transparent; padding: 5px; }
+            .wbs-table input:focus { background: var(--input-bg); }
+            
+            /* Status Selector Styling */
+            .status-select { width: auto; padding: 5px 10px; border-radius: 20px; text-align-last: right; }
+            
+            /* Action Buttons Row */
+            .action-cell { justify-content: flex-end !important; margin-top: 10px; border-top: 1px solid var(--border) !important; padding-top: 10px !important;}
+        }
+
+        /* Desktop Table Styles override */
+        @media (min-width: 769px) {
+            .task-table th, .wbs-table th { background: var(--header-cell-bg); padding: 15px; text-align: left; border-bottom: 2px solid var(--border); }
+            .task-table td, .wbs-table td { padding: 12px; border-bottom: 1px solid var(--border); }
+            .wbs-container { background: var(--card-bg); padding: 20px; border-radius: 12px; }
+        }
+
+        /* Common Elements */
+        .score-badge { padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.85rem; }
         .score-high { background: #fee2e2; color: #991b1b; }
         .score-med { background: #fef3c7; color: #92400e; }
         .score-low { background: #dcfce7; color: #166534; }
 
-        .btn-action { background: none; border: 1px solid transparent; cursor: pointer; font-size: 18px; opacity: 0.7; color: var(--text); padding: 5px; border-radius: 4px; }
-        .btn-action:hover { opacity: 1; background: var(--hover-bg); border-color: var(--border); }
-        .btn-check { color: var(--success); opacity: 0.4; font-size: 22px; margin-right: 10px; background: none; border: none; cursor: pointer; }
-        .btn-check:hover { opacity: 1; transform: scale(1.1); }
-        .task-done { text-decoration: line-through; opacity: 0.6; }
-        /* Smooth Fade Out */
-        .task-done-remove { opacity: 0; transition: opacity 0.5s ease-out; }
-
-        /* WBS Specifics */
-        .wbs-container { background: var(--card-bg); border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow-x: auto; }
-        .wbs-toolbar { margin-bottom: 15px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
-        
-        .wbs-btn { background: var(--bg); border: 1px solid var(--border); padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; color: var(--text); }
-        .wbs-btn:hover { background: var(--hover-bg); }
-        .wbs-btn-primary { background: var(--primary); color: white; border-color: var(--primary); }
-        .wbs-btn-primary:hover { background: var(--primary-dark); }
-
-        .wbs-table input, .wbs-table select { width: 100%; padding: 8px; border: 1px solid var(--border); background: var(--input-bg); border-radius: 4px; font-size: 13px; box-sizing: border-box; color: var(--text); }
-        
-        /* Status Styling mit Decay Farben */
-        .status-select { font-weight: bold; cursor: pointer; }
-        .bg-todo { background-color: var(--status-todo-bg) !important; color: var(--danger) !important; }
-        .bg-doing { background-color: var(--status-doing-bg) !important; color: #b45309 !important; }
-        .bg-done { background-color: var(--status-done-bg) !important; color: var(--success) !important; }
-
-        .decay-icon { color: var(--danger); font-size: 1.2em; cursor: help; margin-right: 5px; }
-
-        .btn-bridge { background: var(--hover-bg); border: 1px solid var(--border); color: var(--primary); cursor: pointer; font-size: 18px; padding: 6px 12px; border-radius: 4px; margin-right: 5px; vertical-align: middle; }
-        .btn-bridge:hover { background: var(--primary); color: white; }
+        .btn-check { 
+            font-size: 1.5rem; background: none; border: none; color: var(--border); cursor: pointer; padding: 10px;
+        }
+        .btn-check.checked { color: var(--success); }
+        .task-done { text-decoration: line-through; opacity: 0.5; }
 
         /* Footer */
-        .footer-tools { margin-top: 50px; text-align: center; font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 20px; display:flex; gap:15px; justify-content:center; flex-wrap:wrap; }
-        .footer-link { color: var(--text-muted); text-decoration: underline; cursor: pointer; padding: 5px; }
+        .footer-tools {
+            margin-top: 40px; text-align: center; display: flex; flex-direction: column; gap: 15px;
+        }
+        .footer-link { 
+            color: var(--text-muted); text-decoration: none; padding: 10px; 
+            border: 1px solid var(--border); border-radius: 8px; background: var(--card-bg);
+        }
 
-        /* Install Modal */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-card { background: var(--card-bg); color: var(--text); width: 100%; max-width: 400px; border-radius: 12px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .modal-title { margin: 0 0 15px 0; font-size: 1.2rem; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .modal-close { float: right; cursor: pointer; font-size: 1.5rem; line-height: 1; }
-        .install-steps li { margin-bottom: 10px; font-size: 0.9rem; }
-        .sync-warning { background: var(--warning-bg); color: var(--warning-text); padding: 15px; border-radius: 8px; margin-top: 20px; font-weight: bold; font-size: 0.9rem; border: 1px solid var(--warning-text); display:flex; align-items:center; gap:10px; }
-
-        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0; }
+        /* Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-card { background: var(--card-bg); width: 100%; max-width: 350px; padding: 25px; border-radius: 16px; }
     </style>
 </head>
 <body>
@@ -227,21 +258,15 @@
     <div class="suite-header">
         <div class="header-top">
             <div class="header-info">
-                <h1>🎓 Lern-Suite V17.12</h1>
-                <p>Master-List (App Edition)</p>
+                <h1>🎓 Lern-Suite App</h1>
+                <div class="streak-badge" onclick="initStreak()">
+                    🔥 <span id="streakCount">0</span> Tage
+                </div>
             </div>
             
             <div class="header-controls-wrapper">
-                <div class="streak-badge" id="streakBadge" title="Deine tägliche Lern-Serie!">
-                    <span class="streak-fire">🔥</span>
-                    <span id="streakCount">0</span>
-                    <span style="font-size:0.8em; opacity:0.8; margin-left:2px;">Tage</span>
-                </div>
-                <button class="btn-dark-mode" onclick="toggleDarkMode()" aria-label="Dark Mode">
-                    <span aria-hidden="true" id="darkModeIcon">🌙</span>
-                </button>
+                <button class="btn-dark-mode" onclick="toggleDarkMode()">🌙</button>
                 <div class="exam-control-group">
-                    <label for="examSelect" class="exam-control-label">Aktueller Fokus:</label>
                     <div class="exam-controls">
                         <select id="examSelect" onchange="switchExam()"></select>
                         <button class="btn-exam-action" onclick="addExam()">+</button>
@@ -251,140 +276,400 @@
             </div>
         </div>
         
-        <div class="tabs" role="tablist">
+        <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('cockpit')" id="tab-btn-cockpit">🚀 Cockpit</button>
-            <button class="tab-btn" onclick="switchTab('backlog')" id="tab-btn-backlog">📋 Stoff-Katalog</button>
-            <button class="tab-btn" onclick="switchTab('howto')" id="tab-btn-howto">📘 How To</button>
+            <button class="tab-btn" onclick="switchTab('backlog')" id="tab-btn-backlog">📋 Katalog</button>
+            <button class="tab-btn" onclick="switchTab('howto')" id="tab-btn-howto">ℹ️ Info</button>
         </div>
     </div>
 
     <!-- TAB 1: COCKPIT -->
     <div id="tab-cockpit" class="tab-content active">
         <div class="phase-display" id="phaseDisplayBox">
-            <div><span class="phase-badge" id="currentPhaseBadge">Lade...</span></div>
-            <div>
-                Noch <span class="days-left" id="daysLeft">0</span> Tage. 
-                Fokus: <strong id="phaseFocus">...</strong>
-            </div>
+            <span class="phase-badge" id="currentPhaseBadge">Lade...</span>
+            <span style="float:right; font-weight:bold; color:var(--danger)">Noch <span id="daysLeft">0</span> Tage</span>
+            <div style="margin-top:5px; font-size:0.9em; opacity:0.8" id="phaseFocus">...</div>
         </div>
 
-        <button class="btn-magic" onclick="autoFillCockpit()">🪄 Auto-Fill: Top 3 Aufgaben (Priorität & Verfall)</button>
+        <button class="btn-magic" onclick="autoFillCockpit()">🪄 Auto-Fill (Top 3)</button>
 
-        <button class="adhoc-toggle" onclick="toggleAdhoc()" id="adhocToggleBtn">
-            <span class="adhoc-arrow" id="adhocArrow">▶</span> 
-            <span>Blitz-Aufgabe hinzufügen (Ad-hoc / Notfall)</span>
+        <button class="adhoc-toggle" onclick="toggleAdhoc()">
+            + Blitz-Aufgabe (Manuell)
         </button>
 
         <div class="input-card" id="adhocInput">
-            <div class="form-group"><label>Modul</label><input type="text" id="inModul" placeholder="z.B. Orga"></div>
-            <div class="form-group"><label>Aufgabe</label><input type="text" id="inTask" placeholder="Was brennt?"></div>
+            <div class="form-group"><input type="text" id="inModul" placeholder="Modul (z.B. Orga)"></div>
+            <div class="form-group"><input type="text" id="inTask" placeholder="Aufgabe"></div>
             <div class="form-group">
-                <label>Wichtigkeit</label>
                 <select id="inImp">
-                    <option value="10">10 (Extrem)</option>
-                    <option value="8">8 (Hoch)</option>
-                    <option value="5" selected>5 (Mittel)</option>
-                    <option value="3">3 (Niedrig)</option>
+                    <option value="10">Prio 10 (Extrem)</option>
+                    <option value="8">Prio 8 (Hoch)</option>
+                    <option value="5" selected>Prio 5 (Mittel)</option>
+                    <option value="3">Prio 3 (Niedrig)</option>
                 </select>
             </div>
-            <div class="form-group"><label>Dauer (Min)</label><input type="number" id="inTime" value="30"></div>
-            <button class="btn-add" onclick="addCockpitTask()">+ Speichern</button>
+            <div class="form-group"><input type="number" id="inTime" value="30" placeholder="Minuten"></div>
+            <button class="btn-add" onclick="addCockpitTask()">Speichern</button>
         </div>
 
         <table class="task-table">
-            <thead>
-                <tr>
-                    <th width="5%">✔</th>
-                    <th width="15%">Modul</th>
-                    <th width="35%">Aufgabe</th>
-                    <th width="10%">Zeit</th>
-                    <th width="10%">Prio</th>
-                    <th width="10%">Score</th>
-                    <th width="10%"></th>
-                </tr>
-            </thead>
             <tbody id="cockpitTableBody"></tbody>
         </table>
         <div id="emptyCockpitMsg" style="text-align:center; padding:40px; color:var(--text-muted); display:none;">
-            Dein Teller ist leer. <br>Nutze den Zauberstab 🪄 oder hole Aufgaben aus dem Katalog.
+            Nichts zu tun. <br>Drücke auf 🪄 Auto-Fill.
         </div>
     </div>
 
 
-    <!-- TAB 2: MASTER LIST (BACKLOG) -->
+    <!-- TAB 2: BACKLOG -->
     <div id="tab-backlog" class="tab-content">
-        <div class="wbs-container">
-            <div class="wbs-toolbar">
-                <button class="wbs-btn wbs-btn-primary" onclick="addWbsRow()">+ Neues Thema</button>
-                <div style="display:flex; gap:10px;">
-                    <button class="wbs-btn" onclick="sortBacklogByScore()">🔽 Nach Score sortieren</button>
-                    <button class="wbs-btn" onclick="checkDecayManually()">♻️ Decay prüfen</button>
-                    <button class="wbs-btn" onclick="exportWBS()">💾 CSV</button>
-                </div>
-            </div>
-
-            <table class="wbs-table" id="wbsTable">
-                <thead>
-                    <tr>
-                        <th width="5%">!</th>
-                        <th width="20%">Modul/Kategorie</th>
-                        <th width="35%">Thema / Aufgabe</th>
-                        <th width="10%">Zeit</th>
-                        <th width="10%">Prio</th>
-                        <th width="5%">Score</th>
-                        <th width="15%">Status (Ampel)</th>
-                        <th width="10%">Zuletzt</th>
-                        <th width="10%">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="wbsTableBody"></tbody>
-            </table>
-            <div id="emptyBacklogMsg" style="text-align:center; padding:30px; color:var(--text-muted); display:none;">
-                Keine Themen eingetragen. Klicke auf <strong>+ Neues Thema</strong>.
-            </div>
+        <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
+            <button class="wbs-btn" style="background:var(--primary); color:white; flex-grow:1;" onclick="addWbsRow()">+ Neues Thema</button>
+            <button class="wbs-btn" style="flex-grow:1;" onclick="sortBacklogByScore()">🔽 Sortieren</button>
         </div>
+
+        <table class="wbs-table">
+            <tbody id="wbsTableBody"></tbody>
+        </table>
+        <div id="emptyBacklogMsg" style="text-align:center; padding:40px; display:none;">Leerer Katalog.</div>
     </div>
 
-    <!-- TAB 3: HOW TO -->
+    <!-- TAB 3: INFO -->
     <div id="tab-howto" class="tab-content">
-        <div style="background:var(--card-bg); padding:30px; border-radius:12px;">
-            <h2>♻️ Dein Master-Katalog</h2>
-            <p><strong>Die neue Logik:</strong> Es gibt nur noch EINE Liste für alles. Keine Phasen mehr.</p>
+        <div style="background:var(--card-bg); padding:20px; border-radius:12px;">
+            <h3>📱 App Mode</h3>
+            <p>Diese Version ist für Handys optimiert. Tabellen werden als Karten angezeigt.</p>
             <ul>
-                <li><strong>🔥 Streak:</strong> Öffne die App jeden Tag, um deine Flamme am Leben zu erhalten!</li>
-                <li><strong>Erfassen:</strong> Trage Themen ein. Standard ist <span style="color:#b91c1c">🔴 Offen</span>.</li>
-                <li><strong>Turbo-Modus:</strong> Drücke im Aufgaben-Feld, Zeit-Feld oder Prio-Feld <strong>ENTER</strong>, um sofort eine neue Zeile zu erstellen!</li>
-                <li><strong>Lernen:</strong> Schiebe sie ins Cockpit (🚀) und setze sie auf <span style="color:#15803d">🟢 Fertig</span>.</li>
-                <li><strong>Vergessen:</strong> Nach 3 Tagen werden sie automatisch <span style="color:#b45309">🟡 Wiederholen</span>, nach 7 Tagen <span style="color:#b91c1c">🔴 Offen</span>.</li>
+                <li><strong>Turbo:</strong> Enter im Katalog erstellt neue Zeile.</li>
+                <li><strong>Sync:</strong> Haken im Cockpit = Grün im Katalog.</li>
+                <li><strong>Clean:</strong> Erledigtes verschwindet nach 0.8s.</li>
             </ul>
         </div>
     </div>
 
     <!-- FOOTER -->
     <div class="footer-tools">
-        <a class="footer-link" onclick="openInstallModal()" style="font-weight:bold; color:var(--primary);">📱 App installieren</a>
-        <a class="footer-link" onclick="downloadBackup()">Backup speichern</a>
-        <a class="footer-link" onclick="restoreBackup()">Backup laden</a>
-        <a class="footer-link" style="color:var(--danger)" onclick="hardReset()">Reset</a>
+        <a class="footer-link" onclick="openInstallModal()">📲 App Installieren (Info)</a>
+        <a class="footer-link" onclick="downloadBackup()">💾 Backup speichern</a>
+        <a class="footer-link" onclick="restoreBackup()">📂 Backup laden</a>
+        <a class="footer-link" style="color:var(--danger); border-color:var(--danger);" onclick="hardReset()">⚠️ Reset Alles</a>
         <input type="file" id="fileInput" style="display:none" onchange="handleFileSelect(event)">
     </div>
 
     <!-- INSTALL MODAL -->
     <div id="installModal" class="modal-overlay">
         <div class="modal-card">
-            <span class="modal-close" onclick="closeInstallModal()">&times;</span>
-            <h3 class="modal-title">📱 App installieren</h3>
-            
-            <div class="sync-warning">
-                <span style="font-size:1.5em">⚠️</span>
-                <div>
-                    <strong>WICHTIG: Kein Cloud-Sync!</strong><br>
-                    Entscheide dich für EIN Gerät (Handy oder Laptop). Daten werden nur auf diesem Gerät gespeichert!
-                </div>
-            </div>
+            <h3 style="margin-top:0">App installieren</h3>
+            <p>Für Vollbild ohne Browser-Leiste:</p>
+            <ul>
+                <li><strong>iOS:</strong> Teilen-Button -> "Zum Home-Bildschirm".</li>
+                <li><strong>Android:</strong> Menü -> "App installieren".</li>
+            </ul>
+            <p style="background:#fff3cd; color:#856404; padding:10px; border-radius:6px; font-size:0.9em;">
+                ⚠️ <strong>Achtung:</strong> Daten werden nur auf diesem Gerät gespeichert!
+            </p>
+            <button onclick="document.getElementById('installModal').style.display='none'" style="width:100%; padding:10px; margin-top:10px;">Verstanden</button>
+        </div>
+    </div>
 
-            <p style="margin-top:20px;">Füge die App zum Home-Bildschirm hinzu, um sie im Vollbild ohne Browser-Leiste zu nutzen:</p>
+    <script>
+        // --- DATA ---
+        let exams = [], activeExamId = null, cockpitTasks = [], wbsData = [];
+
+        function initApp() {
+            try {
+                exams = JSON.parse(localStorage.getItem('exams')) || [];
+                activeExamId = localStorage.getItem('activeExamId');
+                cockpitTasks = JSON.parse(localStorage.getItem('cockpitTasks')) || [];
+                wbsData = JSON.parse(localStorage.getItem('wbsData')) || [];
+
+                if(exams.length === 0) {
+                    const id = 'def-'+Date.now();
+                    exams.push({id, name:'Beispiel-Prüfung', date:'', startDate: new Date().toISOString().split('T')[0]});
+                    activeExamId = id;
+                    saveAll();
+                } else if(!activeExamId) activeExamId = exams[0].id;
+
+                // Migration
+                wbsData.forEach(t => { if(!t.id) t.id = Date.now()+Math.random(); if(t.decayFlag===undefined) t.decayFlag=false; });
+
+                initStreak();
+                applyDecay();
+                renderAll();
+                if(localStorage.getItem('darkMode')==='on') document.body.classList.add('dark-mode');
+            } catch(e) { console.log(e); }
+        }
+
+        function saveAll() {
+            localStorage.setItem('exams', JSON.stringify(exams));
+            localStorage.setItem('activeExamId', activeExamId);
+            localStorage.setItem('cockpitTasks', JSON.stringify(cockpitTasks));
+            localStorage.setItem('wbsData', JSON.stringify(wbsData));
+        }
+
+        function renderAll() {
+            renderHeader();
+            renderCockpit();
+            renderWBS();
+        }
+
+        // --- STREAK & DECAY ---
+        function initStreak() {
+            const today = new Date().toISOString().split('T')[0];
+            let s = JSON.parse(localStorage.getItem('streakData')) || { count: 0, lastLogin: null };
+            if(s.lastLogin !== today) {
+                const yest = new Date(); yest.setDate(yest.getDate()-1);
+                if(s.lastLogin === yest.toISOString().split('T')[0]) s.count++;
+                else s.count = 1;
+                s.lastLogin = today;
+                localStorage.setItem('streakData', JSON.stringify(s));
+            }
+            document.getElementById('streakCount').innerText = s.count;
+        }
+
+        function getDaysDiff(d) {
+            if(!d) return 999;
+            return Math.floor(Math.abs(new Date() - new Date(d)) / (864e5));
+        }
+
+        function applyDecay() {
+            let changed = false;
+            wbsData.forEach(t => {
+                if(t.examId !== activeExamId) return;
+                const diff = getDaysDiff(t.lastReviewed);
+                if(t.status==='done' && diff>3) { t.status='doing'; t.decayFlag=true; changed=true; }
+                if(t.status!=='todo' && diff>7) { t.status='todo'; t.decayFlag=true; changed=true; }
+            });
+            if(changed) saveAll();
+        }
+
+        function calcScore(imp, min, decay, status) {
+            if(status === 'done') return 0;
+            let s = (parseInt(imp||5) * 10);
+            if(parseInt(min||60) <= 30) s += 5;
+            if(decay) s += 20;
+            return s;
+        }
+
+        // --- HEADER ---
+        function renderHeader() {
+            const sel = document.getElementById('examSelect');
+            sel.innerHTML = "";
+            exams.forEach(e => {
+                let d = e.date ? ` (${e.date.split('-').reverse().join('.')})` : "";
+                sel.innerHTML += `<option value="${e.id}" ${e.id===activeExamId?'selected':''}>${e.name}${d}</option>`;
+            });
             
-            <ul class="install-steps">
-                <li><strong> iOS (Safari):</strong><br>Tippe unten auf "Teilen" <i class="fas fa-share-square"></i> und dann auf "Zum Home-Bildschirm".</li>
-                <li><strong>🤖 Android (Chrome):</strong><br>Tippe oben rechts auf das Men
+            // Phase Display
+            const ex = exams.find(e=>e.id===activeExamId);
+            const daysLeft = ex && ex.date ? Math.ceil((new Date(ex.date) - new Date())/864e5) : "?";
+            document.getElementById('daysLeft').innerText = daysLeft;
+            const badge = document.getElementById('currentPhaseBadge');
+            
+            if(daysLeft === "?") badge.innerText = "SETUP";
+            else if(daysLeft > 42) badge.innerText = "1. VERSTEHEN";
+            else if(daysLeft > 21) badge.innerText = "2. ENCODIEREN";
+            else if(daysLeft > 7) badge.innerText = "3. ABRUF";
+            else badge.innerText = "4. TRANSFER";
+        }
+
+        function addExam() {
+            const n = prompt("Name:"); if(!n) return;
+            const dInput = prompt("Datum (TT.MM.YYYY):");
+            let iso = "";
+            if(dInput) { const p = dInput.split('.'); if(p.length===3) iso = `${p[2]}-${p[1]}-${p[0]}`; }
+            exams.push({ id: 'ex'+Date.now(), name: n, date: iso, startDate: new Date().toISOString().split('T')[0] });
+            activeExamId = exams[exams.length-1].id;
+            saveAll(); renderAll();
+        }
+        function deleteExam() { if(exams.length>1 && confirm("Löschen?")) { exams = exams.filter(e=>e.id!==activeExamId); activeExamId=exams[0].id; saveAll(); renderAll(); } }
+        function switchExam() { activeExamId = document.getElementById('examSelect').value; saveAll(); renderAll(); }
+        function toggleDarkMode() { document.body.classList.toggle('dark-mode'); localStorage.setItem('darkMode', document.body.classList.contains('dark-mode')?'on':'off'); }
+
+        // --- TABS (added) ---
+        function switchTab(name) {
+            document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active'));
+            document.getElementById('tab-'+name).classList.add('active');
+            document.getElementById('tab-btn-'+name).classList.add('active');
+        }
+
+        // --- COCKPIT ---
+        function autoFillCockpit() {
+            const pool = wbsData.filter(t => t.examId === activeExamId && t.status !== 'done' && !cockpitTasks.some(ct => ct.originId === t.id));
+            if(pool.length === 0) return alert("Alles erledigt!");
+            
+            pool.sort((a,b) => calcScore(b.imp, b.time, b.decayFlag, b.status) - calcScore(a.imp, a.time, a.decayFlag, a.status));
+            
+            pool.slice(0, 3).forEach(src => {
+                cockpitTasks.push({
+                    id: Date.now() + Math.random(), originId: src.id, examId: activeExamId,
+                    modul: src.mod, task: src.task, imp: src.imp, time: src.time, done: false,
+                    score: calcScore(src.imp, src.time, src.decayFlag, src.status)
+                });
+                src.status = 'doing';
+            });
+            saveAll(); renderAll();
+        }
+
+        function addCockpitTask() {
+            const m = document.getElementById('inModul').value;
+            const t = document.getElementById('inTask').value;
+            if(!t) return;
+            cockpitTasks.push({
+                id: Date.now(), examId: activeExamId, modul: m, task: t, 
+                imp: document.getElementById('inImp').value, time: document.getElementById('inTime').value,
+                done: false, score: 50
+            });
+            saveAll(); renderCockpit(); toggleAdhoc(); document.getElementById('inTask').value="";
+        }
+
+        function renderCockpit() {
+            const tb = document.getElementById('cockpitTableBody'); tb.innerHTML = "";
+            const ts = cockpitTasks.filter(t => t.examId === activeExamId);
+            ts.sort((a,b) => a.done===b.done ? b.score-a.score : a.done?1:-1);
+            
+            if(ts.length===0) document.getElementById('emptyCockpitMsg').style.display='block';
+            else document.getElementById('emptyCockpitMsg').style.display='none';
+
+            ts.forEach(t => {
+                const row = document.createElement('tr');
+                if(t.done) row.className = 'task-done';
+                row.innerHTML = `
+                    <td>
+                        <div style="font-weight:bold; font-size:0.9em; color:var(--primary)">${t.modul||'-'}</div>
+                        <div style="font-size:1.1em; margin-top:2px;">${t.task}</div>
+                        <div style="margin-top:5px; font-size:0.85em; color:var(--text-muted); display:flex; gap:10px;">
+                            <span>⏱ ${t.time}m</span> <span>⚡ ${t.imp}</span> <span>🏆 ${t.score}</span>
+                        </div>
+                    </td>
+                    <td style="text-align:right; min-width:60px;">
+                        <button class="btn-check ${t.done?'checked':''}" onclick="toggleDone(${t.id})">✔</button>
+                        ${!t.done ? `<button onclick="delTask(${t.id})" style="background:none;border:none;font-size:1.2rem;opacity:0.5;">🗑️</button>` : ''}
+                    </td>
+                `;
+                tb.appendChild(row);
+            });
+        }
+
+        function toggleDone(id) {
+            const t = cockpitTasks.find(x => x.id === id);
+            if(t) {
+                t.done = !t.done;
+                if(t.originId) {
+                    const master = wbsData.find(w => w.id === t.originId);
+                    if(master) {
+                        master.status = t.done ? 'done' : 'doing';
+                        if(t.done) { master.lastReviewed = new Date().toISOString().split('T')[0]; master.decayFlag = false; }
+                        saveAll(); renderWBS();
+                    }
+                }
+                saveAll(); renderCockpit();
+                if(t.done) setTimeout(() => { cockpitTasks = cockpitTasks.filter(x => x.id !== id); saveAll(); renderCockpit(); }, 800);
+            }
+        }
+        function delTask(id) { if(confirm("Löschen?")) { cockpitTasks = cockpitTasks.filter(x=>x.id!==id); saveAll(); renderCockpit(); } }
+        function toggleAdhoc() { document.getElementById('adhocInput').classList.toggle('open'); }
+
+        // --- BACKLOG ---
+        function renderWBS() {
+            const tb = document.getElementById('wbsTableBody'); tb.innerHTML = "";
+            const ds = wbsData.filter(t => t.examId === activeExamId);
+            
+            if(ds.length===0) document.getElementById('emptyBacklogMsg').style.display='block';
+            else document.getElementById('emptyBacklogMsg').style.display='none';
+
+            ds.forEach((r, idx) => {
+                const globalIdx = wbsData.indexOf(r);
+                const score = calcScore(r.imp, r.time, r.decayFlag, r.status);
+                const row = document.createElement('tr');
+                
+                // Mobile Optimized Row Layout via data-labels
+                row.innerHTML = `
+                    <td data-label="Modul"><input value="${r.mod}" oninput="updWBS(${globalIdx},'mod',this.value)" placeholder="Modul"></td>
+                    <td data-label="Thema"><input value="${r.task}" oninput="updWBS(${globalIdx},'task',this.value)" onkeydown="checkEnter(event,${globalIdx})" placeholder="Thema"></td>
+                    <td data-label="Details">
+                        <div style="display:flex; gap:5px; width:100%;">
+                            <input type="number" value="${r.time}" oninput="updWBS(${globalIdx},'time',this.value)" style="width:50%" placeholder="Min">
+                            <select onchange="updWBS(${globalIdx},'imp',this.value)" style="width:50%">
+                                <option value="10" ${r.imp=='10'?'selected':''}>Prio 10</option>
+                                <option value="5" ${r.imp=='5'?'selected':''}>Prio 5</option>
+                                <option value="3" ${r.imp=='3'?'selected':''}>Prio 3</option>
+                            </select>
+                        </div>
+                    </td>
+                    <td data-label="Status">
+                        <select class="status-select" onchange="updStatus(${globalIdx},this.value)" style="background:${getStatusColor(r.status)}; color:#000;">
+                            <option value="todo" ${r.status=='todo'?'selected':''}>🔴 Offen</option>
+                            <option value="doing" ${r.status=='doing'?'selected':''}>🟡 Doing</option>
+                            <option value="done" ${r.status=='done'?'selected':''}>🟢 Sitzt</option>
+                        </select>
+                        <span class="score-badge" style="margin-left:10px;">${score} Pkt</span>
+                    </td>
+                    <td class="action-cell">
+                        <button class="wbs-btn" onclick="pushToCockpit(${globalIdx})">🚀 Laden</button>
+                        <button class="wbs-btn" style="color:red; margin-left:10px;" onclick="delWBS(${globalIdx})">×</button>
+                    </td>
+                `;
+                tb.appendChild(row);
+            });
+        }
+
+        function getStatusColor(s) {
+            if(s==='done') return '#dcfce7'; // green
+            if(s==='doing') return '#fef3c7'; // yellow
+            return '#fee2e2'; // red
+        }
+
+        function updWBS(idx, field, val) { wbsData[idx][field] = val; saveAll(); }
+        function updStatus(idx, val) { 
+            wbsData[idx].status = val; 
+            if(val==='done') { wbsData[idx].lastReviewed = new Date().toISOString().split('T')[0]; wbsData[idx].decayFlag=false; }
+            saveAll(); renderWBS(); 
+        }
+        function addWbsRow() { wbsData.push({ id:Date.now()+Math.random(), examId:activeExamId, mod:"", task:"", time:"30", imp:"5", status:"todo" }); saveAll(); renderWBS(); }
+        function checkEnter(e, idx) { 
+            if(e.key==='Enter') { 
+                wbsData.splice(idx+1, 0, { id:Date.now()+Math.random(), examId:activeExamId, mod:wbsData[idx].mod, task:"", time:"30", imp:"5", status:"todo" });
+                saveAll(); renderWBS(); 
+            } 
+        }
+        function delWBS(idx) { if(confirm("Löschen?")) { wbsData.splice(idx,1); saveAll(); renderWBS(); } }
+        function pushToCockpit(idx) {
+            const r = wbsData[idx];
+            if(cockpitTasks.some(c=>c.originId===r.id)) return alert("Schon drin!");
+            cockpitTasks.push({ id:Date.now(), originId:r.id, examId:activeExamId, modul:r.mod, task:r.task, imp:r.imp, time:r.time, done:false, score:calcScore(r.imp,r.time,r.decayFlag,'doing') });
+            r.status='doing'; saveAll(); renderAll();
+        }
+        function sortBacklogByScore() {
+            wbsData.sort((a,b) => calcScore(b.imp,b.time,b.decayFlag,b.status) - calcScore(a.imp,a.time,a.decayFlag,a.status));
+            saveAll(); renderWBS();
+        }
+
+        // --- BACKUP & INSTALL ---
+        function downloadBackup() {
+            const data = { exams, activeExamId, cockpitTasks, wbsData, streak: JSON.parse(localStorage.getItem('streakData')) };
+            const blob = new Blob([JSON.stringify(data)], {type:'application/json'});
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'backup.json'; a.click();
+        }
+        function restoreBackup() { document.getElementById('fileInput').click(); }
+        function handleFileSelect(e) {
+            const fr = new FileReader();
+            fr.onload = (ev) => {
+                const d = JSON.parse(ev.target.result);
+                localStorage.setItem('exams', JSON.stringify(d.exams));
+                localStorage.setItem('activeExamId', d.activeExamId);
+                localStorage.setItem('wbsData', JSON.stringify(d.wbsData));
+                localStorage.setItem('cockpitTasks', JSON.stringify(d.cockpitTasks));
+                if(d.streak) localStorage.setItem('streakData', JSON.stringify(d.streak));
+                location.reload();
+            };
+            fr.readAsText(e.target.files[0]);
+        }
+        function hardReset() { if(confirm("Alles löschen?")) { localStorage.clear(); location.reload(); } }
+        function openInstallModal() { document.getElementById('installModal').style.display='flex'; }
+        
+        window.onload = initApp;
+    </script>
+</body>
+</html>

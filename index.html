@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ultimate Lern-Suite V26.0 (Smart Priority)</title>
+    <title>Ultimate Lern-Suite V31.9 (Clean Code)</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -11,275 +11,120 @@
     <link rel="apple-touch-icon" href="https://img.icons8.com/color/180/brain--v1.png">
 
     <style>
+        /* --- VARIABLES --- */
         :root {
-            --primary: #0052cc;
-            --primary-dark: #003d99;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #0f172a;
-            --text-muted: #475569;
-            --border: #cbd5e1;
-            --input-bg: #ffffff;
-            --header-cell-bg: #f1f5f9;
-            --hover-bg: #e2e8f0;
-            --success: #15803d;
-            --danger: #b91c1c;
-            --warning-bg: #fff7ed;
-            --warning-text: #9a3412;
-            --lf-badge-bg: #e0f2fe;
-            --lf-badge-text: #0369a1;
-            --ap-badge-bg: #f3e8ff;
-            --ap-badge-text: #6b21a8;
-            --prio-high: #dc2626; /* Rot für Prio 8-10 */
-            --prio-mid: #d97706;  /* Orange für Prio 5-7 */
-            --prio-low: #16a34a;  /* Grün für Prio 1-4 */
+            --primary: #0052cc; --primary-dark: #003d99; --bg: #f8fafc; --card-bg: #ffffff;
+            --text: #0f172a; --text-muted: #475569; --border: #cbd5e1; --input-bg: #ffffff;
+            --header-cell-bg: #f1f5f9; --hover-bg: #e2e8f0; --success: #15803d; --danger: #b91c1c;
+            --warning-bg: #fff7ed; --warning-text: #9a3412; --prio-high: #dc2626; --prio-mid: #d97706; --prio-low: #16a34a;
+            --chart-done: #22c55e; --grade-bg: #ecfccb; --grade-text: #365314;
         }
-
         body.dark-mode {
-            --primary: #60a5fa;
-            --primary-dark: #3b82f6;
-            --bg: #0f172a;
-            --card-bg: #1e293b;
-            --text: #f8fafc;
-            --text-muted: #cbd5e1;
-            --border: #475569;
-            --input-bg: #020617;
-            --header-cell-bg: #1e293b;
-            --hover-bg: #334155;
-            --warning-bg: #451a03;
-            --warning-text: #fb923c;
-            --lf-badge-bg: #0c4a6e;
-            --lf-badge-text: #bae6fd;
-            --ap-badge-bg: #4c1d95;
-            --ap-badge-text: #e9d5ff;
+            --primary: #60a5fa; --primary-dark: #3b82f6; --bg: #0f172a; --card-bg: #1e293b;
+            --text: #f8fafc; --text-muted: #cbd5e1; --border: #475569; --input-bg: #020617;
+            --header-cell-bg: #1e293b; --hover-bg: #334155; --warning-bg: #451a03; --warning-text: #fb923c;
+            --grade-bg: #3f6212; --grade-text: #ecfccb;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 15px; 
-            padding-bottom: 140px; 
-            line-height: 1.5;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        input, select, textarea { font-size: 16px !important; }
-
-        /* --- Header --- */
-        .suite-header {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            color: white;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            margin-bottom: 20px;
-        }
-
-        .header-top { display: flex; flex-direction: column; gap: 15px; }
-
-        @media (min-width: 600px) {
-            .header-top { flex-direction: row; justify-content: space-between; align-items: center; }
-        }
-
-        .header-info h1 { margin: 0; font-size: 1.5rem; }
-        .header-info p { margin: 5px 0 0 0; opacity: 0.9; font-size: 0.9rem; }
-
-        .header-controls-wrapper { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-
-        .streak-badge {
-            background: rgba(255,255,255,0.2);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            display: flex; align-items: center; gap: 5px;
-            font-size: 0.9rem;
-            cursor: pointer;
-        }
-
-        .btn-dark-mode, .btn-exam-action {
-            background: rgba(255,255,255,0.2);
-            border: none; color: white;
-            width: 44px; height: 44px;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-        }
+        /* --- BASE --- */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 10px; padding-bottom: 140px; line-height: 1.5; -webkit-tap-highlight-color: transparent; }
+        input, select, textarea { font-size: 16px !important; outline: none; }
         
-        .exam-control-group {
-            background: rgba(255,255,255,0.15);
-            padding: 8px; border-radius: 10px;
-            flex-grow: 1;
-        }
-        .exam-controls { display: flex; gap: 8px; }
-        #examSelect { 
-            flex-grow: 1; padding: 8px; border-radius: 6px; border: none; font-weight: bold; color: #333;
-            height: 44px;
-        }
+        /* --- COMPONENTS --- */
+        .suite-header { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color: white; padding: 15px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 15px; }
+        .header-top { display: flex; flex-direction: column; gap: 10px; }
+        @media (min-width: 600px) { .header-top { flex-direction: row; justify-content: space-between; align-items: center; } }
+        .header-info h1 { margin: 0; font-size: 1.4rem; }
+        .header-controls-wrapper { display: flex; gap: 8px; align-items: center; }
+        
+        .btn-icon { background: rgba(255,255,255,0.2); border: none; color: white; width: 36px; height: 36px; border-radius: 8px; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .btn-icon.sm { width: 32px; font-size: 0.9rem; } /* Cleaned up inline styles */
+        #examSelect { flex-grow: 1; padding: 0 10px; border-radius: 6px; border: none; font-weight: bold; color: #333; height: 36px; }
 
-        /* Tabs */
-        .tabs { display: flex; gap: 8px; overflow-x: auto; margin-top: 15px; padding-bottom: 5px; }
-        .tab-btn {
-            background: rgba(255,255,255,0.2); border: none; color: white; 
-            padding: 12px 20px; border-radius: 25px;
-            font-weight: 600; font-size: 0.95rem; white-space: nowrap;
-        }
-        .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-
+        .tabs { display: flex; gap: 5px; overflow-x: auto; margin-top: 15px; padding-bottom: 2px; }
+        .tab-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; white-space: nowrap; }
+        .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
 
-        /* --- Cockpit & Cards --- */
-        .phase-display {
-            background: var(--card-bg); padding: 15px; border-radius: 12px; border-left: 5px solid var(--primary);
-            margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            font-size: 0.95rem;
-        }
-        .phase-badge { background: var(--primary); color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; margin-right: 8px; }
-
-        .btn-magic {
-            background: linear-gradient(135deg, #7c3aed, #db2777); color: white; border: none; 
-            padding: 15px; border-radius: 12px; font-weight: bold; font-size: 1rem; width: 100%;
-            margin-bottom: 20px; box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
-            cursor: pointer;
-        }
-
-        .adhoc-toggle {
-            background: var(--hover-bg); border: none; width: 100%; padding: 12px; border-radius: 8px;
-            text-align: left; font-weight: 600; color: var(--text); margin-bottom: 10px;
-            display: flex; align-items: center; gap: 10px; cursor: pointer;
-        }
+        /* --- VIEWS --- */
+        .phase-display { background: var(--card-bg); padding: 15px; border-radius: 12px; border-left: 5px solid var(--primary); margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .btn-magic { background: linear-gradient(135deg, #7c3aed, #db2777); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; width: 100%; margin-bottom: 15px; cursor: pointer; }
         
-        .input-card {
-            background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border);
-            margin-bottom: 20px; display: none; gap: 10px;
-            grid-template-columns: 1fr;
-        }
-        .input-card.open { display: grid; }
-        @media (min-width: 600px) { .input-card.open { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); } }
+        .task-list { display: flex; flex-direction: column; gap: 8px; }
+        .cockpit-card { background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: opacity 0.3s ease; }
+        .check-btn { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--border); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; font-size: 1.2rem; transition: all 0.2s; }
+        .check-btn.checked { background: var(--success); border-color: var(--success); color: white; }
 
-        .form-group input, .form-group select {
-            width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px;
-            background: var(--input-bg); color: var(--text);
-            box-sizing: border-box;
-        }
-        .btn-add {
-            width: 100%; padding: 12px; background: var(--text); color: var(--bg); border: none; border-radius: 8px; font-weight: bold; cursor: pointer;
-        }
-
-        /* --- RESPONSIVE TABLES / LISTS --- */
-        .task-table { width: 100%; border-collapse: collapse; }
+        .dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media (min-width: 768px) { .dashboard-grid { grid-template-columns: 1fr 1fr; } }
+        .stat-card { background: var(--card-bg); padding: 20px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.02); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .chart-container { position: relative; width: 160px; height: 160px; border-radius: 50%; background: conic-gradient(var(--chart-done) 0deg, var(--border) 0deg 360deg); display: flex; align-items: center; justify-content: center; margin-bottom: 15px; transition: background 0.5s ease; }
+        .chart-inner { width: 120px; height: 120px; background: var(--card-bg); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .chart-value { font-size: 1.8rem; font-weight: 800; color: var(--text); }
         
-        @media (max-width: 768px) {
-            .task-table, .wbs-table, tbody, tr, td, th { display: block; width: 100%; box-sizing: border-box; }
-            .task-table thead, .wbs-table thead { display: none; }
-            
-            .task-table tr, .wbs-table tr {
-                background: var(--card-bg);
-                margin-bottom: 15px;
-                border-radius: 12px;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-                border: 1px solid var(--border);
-                padding: 15px;
-                position: relative;
-            }
+        .gpa-box { background: var(--grade-bg); color: var(--grade-text); padding: 15px; border-radius: 12px; width: 100%; margin-top: 10px; text-align: center; font-weight: bold; border: 1px solid var(--border); }
+        .module-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        .module-table th { text-align: left; color: var(--text-muted); padding: 5px; border-bottom: 1px solid var(--border); }
+        .module-table td { padding: 8px 5px; border-bottom: 1px solid var(--border); }
+        .module-table input { width: 50px; padding: 5px; border-radius: 4px; border: 1px solid var(--border); text-align: center; background: rgba(255,255,255,0.5); }
+        .progress-row { margin-bottom: 12px; }
+        .progress-header { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px; font-weight: 600; }
+        .progress-track { width: 100%; height: 10px; background: var(--hover-bg); border-radius: 5px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.8s ease; }
+        .stat-list-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
 
-            .task-table td, .wbs-table td {
-                padding: 5px 0;
-                border: none;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                text-align: right;
-            }
-
-            .wbs-table td::before {
-                content: attr(data-label);
-                font-weight: bold;
-                color: var(--text-muted);
-                font-size: 0.85rem;
-                text-align: left;
-                margin-right: 10px;
-                min-width: 60px;
-            }
-
-            .wbs-table input, .wbs-table select { 
-                width: 100%; text-align: right; border: none; background: transparent; padding: 5px; color: var(--text) !important;
-            }
-            .wbs-table input:focus { background: var(--input-bg); }
-            
-            .status-select { 
-                width: auto; 
-                padding: 6px 12px; 
-                border-radius: 8px; 
-                text-align-last: center; 
-                border: none;
-                font-weight: bold;
-                -webkit-appearance: none;
-                appearance: none;
-            }
-            
-            .action-cell { justify-content: flex-end !important; margin-top: 10px; border-top: 1px solid var(--border) !important; padding-top: 10px !important;}
-        }
-
-        @media (min-width: 769px) {
-            .task-table th, .wbs-table th { background: var(--header-cell-bg); padding: 15px; text-align: left; border-bottom: 2px solid var(--border); }
-            .task-table td, .wbs-table td { padding: 12px; border-bottom: 1px solid var(--border); }
-            .wbs-container { background: var(--card-bg); padding: 20px; border-radius: 12px; }
-        }
-
-        .score-badge { padding: 4px 8px; border-radius: 12px; font-weight: bold; font-size: 0.85rem; background: var(--hover-bg); border:1px solid var(--border); }
-        .lf-badge { 
-            padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: bold; 
-            background: var(--lf-badge-bg); color: var(--lf-badge-text); margin-left: 5px; text-transform: uppercase;
-        }
-        .ap-badge { 
-            padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: bold; 
-            background: var(--ap-badge-bg); color: var(--ap-badge-text); margin-left: 5px; text-transform: uppercase;
-        }
-        .prio-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:5px; }
-
-        .btn-check { font-size: 1.5rem; background: none; border: none; color: var(--border); cursor: pointer; padding: 10px; }
-        .btn-check.checked { color: var(--success); }
-        .task-done { text-decoration: line-through; opacity: 0.5; }
-
-        .level-dots { font-size: 0.7rem; color: var(--primary); letter-spacing: 2px; margin-right: 5px;}
-        .level-dots .active { opacity: 1; }
-        .level-dots .inactive { opacity: 0.2; }
-
-        /* Filter Row */
-        .filter-row { display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap; background: var(--header-cell-bg); padding:10px; border-radius:12px; border:1px solid var(--border); }
-        .filter-select { flex-grow:1; padding:10px; border-radius:8px; border:1px solid var(--border); background:var(--card-bg); color:var(--text); font-weight:bold;}
-
-        /* Footer */
-        .footer-tools {
-            margin-top: 40px; text-align: center; display: flex; flex-direction: column; gap: 15px;
-        }
-        .footer-link { 
-            color: var(--text-muted); text-decoration: none; padding: 12px; 
-            border: 1px solid var(--border); border-radius: 8px; background: var(--card-bg); font-weight: 500;
-            cursor: pointer;
-        }
-
-        /* Modal */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
-        .modal-card { background: var(--card-bg); width: 100%; max-width: 400px; padding: 25px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .template-btn { width:100%; padding:15px; margin-bottom:10px; border:1px solid var(--border); border-radius:8px; background:var(--bg); text-align:left; cursor:pointer; color:var(--text); font-weight:bold; }
-        .template-btn:hover { background:var(--hover-bg); border-color:var(--primary); }
+        .filter-row { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; background: var(--header-cell-bg); padding: 10px; border-radius: 10px; border: 1px solid var(--border); }
+        .filter-select { flex-grow: 1; padding: 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); font-weight: bold; }
+        #wbsTreeContainer { display: flex; flex-direction: column; gap: 10px; }
+        details.tree-level-1 { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+        details.tree-level-1 > summary { padding: 12px; background: var(--header-cell-bg); font-weight: bold; cursor: pointer; list-style: none; display: flex; justify-content: space-between; }
+        details.tree-level-1 > summary::-webkit-details-marker { display: none; }
+        details.tree-level-2 { border-top: 1px solid var(--border); }
+        details.tree-level-2 > summary { padding: 10px 12px; font-weight: 600; cursor: pointer; color: var(--primary); background: var(--card-bg); display: flex; align-items: center; gap: 8px; }
         
-        /* TOAST Notification */
-        #toast {
-            visibility: hidden; min-width: 250px; background-color: var(--text); color: var(--bg);
-            text-align: center; border-radius: 50px; padding: 16px; position: fixed; z-index: 9999;
-            left: 50%; bottom: 80px; transform: translateX(-50%); 
-            font-weight: 500; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 80px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 80px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        .tree-item { display: grid; grid-template-columns: 25px 1fr auto; gap: 10px; align-items: center; background: var(--card-bg); padding: 8px 12px; border-top: 1px solid var(--border); }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; cursor: pointer; margin: 0 auto; }
+        .status-dot.todo { background: var(--danger); }
+        .status-dot.doing { background: var(--warning-text); }
+        .status-dot.done { background: var(--success); }
+        .item-input { width: 100%; border: none; background: transparent; font-weight: 500; color: var(--text); padding: 2px 0; }
+        .item-meta-row { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-muted); }
+        .mini-select { border: none; background: transparent; font-size: inherit; color: inherit; font-weight: 600; cursor: pointer; padding: 0; }
+        .mini-input { border: none; background: transparent; font-size: inherit; color: inherit; width: 30px; text-align: center; border-bottom: 1px dashed var(--border); }
+        .prio-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:2px; flex-shrink:0; }
+        .action-btn { width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 6px; background: white; color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .action-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .action-btn.del:hover { border-color: var(--danger); color: var(--danger); background: #fee2e2; }
+
+        .gantt-box { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; padding: 10px; margin-bottom: 20px; }
+        .gantt-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .gantt-zoom-select { padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); font-size: 0.8rem; }
+        .timeline { position: relative; min-height: 50px; padding: 10px 0; }
+        .bar-row { height: 25px; margin-bottom: 5px; position: relative; }
+        .bar { position: absolute; height: 20px; background: var(--primary); border-radius: 4px; color: white; font-size: 0.7rem; display: flex; align-items: center; padding-left: 5px; opacity: 0.8; white-space: nowrap; overflow: hidden;}
+        .today-line { position: absolute; top:0; bottom:0; width: 2px; background: var(--danger); z-index: 10; }
+        .agenda-item { background: var(--card-bg); padding: 10px; border-radius: 8px; border-left: 4px solid var(--text-muted); margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; justify-content: space-between; }
+
+        .footer-tools { margin-top: 40px; text-align: center; display: flex; flex-direction: column; gap: 10px; opacity: 0.9; }
+        .footer-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .footer-link { border: 1px solid var(--border); padding: 8px 15px; border-radius: 20px; color: var(--text); text-decoration: none; font-size: 0.85rem; background: var(--card-bg); cursor: pointer; }
+        
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-card { background: var(--card-bg); width: 100%; max-width: 400px; padding: 20px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .template-btn { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid var(--border); border-radius: 8px; text-align: left; background: var(--bg); cursor: pointer; color: var(--text); font-weight: bold; }
+        .file-upload-label { display: block; width: 100%; padding: 15px; border: 2px dashed var(--primary); border-radius: 8px; text-align: center; color: var(--primary); cursor: pointer; margin-bottom: 10px; font-weight: bold; background: var(--hover-bg); }
+        .file-upload-label:hover { background: #e0f2fe; }
+        
+        .guide-box { margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .guide-box:last-child { border-bottom: none; }
+        .guide-title { font-size: 1rem; font-weight: bold; margin-bottom: 8px; color: var(--primary); }
+        .guide-text { font-size: 0.9rem; line-height: 1.5; color: var(--text); }
+        .guide-tip { background: var(--input-bg); padding: 10px; border-left: 3px solid var(--warning-text); border-radius: 4px; margin-top: 10px; font-size: 0.85rem; font-style: italic; }
+
+        #toast { visibility: hidden; position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 10px 20px; border-radius: 20px; z-index: 3000; font-size: 0.9rem; }
+        #toast.show { visibility: visible; animation: fadein 0.3s, fadeout 0.3s 2.5s; }
     </style>
 </head>
 <body>
@@ -287,794 +132,444 @@
     <div class="suite-header">
         <div class="header-top">
             <div class="header-info">
-                <h1>🎓 Lern-Suite V26.0</h1>
-                <div class="streak-badge" onclick="initStreak()">
-                    🔥 <span id="streakCount">0</span> Tage
-                </div>
+                <h1>🎓 Lern-Suite V31.9</h1>
+                <p id="modeBadge">Azubi Edition</p>
             </div>
-            
             <div class="header-controls-wrapper">
-                <button class="btn-dark-mode" onclick="toggleDarkMode()">🌙</button>
-                <div class="exam-control-group">
-                    <div class="exam-controls">
-                        <select id="examSelect" onchange="switchExam()"></select>
-                        <button class="btn-exam-action" onclick="addExam()">+</button>
-                        <button class="btn-exam-action" onclick="deleteExam()">🗑️</button>
-                    </div>
+                <button class="btn-icon" onclick="toggleDark()">🌙</button>
+                <div style="background:rgba(255,255,255,0.15); padding:4px; border-radius:8px; display:flex; gap:4px; flex-grow:1;">
+                    <select id="examSelect" onchange="switchExam()"></select>
+                    <button class="btn-icon sm" onclick="editExam()" title="Datum ändern">✏️</button>
+                    <button class="btn-icon sm" onclick="addExam()" title="Neu">+</button>
                 </div>
             </div>
         </div>
         
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('cockpit')" id="tab-btn-cockpit">🚀 Cockpit</button>
-            <button class="tab-btn" onclick="switchTab('backlog')" id="tab-btn-backlog">📋 Katalog <span id="backlogCount" style="font-size:0.8em; opacity:0.7"></span></button>
-            <button class="tab-btn" onclick="switchTab('howto')" id="tab-btn-howto">ℹ️ Info</button>
+            <button class="tab-btn active" onclick="showTab('cockpit')" id="btn-cockpit">🚀 Cockpit</button>
+            <button class="tab-btn" onclick="showTab('plan')" id="btn-plan">📅 Zeitplan</button>
+            <button class="tab-btn" onclick="showTab('stats')" id="btn-stats">📊 Stats</button>
+            <button class="tab-btn" onclick="showTab('backlog')" id="btn-backlog">📚 Katalog</button>
+            <button class="tab-btn" onclick="showTab('info')" id="btn-info">ℹ️ Info</button>
         </div>
     </div>
 
-    <!-- TAB 1: COCKPIT -->
+    <!-- 1. COCKPIT -->
     <div id="tab-cockpit" class="tab-content active">
-        <div class="phase-display" id="phaseDisplayBox">
-            <span class="phase-badge" id="currentPhaseBadge">Lade...</span>
-            <span style="float:right; font-weight:bold; color:var(--danger)">Noch <span id="daysLeft">0</span> Tage</span>
-            <div style="margin-top:5px; font-size:0.9em; opacity:0.8" id="phaseFocus">...</div>
+        <div class="phase-display">
+            <div><strong>Aktuelle Phase</strong><div style="font-size:0.8rem; opacity:0.7" id="daysLeft">...</div></div>
+            <div id="progressText" style="font-weight:bold; color:var(--primary)">0%</div>
         </div>
+        <button class="btn-magic" onclick="autoFill()">🪄 Smart Auto-Fill (Lernplan füllen)</button>
+        <div id="cockpitList" class="task-list"></div>
+        <div id="emptyCockpit" style="text-align:center; padding:30px; display:none; color:var(--text-muted)">Nichts zu tun. Hol dir Aufgaben aus dem Katalog.</div>
+    </div>
 
-        <button class="btn-magic" onclick="autoFillCockpit()">🪄 Smart Auto-Fill (SRS)</button>
-
-        <button class="adhoc-toggle" onclick="toggleAdhoc()">
-            + Blitz-Aufgabe (Manuell)
-        </button>
-
-        <div class="input-card" id="adhocInput">
-            <div class="form-group"><input type="text" id="inModul" placeholder="Modul (Tag, z.B. WiSo)"></div>
-            <div class="form-group"><input type="text" id="inTask" placeholder="Aufgabe"></div>
-            <div class="form-group">
-                <select id="inImp">
-                    <option value="10">Prio 10 (Extrem)</option>
-                    <option value="8">Prio 8 (Hoch)</option>
-                    <option value="5" selected>Prio 5 (Mittel)</option>
-                    <option value="3">Prio 3 (Niedrig)</option>
+    <!-- 2. ZEITPLAN -->
+    <div id="tab-plan" class="tab-content">
+        <div class="gantt-box">
+            <div class="gantt-header">
+                <strong>Zeitstrahl</strong>
+                <select class="gantt-zoom-select" id="ganttZoomSelect" onchange="updateGanttView()">
+                    <option value="all">Gesamt</option>
+                    <option value="30">30 Tage</option>
+                    <option value="60">60 Tage</option>
+                    <option value="90">90 Tage</option>
                 </select>
             </div>
-            <div class="form-group"><input type="number" id="inTime" value="30" placeholder="Minuten"></div>
-            <button class="btn-add" onclick="addCockpitTask()">Speichern</button>
+            <div class="timeline" id="ganttChart"></div>
         </div>
+        <h3>📅 Agenda</h3>
+        <div id="agendaList" class="task-list"></div>
+    </div>
 
-        <table class="task-table">
-            <tbody id="cockpitTableBody"></tbody>
-        </table>
-        <div id="emptyCockpitMsg" style="text-align:center; padding:40px; color:var(--text-muted); display:none;">
-            Nichts zu tun. <br>Drücke auf 🪄 Auto-Fill.
+    <!-- 3. STATS -->
+    <div id="tab-stats" class="tab-content">
+        <div class="dashboard-grid">
+            <div class="stat-card">
+                <h3 style="margin-top:0;">Fortschritt</h3>
+                <div class="chart-container" id="mainPieChart">
+                    <div class="chart-inner"><span class="chart-value" id="mainPercent">0%</span></div>
+                </div>
+            </div>
+            <div class="stat-card" style="align-items: center; justify-content: flex-start;">
+                <h3 style="margin-top:0; width:100%;">Leistung & Details</h3>
+                <div id="uniStats" style="display:none; width:100%;">
+                    <div class="gpa-box">∅ Note (GPA) <span class="gpa-value" id="gpaValue">-</span></div>
+                    <div style="margin-top:15px; width:100%;">
+                        <div class="progress-header"><span>ECTS Fortschritt</span> <span id="ectsCount">0 / 180</span></div>
+                        <div class="progress-track"><div class="progress-fill" id="ectsBar" style="width:0%"></div></div>
+                    </div>
+                    <h4 style="margin-top:10px;">🎓 Modul-Noten</h4>
+                    <table class="module-table" id="moduleTable"></table>
+                </div>
+                <div class="progress-section" id="statsDetails"></div>
+            </div>
+            <div class="stat-card" style="align-items: flex-start;">
+                <h3 style="margin-top:0;">⚠️ Fokus-Bereiche</h3>
+                <div class="stat-list" id="problemZonesList" style="width:100%"></div>
+            </div>
         </div>
     </div>
 
-
-    <!-- TAB 2: BACKLOG (MIT TAG-FILTER) -->
+    <!-- 4. BACKLOG -->
     <div id="tab-backlog" class="tab-content">
-        
         <div class="filter-row">
-            <select id="filterExamPart" class="filter-select" onchange="renderWBS()">
-                <option value="all">📚 Alle Prüfungen</option>
-            </select>
-            <select id="filterModul" class="filter-select" onchange="renderWBS()">
-                <option value="all">🌍 Alle Themen</option>
-            </select>
-            <select id="filterLF" class="filter-select" onchange="renderWBS()">
-                <option value="all">🏫 Alle Lernfelder</option>
-            </select>
-            <button class="wbs-btn" style="background:var(--primary); color:white; border:none; padding:0 15px; border-radius:8px;" onclick="addWbsRow()">+</button>
+            <select id="filterPart" class="filter-select" onchange="renderBacklog()"><option value="all">Alle Bereiche</option></select>
+            <select id="filterMod" class="filter-select" onchange="renderBacklog()"><option value="all">Alle Themen</option></select>
+            <button class="btn-icon sm" style="background:var(--primary); width:auto; padding:0 15px;" onclick="addTask()">+ Neu</button>
         </div>
-
-        <table class="wbs-table">
-            <tbody id="wbsTableBody"></tbody>
-        </table>
-        <div id="emptyBacklogMsg" style="text-align:center; padding:40px; display:none;">
-            Leerer Katalog.<br>
-            <button onclick="openTemplateModal()" style="margin-top:10px; padding:10px; background:var(--success); color:white; border:none; border-radius:8px; font-weight:bold;">📚 IHK Katalog laden</button>
+        <div id="backlogTree"></div>
+        <div id="emptyBacklog" style="text-align:center; padding:40px; display:none;">
+            <p style="color:var(--text-muted)">Katalog ist leer.</p>
+            <button class="footer-link" style="background:var(--primary); color:white; border:none;" onclick="openImport()">Daten importieren</button>
         </div>
     </div>
 
-    <!-- TAB 3: INFO -->
-    <div id="tab-howto" class="tab-content">
-        <div style="background:var(--card-bg); padding:20px; border-radius:12px;">
-            <h3>🚀 Ultimate Lern-Suite V26.0</h3>
-            <p><strong>IHK Smart Priority</strong></p>
-            <p>Der Planer setzt die Prioritäten (Prio) jetzt automatisch:</p>
-            <ul>
-                <li><span style="color:var(--danger)">●</span> <strong>Prio 10 (Rot):</strong> Absolute Klassiker (z.B. Subnetting, SQL, Netzplan).</li>
-                <li><span style="color:var(--warning-text)">●</span> <strong>Prio 8 (Orange):</strong> Sehr wichtig (z.B. DSGVO, Firewall, Verträge).</li>
-                <li><span style="color:var(--success)">●</span> <strong>Prio 5 (Grün):</strong> Standard-Stoff.</li>
-            </ul>
-            <p>Klicke unten auf <strong>"📚 Katalog importieren"</strong>, um zu starten.</p>
+    <!-- 5. INFO -->
+    <div id="tab-info" class="tab-content">
+        <div class="phase-display" style="display:block;">
+            <h3>📖 Handbuch & Guide</h3>
+            <div class="guide-box">
+                <div class="guide-title">1. Der Start</div>
+                <div class="guide-text">Lege zuerst oben rechts über das <strong>+</strong> eine Prüfung an und setze das Datum.</div>
+            </div>
+            <div class="guide-box">
+                <div class="guide-title">2. Katalog & Import</div>
+                <div class="guide-text">Nutze "Daten importieren", um IHK- oder Uni-Module zu laden. Drücke <strong>ENTER</strong> in einer Zeile, um schnell neue Aufgaben hinzuzufügen.</div>
+            </div>
+            <div class="guide-tip">💡 Tipp: Importierte Zeilen dienen oft als "Anker". Breche sie mit ENTER in kleine Aufgaben auf.</div>
         </div>
     </div>
 
     <!-- FOOTER -->
     <div class="footer-tools">
-        <a class="footer-link" onclick="openTemplateModal()" style="border-color:var(--success); color:var(--success); font-weight:bold;">📚 Katalog importieren (IHK FULL)</a>
-        
-        <a class="footer-link" onclick="openInstallModal()">📲 App Installieren (Info)</a>
-        <a class="footer-link" onclick="downloadBackup()">💾 Backup speichern</a>
-        <a class="footer-link" onclick="restoreBackup()">📂 Backup laden</a>
-        <a class="footer-link" style="color:var(--danger); border-color:var(--danger);" onclick="hardReset()">⚠️ Reset Alles</a>
-        <input type="file" id="fileInput" style="display:none" onchange="handleFileSelect(event)">
+        <div class="footer-row">
+            <a class="footer-link" onclick="toggleUniMode()">🔄 Modus: <span id="footerMode">IHK</span></a>
+            <a class="footer-link" onclick="downloadBackup()">💾 Backup</a>
+            <a class="footer-link" onclick="restoreBackup()">📂 Laden</a>
+        </div>
+        <div class="footer-row">
+            <a class="footer-link" style="color:var(--danger); border-color:var(--danger)" onclick="hardReset()">⚠️ Reset</a>
+        </div>
+        <input type="file" id="fileInput" hidden onchange="loadFile(event)">
     </div>
 
-    <!-- MODALS -->
-    <div id="installModal" class="modal-overlay">
+    <!-- IMPORT MODAL -->
+    <div id="importModal" class="modal-overlay">
         <div class="modal-card">
-            <h3 style="margin-top:0">App installieren</h3>
-            <p>Für Vollbild ohne Browser-Leiste:</p>
-            <ul><li>iOS: Teilen -> Home-Bildschirm</li><li>Android: Menü -> App installieren</li></ul>
-            <button onclick="document.getElementById('installModal').style.display='none'" style="width:100%; padding:10px; margin-top:10px;">Verstanden</button>
+            <h3 style="margin-top:0">Katalog importieren</h3>
+            <p style="font-size:0.9rem; color:var(--text-muted);">Daten werden hinzugefügt (nicht überschrieben).</p>
+            
+            <div id="ihkTemplates">
+                <button class="template-btn" style="border-left:5px solid #0052cc" onclick="loadIHKData('AP1')">🟦 AP1 Komplett (Basis)</button>
+                <button class="template-btn" style="border-left:5px solid #eab308" onclick="loadIHKData('WISO')">⚖️ WiSo Komplett</button>
+                <button class="template-btn" style="border-left:5px solid #a855f7" onclick="loadAP2Smart()">🟪 AP2 Spezial (FISI / KIDG)</button>
+            </div>
+            
+            <div id="uniTemplates" style="display:none;">
+                <button class="template-btn" style="border-left:5px solid #10b981" onclick="loadUniData('INF_HWR')">💻 Informatik (HWR)</button>
+                <button class="template-btn" style="border-left:5px solid #f59e0b" onclick="loadUniData('WI_HWR')">📊 W-Info (HWR)</button>
+                <button class="template-btn" style="border-left:5px solid #3b82f6" onclick="loadUniData('WI_WILDAU')">🏭 W-Info (Wildau)</button>
+            </div>
+            
+            <label class="file-upload-label">
+                📂 Eigene JSON Datei
+                <input type="file" id="catalogImportInput" hidden accept=".json" onchange="handleCatalogImport(event)">
+            </label>
+
+            <button class="template-btn" style="text-align:center; margin-top:10px;" onclick="closeImport()">Abbrechen</button>
         </div>
     </div>
 
-    <div id="templateModal" class="modal-overlay">
-        <div class="modal-card">
-            <h3 style="margin-top:0">📚 IHK Baukasten (Smart)</h3>
-            <p style="font-size:0.9em; color:var(--text-muted)">Prioritäten werden automatisch berechnet.</p>
-            
-            <button class="template-btn" style="border-left:5px solid #0052cc" onclick="loadIHKData('AP1')">
-                🟦 <strong>AP1 - BASIS (Alle Berufe)</strong><br>
-                <small>Projekt, Hardware, Netze (LF 1, 2, 3, 5, 6)</small>
-            </button>
-            
-            <button class="template-btn" style="border-left:5px solid #eab308" onclick="loadIHKData('WISO')">
-                ⚖️ <strong>WiSo (Komplett)</strong><br>
-                <small>Recht, Sozialkunde, Betrieb (LF 1)</small>
-            </button>
-
-            <hr style="border:0; border-top:1px solid var(--border); margin:15px 0;">
-
-            <button class="template-btn" style="border-left:5px solid #a855f7" onclick="loadIHKData('AP2')">
-                🟪 <strong>AP2 - Komplett</strong><br>
-                <small>Security, Datenschutz, Prozesse, Spezialisierung</small>
-            </button>
-            
-            <button onclick="document.getElementById('templateModal').style.display='none'" style="width:100%; padding:10px; margin-top:10px;">Schließen</button>
-        </div>
-    </div>
-
-    <!-- TOAST -->
-    <div id="toast">Nachricht...</div>
+    <div id="toast">Info</div>
 
     <script>
-        // --- HARDCODED IHK DATA (COMPRESSED) ---
-        // Format: AP|Modul|Task|Lernfelder
-        const IHK_RAW_DATA = `
-AP1|Projektmanagement|Merkmale eines Projektes|LF1, LF2, LF3, LF5, LF6
-AP1|Projektmanagement|Projektplanung mithilfe von Strukturplan, Netzplan und Gantt-Diagramm|LF1, LF2, LF3, LF5, LF6
-AP1|Projektmanagement|Kritischer Weg|LF1, LF2, LF3, LF5, LF6
-AP1|Projektmanagement|Pufferzeiten|LF1, LF2, LF3, LF5, LF6
-AP1|Projektmanagement|Fristgerechte Terminierung|LF1, LF2, LF3, LF5, LF6
-AP1|Projektmanagement|Lösungen bei Terminproblemen|LF1, LF2, LF3, LF5, LF6
-AP1|Projektmanagement|SMART-Prinzip|LF1, LF2, LF3, LF5, LF6
-AP1|Projektmanagement|Meilensteine|LF1, LF2, LF3, LF5, LF6
-AP1|Projektmanagement|Projektphasen (Wasserfall / SCRUM) definieren|LF1, LF2, LF3, LF5, LF6
-AP1|Projektmanagement|Phasen der Teambildung und -entwicklung kennen|LF1, LF2, LF3, LF5, LF6
-AP1|Projektmanagement|Reflexionsmethoden (Feedback-Kultur, Lessons Learned) kennen|LF1, LF2, LF3, LF5, LF6
-AP1|Projektmanagement|Machbarkeitsanalyse mithilfe einer Budgetvorgabe|LF1, LF2, LF3, LF5, LF6
-AP1|Projektmanagement|Vor- und Nachkalkulation|LF1, LF2, LF3, LF5, LF6
-AP1|Projektmanagement|Einfluss der Stakeholder beurteilen können|LF1, LF2, LF3, LF5, LF6
-AP1|Projektmanagement|Risikoanalyse|LF1, LF2, LF3, LF5, LF6
-AP1|Service & Support|Kundenkommunikation|LF1, LF2, LF3, LF5, LF6
-AP1|Service & Support|Fehlermanagement|LF1, LF2, LF3, LF5, LF6
-AP1|Service & Support|Störungs-Management|LF1, LF2, LF3, LF5, LF6
-AP1|Service & Support|Bearbeitungsstatus (z. B. Ticketsystem)|LF1, LF2, LF3, LF5, LF6
-AP1|Service & Support|KI-Unterstützung|LF1, LF2, LF3, LF5, LF6
-AP1|Service & Support|Support- und Serviceanfragen|LF1, LF2, LF3, LF5, LF6
-AP1|Service & Support|First-, Second- und Third-Level-Support|LF1, LF2, LF3, LF5, LF6
-AP1|Markt & Kunden|Marktformen (Monopol, Oligopol, Polypol, Käufer-/Verkäufermarkt)|LF1, LF2
-AP1|Markt & Kunden|Zielgruppendefinition und -abgrenzung|LF1, LF2
-AP1|Markt & Kunden|Quantitative und qualitative Angebotsbewertung|LF1, LF2
-AP1|Markt & Kunden|Eigene Datenerhebung (z. B. Kundenbefragung)|LF1, LF2
-AP1|Markt & Kunden|Auswertung vorhandener Daten (z. B. Anforderungen an Büroarbeitsplätze)|LF1, LF2
-AP1|Markt & Kunden|Situationsgerechte Kundenkommunikation|LF1, LF2
-AP1|Markt & Kunden|Kommunikationsmodelle (4-Ohren-Modell, Sender-Empfänger)|LF1, LF2
-AP1|Markt & Kunden|Kundenbedarf ermitteln und Angebote unterbreiten|LF1, LF2
-AP1|Markt & Kunden|Interpretation englischsprachiger Texte|LF1, LF2
-AP1|Markt & Kunden|Technische und kaufmännische Texte (deutsch/englisch)|LF1, LF2
-AP1|Markt & Kunden|Präsentation und Medienkompetenz|LF1, LF2
-AP1|Markt & Kunden|Nutzwertanalyse|LF1, LF2
-AP1|Markt & Kunden|Vertriebsformen (direkter/indirekter Vertrieb)|LF1, LF2
-AP1|IT-Systeme|Funktionale, ökonomische und ökologische Aspekte (Ergonomie, Kosten, Nutzungsdauer, Energie)|LF2, LF3
-AP1|IT-Systeme|Hardwareprodukte (CPU, Motherboard, Speicher, Datenträger, Netzteile, GPU, Peripherie, Sensoren, Netzwerkkarten, Router/Switch/AP)|LF2, LF3
-AP1|IT-Systeme|Softwareprodukte (Anwendungen, Betriebssysteme, Standard-/Branchensoftware, DBMS, Browser, ERP/CRM/SCM, Entwicklungsumgebungen)|LF2, LF3
-AP1|IT-Systeme|Cloudlösungen (SaaS, DaaS)|LF2, LF3
-AP1|IT-Systeme|KI-Software|LF2, LF3
-AP1|IT-Systeme|Virtuelle Desktops (Cloud oder lokal)|LF2, LF3
-AP1|IT-Systeme|Kommunikationssysteme (Videokonferenz, Social Media)|LF2, LF3
-AP1|IT-Systeme|Client-Server-Systeme|LF2, LF3
-AP1|IT-Systeme|Einbindung in einer Domäne|LF2, LF3
-AP1|IT-Systeme|Mobile Geräte (Smartphone, Tablet)|LF2, LF3
-AP1|IT-Systeme|Netzwerkprotokolle (Ethernet, IP, DNS) und OSI-Modell|LF2, LF3
-AP1|IT-Systeme|Kenngrößen, Leistungsdaten, Funktionsumfang|LF2, LF3
-AP1|IT-Systeme|Einstellmöglichkeiten (BIOS/UEFI, CPU, RAM, SSD/HDD, Dateisysteme)|LF2, LF3
-AP1|IT-Systeme|Grafik-/Netzwerkkarte, Gateway, Router, Switch, WLAN/Ethernet-Standards|LF2, LF3
-AP1|IT-Systeme|Barrierefreier Zugriff am Arbeitsplatz|LF2, LF3
-AP1|IT-Systeme|Einstellmöglichkeiten auf Webseiten|LF2, LF3
-AP1|IT-Systeme|Gütesiegel für Energieeffizienz|LF2, LF3
-AP1|IT-Systeme|Übertragungsraten/zeiten, Datenmengen (Dokumente/Videos), Strom/Leistung/Wirkungsgrad/Energiekosten|LF2, LF3
-AP1|IT-Systeme|Anschaffungs-/Betriebs-/Lizenz-/Finanzierungskosten, fixe/variable Kosten|LF2, LF3
-AP1|IT-Systeme|Einfacher Kostenvergleich (Leasing, Kauf, Finanzierung, Pay-per-Use)|LF2, LF3
-AP1|IT-Systeme|Preis-Leistungs-Verhältnis|LF2, LF3
-AP1|IT-Systeme|Qualitativer/quantitativer Angebotsvergleich|LF2, LF3
-AP1|IT-Systeme|Wertschöpfung|LF2, LF3
-AP1|IT-Lösungen|Bedarfsanalyse|LF5
-AP1|IT-Lösungen|Lasten- und Pflichtenheft (Zweck, Urheber, Inhalt)|LF5
-AP1|IT-Lösungen|Installation/Einrichtung (OS, BIOS/UEFI, Partitionierungen/Formatierungen, Netzwerkanbindung, IPv4/v6, Remote-Desktop, KI-Software)|LF5
-AP1|IT-Lösungen|Gerätekategorien (Desktop, Notebook, All-in-One, Thin Client, Tablet, Smartphone)|LF5
-AP1|IT-Lösungen|Mobile/stationäre Arbeitsplatzsysteme (PC, Terminals, LAN, WLAN)|LF5
-AP1|IT-Lösungen|Barrierefreiheit, Unterstützung durch zusätzliche Hardware (Monitor, Tastatur, Lautsprecher/Mikrofon)|LF5
-AP1|IT-Lösungen|Anwendungssoftware|LF5
-AP1|IT-Lösungen|Betriebssysteme (Einsatzzweck, Dateiverwaltung, Freigaben managen)|LF5
-AP1|IT-Lösungen|Integrierte Entwicklungsumgebung (IDE)|LF5
-AP1|IT-Lösungen|Standard- oder Individualsoftware|LF5
-AP1|IT-Lösungen|Open Source / proprietär|LF5
-AP1|IT-Lösungen|Beurteilungskriterien (Anpassbarkeit, Wartbarkeit, Schnittstellen)|LF5
-AP1|IT-Lösungen|Grundlagen des Schutzes der Urheber|LF5
-AP1|IT-Lösungen|Lizenzarten (EULA, OEM, GNU)|LF5
-AP1|IT-Lösungen|Pay-per-Use|LF5
-AP1|IT-Lösungen|Installation/Konfiguration Hardware|LF5
-AP1|IT-Lösungen|Installation/Konfiguration Betriebssystem|LF5
-AP1|IT-Lösungen|Arbeiten mit der Kommandozeile (Befehlssyntax, Parameter)|LF5
-AP1|IT-Lösungen|Anpassung von Software|LF5
-AP1|IT-Lösungen|Konfiguration, Test, Troubleshooting und Dokumentation von Netzwerkverbindungen (IP, DHCP, WLAN, VPN)|LF5
-AP1|IT-Lösungen|Konsolenbefehle Datei/Netz (dir, ls, mkdir, ipconfig, ifconfig/ip, ping, traceroute, nslookup)|LF5
-AP1|Programmierung|Compiler, Linker, Interpreter|LF5
-AP1|Programmierung|Prozedurale und objektorientierte Herangehensweise|LF5
-AP1|Programmierung|Variablen, Datentypen, Datenstrukturen|LF5
-AP1|Programmierung|Kontrollstrukturen (Verzweigung, Schleife)|LF5
-AP1|Programmierung|Prozeduren, Funktionen|LF5
-AP1|Programmierung|Klassen, Attribute, Objekte, Methoden, Sichtbarkeit|LF5
-AP1|Programmierung|Bibliotheken, Frameworks|LF5
-AP1|Programmierung|Skriptsprachen (z. B. Shell)|LF5
-AP1|Programmierung|Debugging, formale und inhaltliche Fehler|LF5
-AP1|Programmierung|Kontrollstrukturen als Pseudocode abbilden|LF5
-AP1|Programmierung|UML (Use Case, Klassen-, Aktivitätsdiagramm)|LF5
-AP1|Programmierung|Entwurf von Ausgabemasken (Ergonomie, CI, Barrierefreiheit)|LF5
-AP1|Programmierung|Fehler in gegebenem Quellcode finden|LF5
-AP1|Programmierung|Schreibtischtest mit gegebenem Quellcode|LF5
-AP1|Datenbanken|Einfache ER-Modelle|LF5
-AP1|Qualitätssicherung|Betriebliche QM-Systeme|LF3, LF5, LF6
-AP1|Qualitätssicherung|QS-Normen|LF3, LF5, LF6
-AP1|Qualitätssicherung|Zertifizierung|LF3, LF5, LF6
-AP1|Qualitätssicherung|Qualitätsplanung und Qualitätsziele (Ist-/Soll-Zustand)|LF3, LF5, LF6
-AP1|Qualitätssicherung|Qualitätslenkung (Umsetzung der Planphase)|LF3, LF5, LF6
-AP1|Qualitätssicherung|PDCA-Zyklus (Plan, Do, Check, Act)|LF3, LF5, LF6
-AP1|Qualitätssicherung|Testprotokoll für das Einrichten eines Arbeitsplatzes|LF3, LF5, LF6
-AP1|Sicherheit & Datenschutz|Verfügbarkeit, Vertraulichkeit, Integrität gewährleisten|LF4
-AP1|Sicherheit & Datenschutz|TOM; IT-Sicherheitsbeauftragte/r vs. Datenschutzbeauftragte/r|LF4
-AP1|Sicherheit & Datenschutz|IT-Sicherheitsrichtlinien (z. B. Passwort-Policy)|LF4
-AP1|Sicherheit & Datenschutz|Technische Maßnahmen (Virenschutz, Firewall, Verschlüsselung)|LF4
-AP1|Sicherheit & Datenschutz|Personelle Maßnahmen, Sicherheitsbewusstsein|LF4
-AP1|Sicherheit & Datenschutz|Ausschnitte BSI IT-Grundschutz|LF4
-AP1|Sicherheit & Datenschutz|Grundzüge DSGVO/BDSG; personenbezogene Daten; Rechte; Anonymisierung/Pseudonymisierung|LF4
-AP1|Sicherheit & Datenschutz|Schutzbedarf: Anwendungen, IT-Systeme, Räume/Infrastruktur, Kommunikationsverbindungen|LF4
-AP1|Sicherheit & Datenschutz|Bausteine aus dem Grundschutzkatalog|LF4
-AP1|Sicherheit & Datenschutz|Schutzbedarfskategorien (normal/hoch/sehr hoch) ableiten und begründen|LF4
-AP1|Sicherheit & Datenschutz|Risikoklassifikation (z. B. Matrix)|LF4
-AP1|Sicherheit & Datenschutz|ISMS kennen und unterstützen|LF4
-AP1|Sicherheit & Datenschutz|Sicherheitsbewusstsein schaffen (Security by Design/Default)|LF4
-AP1|Sicherheit & Datenschutz|IT-Sicherheitsmanagement|LF4
-AP1|Sicherheit & Datenschutz|Härtung des Betriebssystems|LF4
-AP1|Sicherheit & Datenschutz|Datensicherung / Backup-Verfahren|LF4
-AP1|Sicherheit & Datenschutz|Sicherung der Verfügbarkeit (z. B. NAS)|LF4
-AP1|Sicherheit & Datenschutz|Zugangs- und Zugriffskontrolle|LF4
-AP1|Sicherheit & Datenschutz|Verschlüsselung (symmetrisch, asymmetrisch, hybrid)|LF4
-AP1|Sicherheit & Datenschutz|Hashwerte, Zertifikate, digitale Signaturen|LF4
-AP1|Sicherheit & Datenschutz|Authentifizierung (z. B. Zwei-Faktor), Passwort-Policy bewerten|LF4
-AP1|Sicherheit & Datenschutz|Personal Firewall anpassen|LF4
-AP1|Vertragswesen|Kaufvertrag, Mietvertrag, Leasing|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Lizenzvertrag|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Servicevertrag, SLA|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Werkvertrag, Dienstvertrag|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Vertragsbestandteile (Leistungsbeschreibung, Termine, Entgelte, Sanktionen)|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Vertragsstörungen|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Unternehmensziele (Ökonomisch, Ökologisch, Sozial)|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Leistungserbringung vor Ort vs. Remote|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Ticketsystem|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Kundenvorgaben (Termin/Ort, technische Voraussetzungen, Betriebssystem, Hersteller)|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Mehrliniensystem, Einliniensystem, Matrixorganisation|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Handlungs- und Entscheidungsspielräume/Vollmachten|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Veränderungsprozesse begleiten und unterstützen können|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Inhalt des Abnahmeprotokolls|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Mängelarten: Schlechtleistung, Falschlieferung, Minderlieferung|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Soll-Ist-Vergleich, Abweichungsanalyse|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Nachkalkulation|LF2, LF3, LF6, LF7
-AP1|Vertragswesen|Lessons Learned|LF2, LF3, LF6, LF7
-AP2|Kundenbeziehungen|BGB / HGB|LF3, LF6, LF9, LF12
-AP2|Kundenbeziehungen|Gesetz gegen unlauteren Wettbewerb (UWG)|LF3, LF6, LF9, LF12
-AP2|Kundenbeziehungen|AGB-Gesetz|LF3, LF6, LF9, LF12
-AP2|Kundenbeziehungen|Compliance|LF3, LF6, LF9, LF12
-AP2|Kundenbeziehungen|Customer Relationship Management (CRM)|LF3, LF6, LF9, LF12
-AP2|Kundenbeziehungen|Präsentationstechnik|LF3, LF6, LF9, LF12
-AP2|Kundenbeziehungen|Grafische Darstellung (Diagramme, Bildbearbeitung)|LF3, LF6, LF9, LF12
-AP2|Kundenbeziehungen|Tabellenkalkulation|LF3, LF6, LF9, LF12
-AP2|Kundenbeziehungen|Präsentationsprogramme|LF3, LF6, LF9, LF12
-AP2|Kundenbeziehungen|Corporate Identity (CI)|LF3, LF6, LF9, LF12
-AP2|IT-Entwicklung|Debugging, Breakpoint|LF5, LF6, LF7, LF8, LF10, LF11, LF12
-AP2|IT-Entwicklung|Software-Test (Black Box, White Box, Review, Extremwerttest)|LF5, LF6, LF7, LF8, LF10, LF11, LF12
-AP2|IT-Entwicklung|Testdaten|LF5, LF6, LF7, LF8, LF10, LF11, LF12
-AP2|IT-Entwicklung|Komponententest, Integrationstest, Systemtest|LF5, LF6, LF7, LF8, LF10, LF11, LF12
-AP2|IT-Entwicklung|Versionsmanagement des Quellcodes|LF5, LF6, LF7, LF8, LF10, LF11, LF12
-AP2|IT-Entwicklung|Algorithmen formulieren (Aktivitätsdiagramm, Pseudocode)|LF5, LF6, LF7, LF8, LF10, LF11, LF12
-AP2|IT-Entwicklung|UML (Use Case, Klassen-, Aktivitätsdiagramme)|LF5, LF6, LF7, LF8, LF10, LF11, LF12
-AP2|IT-Entwicklung|Entwurf der Bildschirmausgabemasken (Software-Ergonomie, Barrierefreiheit)|LF5, LF6, LF7, LF8, LF10, LF11, LF12
-AP2|Datenbanken|Relationale und nicht-relationale Datenbanken, NoSQL|LF5, LF6, LF7, LF8, LF10, LF11, LF12
-AP2|Datenbanken|Datentypen (Boolean, Integer, BLOB, etc.)|LF5, LF6, LF7, LF8, LF10, LF11, LF12
-AP2|Datenbanken|Anomalien / Redundanzen erkennen|LF5, LF6, LF7, LF8, LF10, LF11, LF12
-AP2|Datenbanken|Normalisieren (1. bis 3. Normalform)|LF5, LF6, LF7, LF8, LF10, LF11, LF12
-AP2|Datenbanken|ER-Modell, Attribute, Beziehungen, Kardinalitäten, referenzielle Integrität|LF5, LF6, LF7, LF8, LF10, LF11, LF12
-AP2|Datenbanken|SQL: Tabellenstruktur, Index, Select, Sortieren, Gruppieren|LF5, LF6, LF7, LF8, LF10, LF11, LF12
-AP2|Datenbanken|Abfrage über mehrere Tabellen (Joins)|LF5, LF6, LF7, LF8, LF10, LF11, LF12
-AP2|Datenbanken|Open Data, API-Schnittstellen|LF5, LF6, LF7, LF8, LF10, LF11, LF12
-AP2|IT-Sicherheit|TCSEC, ITSEC, Common Criteria|LF4, LF5, LF9, LF11
-AP2|IT-Sicherheit|BSI-Standards / IT-Grundschutz|LF4, LF5, LF9, LF11
-AP2|IT-Sicherheit|ISO/IEC 2700x|LF4, LF5, LF9, LF11
-AP2|IT-Sicherheit|Relevante rechtliche Vorschriften (GoBD, DSGVO)|LF4, LF5, LF9, LF11
-AP2|IT-Sicherheit|Datensicherheitsmanagement|LF4, LF5, LF9, LF11
-AP2|IT-Sicherheit|Datensicherungsstrategien (RAID, Vollsicherung, inkrementell, differentiell)|LF4, LF5, LF9, LF11
-AP2|IT-Sicherheit|Verschlüsselung (Symmetrisch, asymmetrisch, hybrid; Hashwerte; Zertifikate; Digitale Signaturen)|LF4, LF5, LF9, LF11
-AP2|IT-Sicherheit|Benutzer-, Gruppen- und Zugriffsrechte|LF4, LF5, LF9, LF11
-AP2|IT-Sicherheit|Netzwerksicherheit; IDS- und IDP-Systeme|LF4, LF5, LF9, LF11
-AP2|IT-Sicherheit|Social Engineering (Phishing, Deepfake)|LF4, LF5, LF9, LF11
-AP2|Datenschutz|DSGVO, BDSG, E-Privacy, Urheberrecht, Recht am eigenen Bild|LF2, LF4, LF5, LF9, LF11, LF12
-AP2|Datenschutz|Standard-Datenschutzmodell; ISO 27701, 27001|LF2, LF4, LF5, LF9, LF11, LF12
-AP2|Datenschutz|Schutzbedarfsfeststellung (Daten klassifizieren, Schutzziele definieren)|LF2, LF4, LF5, LF9, LF11, LF12
-AP2|Datenschutz|Datenschutzbeauftragte; BSI, TÜV; Datenschutzzertifizierung|LF2, LF4, LF5, LF9, LF11, LF12
-AP2|Netzwerke|IPv4/IPv6, MAC, Routing, Switching, ARP, TCP/UDP|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Netzwerke|Netzwerkkomponenten (Switch, Bridge, Router, Firewall)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Netzwerke|Netzwerkkonzepte (LAN/WAN/MAN/GAN)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Netzwerke|Zugriffskontrolle im Netzwerk (RADIUS, Kerberos)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Netzwerke|Verschlüsselung auf Netzwerkebene, VPN|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Netzwerke|VLAN|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Netzwerke|Drahtlos: PAN/WLAN/Mesh/Bluetooth|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Netzwerke|Peer-to-Peer vs. Client-Server|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Netzwerke|Übertragungsprotokolle (HTTP/HTTPS, TCP/UDP)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Netzwerke|VPN-Modelle (Tunneling, IPsec)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Netzwerke|Dienste (DNS, DHCP, Proxy)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Netzwerke|Server-Dienste (Mailserver, Webserver, Groupware, Datenbanken)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Netzwerke|Ausfallwahrscheinlichkeiten (MTBF)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Netzwerke|Notfallkonzept (Disaster Recovery)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Netzwerke|Sicherstellung des Betriebes (USV, RAID, Backups)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Netzwerke|Monitoring (SNMP, Systemlast, Schwellwerte)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Netzwerke|Incident Management (Ticketsystem, SLA, Eskalation)|LF3, LF4, LF5, LF6, LF7, LF8, LF9, LF11
-AP2|Speicher|NAS, SAN, iSCSI, SMB, NFS|LF4, LF5, LF8, LF9
-AP2|Speicher|Backup-Strategien (On-Premises, Cloud, SaaS, IaaS)|LF4, LF5, LF8, LF9
-AP2|Konzeption|Schutzziele der Informationssicherheit (Integrität, Verfügbarkeit)|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
-AP2|Konzeption|Cloud vs. On-Premises|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
-AP2|Konzeption|Virtualisierung vs. Bare-Metal|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
-AP2|Konzeption|Server Hardware/OS/Anwendungen|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
-AP2|Konzeption|Cloud-Anbieter Auswahl|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
-AP2|Konzeption|Kompatibilitätsprobleme (Zeichensätze, Formate)|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
-AP2|Konzeption|Lifecycle-Betrachtung (Support, Updates)|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
-AP2|Konzeption|Tests (Performance, Penetration, Integration, System)|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
-AP2|Konzeption|Migration planen|LF2, LF4, LF5, LF7, LF8, LF9, LF10, LF12
-WISO|Ausbildung|Inhalte des Ausbildungsvertrages|
-WISO|Ausbildung|Rechte und Pflichten Azubi/Ausbilder|
-WISO|Ausbildung|Probezeit, Vergütung, Urlaub, Kündigung|
-WISO|Ausbildung|Duales System (Vorteile/Lernorte)|
-WISO|Ausbildung|Aufgaben Kammern/Betrieb/Schule|
-WISO|Recht|Arbeitsrechtliche Gesetze (BBiG, ArbSchG)|
-WISO|Recht|Arbeitgeberverbände/Gewerkschaften|
-WISO|Recht|Betriebsrat (Wahl, Rechte)|
-WISO|Recht|JAV (Jugend-Auszubildendenvertretung)|
-WISO|Recht|Tarifrecht (Verträge, Autonomie, Arbeitskampf)|
-WISO|Lohn|Lohnformen, Brutto/Netto, Lohnsteuer|
-WISO|Lohn|Sozialversicherungen|
-WISO|Betrieb|Rechtsformen (GmbH, KG, AG)|
-WISO|Betrieb|Unternehmensstrukturen (Matrix, Sparte)|
-WISO|Betrieb|Wirtschaftliche Verflechtungen (Konzern)|
-WISO|Schutz|Arbeitsschutzgesetz, Arbeitssicherheitsgesetz|
-WISO|Schutz|Unfallverhütungsvorschriften (UVV)|
-WISO|Schutz|Bildschirmarbeitsplatzverordnung|
-WISO|Schutz|Gefährdungen am Arbeitsplatz|
-WISO|Schutz|Erste-Hilfe-Maßnahmen, Meldeketten|
-WISO|Schutz|Brandschutz|
-WISO|Umwelt|Rationelle Energieverwendung|
-WISO|Umwelt|Abfalltrennung und Recycling|
-WISO|Digital|Vernetztes Zusammenarbeiten|
-WISO|Digital|Datenschutz bei Kommunikation|
-WISO|Digital|Ethische Aspekte und Compliance|
-`;
+        /* --- DATA --- */
+        const IHK_FULL_DATA = [
+          {"part": "AP1", "mod": "Projektmanagement", "task": "Merkmale eines Projektes"}, {"part": "AP1", "mod": "Projektmanagement", "task": "Projektplanung"}, {"part": "AP1", "mod": "IT-Systeme", "task": "Hardware Komponenten"},
+          {"part": "WISO", "mod": "Recht", "task": "Arbeitsvertrag"}, {"part": "WISO", "mod": "Sozial", "task": "Versicherungen"},
+          {"part": "AP2", "mod": "Netzwerke", "task": "IPv4 Subnetting", "job": "FISI"}, {"part": "AP2", "mod": "Server", "task": "Virtualisierung", "job": "FISI"},
+          {"part": "AP2", "mod": "Prozesse", "task": "BPMN", "job": "KIDG"}, {"part": "AP2", "mod": "Rechnungswesen", "task": "KLR", "job": "KIDG"}
+        ];
 
-        // --- DATA ---
-        let exams = [], activeExamId = null, cockpitTasks = [], wbsData = [];
+        const UNI_DATA = {
+            "WI_HWR": [{"part": "Sem 1", "mod": "BWL", "task": "Grundlagen", "ects": 5}, {"part": "Sem 1", "mod": "IT", "task": "Java", "ects": 5}],
+            "INF_HWR": [{"part": "Sem 1", "mod": "Mathe", "task": "Algebra", "ects": 7}, {"part": "Sem 1", "mod": "Prog", "task": "C", "ects": 5}],
+            "WI_WILDAU": [{"part": "Sem 1", "mod": "BWL", "task": "Grundlagen", "ects": 5}]
+        };
 
-        function initApp() {
+        let exams = [], tasks = [], cockpit = [], activeExamId = null, isUniMode = false, ganttView = 'all';
+        let moduleSettings = {};
+
+        // --- INIT ---
+        window.onload = function() {
             try {
                 exams = JSON.parse(localStorage.getItem('exams')) || [];
+                tasks = JSON.parse(localStorage.getItem('wbsData')) || [];
+                cockpit = JSON.parse(localStorage.getItem('cockpitTasks')) || [];
+                moduleSettings = JSON.parse(localStorage.getItem('moduleSettings')) || {};
                 activeExamId = localStorage.getItem('activeExamId');
-                cockpitTasks = JSON.parse(localStorage.getItem('cockpitTasks')) || [];
-                wbsData = JSON.parse(localStorage.getItem('wbsData')) || [];
+                isUniMode = localStorage.getItem('isUniMode') === 'true';
 
-                if(exams.length === 0) {
-                    const id = 'def-'+Date.now();
-                    exams.push({id, name:'Meine IHK Prüfung', date:'', startDate: new Date().toISOString().split('T')[0]});
+                if (exams.length === 0) {
+                    const id = 'ex-'+Date.now();
+                    exams.push({id:id, name:'Meine Prüfung', date:'', start: new Date().toISOString().split('T')[0]});
                     activeExamId = id;
-                    saveAll();
-                } else if(!activeExamId) activeExamId = exams[0].id;
+                    save();
+                } else if (!activeExamId || !exams.find(e => e.id === activeExamId)) { activeExamId = exams[0].id; }
 
-                wbsData.forEach(t => { 
-                    if(!t.id) t.id = Date.now()+Math.random(); 
-                    if(t.decayFlag===undefined) t.decayFlag=false;
-                    if(t.level===undefined) t.level = (t.status === 'done') ? 1 : 0;
-                    if(!t.lf) t.lf = []; 
-                    if(!t.examPart) t.examPart = "IHK";
+                tasks.forEach(t => {
+                    if (!t.part) t.part = t.examPart || "Allgemein";
+                    if (!t.mod) t.mod = "Unsortiert";
+                    if (!t.level) t.level = 0;
+                    if (t.decayFlag === undefined) t.decayFlag = false;
                 });
 
-                initStreak();
-                applyDecay();
-                renderAll();
-                if(localStorage.getItem('darkMode')==='on') document.body.classList.add('dark-mode');
-            } catch(e) { console.log(e); }
-        }
+                if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+                applyDecay(); updateModeUI(); renderAll();
+            } catch(e) { console.error(e); }
+        };
 
-        function saveAll() {
+        function save() {
             localStorage.setItem('exams', JSON.stringify(exams));
+            localStorage.setItem('wbsData', JSON.stringify(tasks));
+            localStorage.setItem('cockpitTasks', JSON.stringify(cockpit));
+            localStorage.setItem('moduleSettings', JSON.stringify(moduleSettings));
             localStorage.setItem('activeExamId', activeExamId);
-            localStorage.setItem('cockpitTasks', JSON.stringify(cockpitTasks));
-            localStorage.setItem('wbsData', JSON.stringify(wbsData));
+            localStorage.setItem('isUniMode', isUniMode);
         }
 
-        function renderAll() { renderHeader(); renderCockpit(); renderWBS(); }
+        function renderAll() { renderHeader(); renderCockpit(); renderBacklog(); renderPlan(); renderDashboard(); }
 
-        // --- SRS LOGIC ---
-        function getInterval(level) {
-            if(level === 0) return 1; 
-            if(level === 1) return 3;  
-            if(level === 2) return 7;  
-            if(level === 3) return 14; 
-            if(level >= 4) return 30;  
-            return 3;
-        }
-
-        function getDaysDiff(d) {
-            if(!d) return 999;
-            return Math.floor(Math.abs(new Date() - new Date(d)) / (864e5));
-        }
-
-        function applyDecay() {
-            let changed = false;
-            wbsData.forEach(t => {
-                if(t.examId !== activeExamId) return;
-                const diff = getDaysDiff(t.lastReviewed);
-                const limit = getInterval(t.level);
-
-                if(t.status==='done' && diff > limit) { 
-                    t.status='doing'; t.decayFlag=true; changed=true; 
-                }
-                if(t.status!=='todo' && diff > (limit * 2.5)) { 
-                    t.status='todo'; t.decayFlag=true; changed=true; 
-                }
-            });
-            if(changed) saveAll();
-        }
-
-        function calcScore(imp, min, decay, status, level) {
-            if(status === 'done') return 0;
-            let s = (parseInt(imp||5) * 10);
-            if(parseInt(min||60) <= 30) s += 5;
-            if(decay) s += 20;
-            if(level > 0 && decay) s += (level * 5); 
-            return s;
-        }
-
-        // --- SMART PRIORITY LOGIC ---
-        function getAutoPriority(taskName) {
-            const t = taskName.toLowerCase();
-            // PRIO 10: Absolute Basics & Punktegaranten
-            if(t.includes("subnetting") || t.includes("ipv4") || t.includes("netzplan") || 
-               t.includes("kritischer weg") || t.includes("sql") || t.includes("er-modell") ||
-               t.includes("normalisierung") || t.includes("kalkulation") || t.includes("rechtsform") ||
-               t.includes("bbig") || t.includes("betriebsrat") || t.includes("raid") || t.includes("usv") ||
-               t.includes("nutzwertanalyse") || t.includes("firewall") || t.includes("vpn") || t.includes("dsgvo")) {
-                return "10";
-            }
-            // PRIO 8-9: Sehr wichtig
-            if(t.includes("ipv6") || t.includes("vlan") || t.includes("osi") || t.includes("lastenheft") ||
-               t.includes("pflichtenheft") || t.includes("gantt") || t.includes("angebot") || t.includes("vertrag") ||
-               t.includes("agil") || t.includes("scrum") || t.includes("bpmn") || t.includes("epk") ||
-               t.includes("datenschutz") || t.includes("backup") || t.includes("lizenzen") || t.includes("sozial")) {
-                return "8";
-            }
-            // PRIO 3-4: Grundlagen
-            if(t.includes("grundlagen") || t.includes("begriffe") || t.includes("geschichte") || t.includes("einführung")) {
-                return "4";
-            }
-            return "5"; // Standard
-        }
-
-        // --- HELPER ---
-        function showToast(msg) {
-            const t = document.getElementById("toast");
-            t.className = "show"; t.innerText = msg;
-            setTimeout(function(){ t.className = t.className.replace("show", ""); }, 3000);
-        }
-
-        // --- HEADER ---
-        function renderHeader() {
-            const sel = document.getElementById('examSelect');
-            sel.innerHTML = "";
-            exams.forEach(e => {
-                let d = e.date ? ` (${e.date.split('-').reverse().join('.')})` : "";
-                sel.innerHTML += `<option value="${e.id}" ${e.id===activeExamId?'selected':''}>${e.name}${d}</option>`;
-            });
-            
-            const ex = exams.find(e=>e.id===activeExamId);
-            const daysLeft = ex && ex.date ? Math.ceil((new Date(ex.date) - new Date())/864e5) : "?";
-            document.getElementById('daysLeft').innerText = daysLeft;
-            const badge = document.getElementById('currentPhaseBadge');
-            if(daysLeft > 42) badge.innerText = "1. VERSTEHEN"; else if(daysLeft > 7) badge.innerText = "3. ABRUF"; else badge.innerText = "4. TRANSFER";
-        }
-
-        function addExam() {
-            const n = prompt("Name:"); if(!n) return;
-            const dInput = prompt("Datum (TT.MM.YYYY):");
-            let iso = "";
-            if(dInput) { const p = dInput.split('.'); if(p.length===3) iso = `${p[2]}-${p[1]}-${p[0]}`; }
-            exams.push({ id: 'ex'+Date.now(), name: n, date: iso, startDate: new Date().toISOString().split('T')[0] });
-            activeExamId = exams[exams.length-1].id;
-            saveAll(); renderAll();
-        }
-        function deleteExam() { if(exams.length>1 && confirm("Löschen?")) { exams = exams.filter(e=>e.id!==activeExamId); activeExamId=exams[0].id; saveAll(); renderAll(); } }
-        function switchExam() { activeExamId = document.getElementById('examSelect').value; saveAll(); renderAll(); }
-        function toggleDarkMode() { document.body.classList.toggle('dark-mode'); localStorage.setItem('darkMode', document.body.classList.contains('dark-mode')?'on':'off'); }
-        function switchTab(name) { document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active')); document.getElementById('tab-'+name).classList.add('active'); document.getElementById('tab-btn-'+name).classList.add('active'); }
-
-        // --- COCKPIT ---
-        function autoFillCockpit() {
-            const pool = wbsData.filter(t => t.examId === activeExamId && t.status !== 'done' && !cockpitTasks.some(ct => ct.originId === t.id));
-            if(pool.length === 0) return alert("Alles erledigt!");
-            pool.sort((a,b) => calcScore(b.imp, b.time, b.decayFlag, b.status, b.level) - calcScore(a.imp, a.time, a.decayFlag, a.status, a.level));
-            pool.slice(0, 3).forEach(src => {
-                cockpitTasks.push({ id: Date.now() + Math.random(), originId: src.id, examId: activeExamId, modul: src.mod, task: src.task, imp: src.imp, time: src.time, done: false, score: calcScore(src.imp, src.time, src.decayFlag, src.status, src.level) });
-                src.status = 'doing';
-            });
-            saveAll(); renderAll();
-        }
-
-        function addCockpitTask() {
-            const m = document.getElementById('inModul').value, t = document.getElementById('inTask').value;
-            if(!t) return;
-            cockpitTasks.push({ id: Date.now(), examId: activeExamId, modul: m, task: t, imp: document.getElementById('inImp').value, time: document.getElementById('inTime').value, done: false, score: 50 });
-            saveAll(); renderCockpit(); toggleAdhoc(); document.getElementById('inTask').value="";
-        }
-
-        function renderCockpit() {
-            const tb = document.getElementById('cockpitTableBody'); tb.innerHTML = "";
-            const ts = cockpitTasks.filter(t => t.examId === activeExamId);
-            ts.sort((a,b) => a.done===b.done ? b.score-a.score : a.done?1:-1);
-            if(ts.length===0) document.getElementById('emptyCockpitMsg').style.display='block'; else document.getElementById('emptyCockpitMsg').style.display='none';
-            ts.forEach(t => {
-                const row = document.createElement('tr'); if(t.done) row.className = 'task-done';
-                row.innerHTML = `<td><div style="font-weight:bold;color:var(--primary)">${t.modul||'-'}</div><div style="font-size:1.1em">${t.task}</div><div style="font-size:0.85em;color:var(--text-muted)">⏱ ${t.time}m ⚡ ${t.imp} 🏆 ${t.score}</div></td><td style="text-align:right"><button class="btn-check ${t.done?'checked':''}" onclick="toggleDone(${t.id})">✔</button> ${!t.done ? `<button onclick="delTask(${t.id})" style="background:none;border:none;font-size:1.2rem;opacity:0.5;">🗑️</button>` : ''}</td>`;
-                tb.appendChild(row);
-            });
-        }
-
-        function toggleDone(id) {
-            const t = cockpitTasks.find(x => x.id === id);
-            if(t) {
-                t.done = !t.done;
-                if(t.originId) {
-                    const master = wbsData.find(w => w.id === t.originId);
-                    if(master) {
-                        if(t.done) {
-                            master.status = 'done';
-                            master.lastReviewed = new Date().toISOString().split('T')[0];
-                            master.decayFlag = false;
-                            master.level = (master.level || 0) + 1; // SRS LEVEL UP
-                            
-                            // TOAST MESSAGE
-                            const nextInterval = getInterval(master.level);
-                            showToast(`👍 Super! Level ${master.level} erreicht.\nWiedervorlage in ${nextInterval} Tagen.`);
-                        } else {
-                            master.status = 'doing';
-                        }
-                        saveAll(); renderWBS();
-                    }
-                }
-                saveAll(); renderCockpit();
-                if(t.done) setTimeout(() => { cockpitTasks = cockpitTasks.filter(x => x.id !== id); saveAll(); renderCockpit(); }, 800);
-            }
-        }
-        function delTask(id) { if(confirm("Löschen?")) { cockpitTasks = cockpitTasks.filter(x=>x.id!==id); saveAll(); renderCockpit(); } }
-        function toggleAdhoc() { document.getElementById('adhocInput').classList.toggle('open'); }
-
-        // --- BACKLOG ---
-        function renderWBS() {
-            const tb = document.getElementById('wbsTableBody'); tb.innerHTML = "";
-            let ds = wbsData.filter(t => t.examId === activeExamId);
-
-            // Update Counter
-            const countEl = document.getElementById('backlogCount');
-            if(countEl) countEl.innerText = `(${ds.length})`;
-
-            // Populate Filters
-            populateFilters(ds);
-            
-            // Apply Filters
-            const filterExam = document.getElementById('filterExamPart').value;
-            const filterMod = document.getElementById('filterModul').value;
-            const filterLF = document.getElementById('filterLF').value;
-
-            if(filterExam !== 'all') ds = ds.filter(t => t.examPart === filterExam);
-            if(filterMod !== 'all') ds = ds.filter(t => t.mod === filterMod);
-            if(filterLF !== 'all') ds = ds.filter(t => t.lf && t.lf.includes(filterLF));
-
-            if(ds.length===0) document.getElementById('emptyBacklogMsg').style.display='block'; else document.getElementById('emptyBacklogMsg').style.display='none';
-
-            ds.forEach((r, idx) => {
-                const globalIdx = wbsData.indexOf(r);
-                const score = calcScore(r.imp, r.time, r.decayFlag, r.status, r.level);
-                
-                // Badges
-                let badges = "";
-                if(r.examPart) badges += `<span class="ap-badge">${r.examPart}</span>`;
-                if(r.lf && r.lf.length > 0) {
-                    r.lf.forEach(l => badges += `<span class="lf-badge">${l}</span>`);
-                }
-
-                // Prio Dot
-                let prioColor = 'var(--prio-low)';
-                if(r.imp >= 8) prioColor = 'var(--prio-high)';
-                else if(r.imp >= 5) prioColor = 'var(--prio-mid)';
-
-                // DOTS
-                let dots = "";
-                for(let i=0; i<4; i++) dots += (i < r.level) ? "●" : "○";
-                
-                const row = document.createElement('tr');
-                
-                row.innerHTML = `
-                    <td data-label="Modul"><input value="${r.mod}" oninput="updWBS(${globalIdx},'mod',this.value)" placeholder="Modul"></td>
-                    <td data-label="Thema">
-                        <div style="display:flex;align-items:center;">
-                            <span class="prio-dot" style="background:${prioColor}" title="Prio ${r.imp}"></span>
-                            <input value="${r.task}" oninput="updWBS(${globalIdx},'task',this.value)" onkeydown="checkEnter(event,${globalIdx})" placeholder="Thema" style="flex-grow:1">
-                        </div>
-                        <div style="margin-top:5px;">${badges}</div>
-                    </td>
-                    <td data-label="Details"><div style="display:flex;gap:5px;width:100%"><input type="number" value="${r.time}" oninput="updWBS(${globalIdx},'time',this.value)" style="width:50%"><select onchange="updWBS(${globalIdx},'imp',this.value)" style="width:50%"><option value="10" ${r.imp=='10'?'selected':''}>Prio 10</option><option value="8" ${r.imp=='8'?'selected':''}>Prio 8</option><option value="5" ${r.imp=='5'?'selected':''}>Prio 5</option><option value="3" ${r.imp=='3'?'selected':''}>Prio 3</option></select></div></td>
-                    <td data-label="Status">
-                        <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px; width:100%;">
-                            <select class="status-select" onchange="updStatus(${globalIdx},this.value)" style="background:${getStatusColor(r.status)}; color:#000;">
-                                <option value="todo" ${r.status=='todo'?'selected':''}>🔴 Offen</option>
-                                <option value="doing" ${r.status=='doing'?'selected':''}>🟡 Doing</option>
-                                <option value="done" ${r.status=='done'?'selected':''}>🟢 Sitzt</option>
-                            </select>
-                            <div style="display:flex; align-items:center; gap:5px;">
-                                <span class="level-dots" title="Level ${r.level}">${dots}</span>
-                                <span class="score-badge">${score} Pkt</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="action-cell"><button class="wbs-btn" onclick="pushToCockpit(${globalIdx})">🚀</button><button class="wbs-btn" style="color:red;margin-left:10px;" onclick="delWBS(${globalIdx})">×</button></td>
-                `;
-                tb.appendChild(row);
-            });
-        }
-
-        function populateFilters(data) {
-            const selExam = document.getElementById('filterExamPart');
-            const selMod = document.getElementById('filterModul');
-            const selLF = document.getElementById('filterLF');
-            
-            const currExam = selExam.value;
-            const currMod = selMod.value;
-            const currLF = selLF.value;
-
-            const exams = [...new Set(data.map(i => i.examPart || 'Sonstiges'))].sort();
-            const mods = [...new Set(data.map(i => i.mod))].sort();
-            const lfs = [...new Set(data.flatMap(i => i.lf || []))].sort();
-
-            selExam.innerHTML = '<option value="all">📚 Alle Prüfungen</option>';
-            exams.forEach(e => selExam.innerHTML += `<option value="${e}" ${e===currExam?'selected':''}>${e}</option>`);
-
-            selMod.innerHTML = '<option value="all">🌍 Alle Themen</option>';
-            mods.forEach(m => selMod.innerHTML += `<option value="${m}" ${m===currMod?'selected':''}>${m}</option>`);
-
-            selLF.innerHTML = '<option value="all">🏫 Alle Lernfelder</option>';
-            lfs.forEach(l => {
-                selLF.innerHTML += `<option value="${l}" ${l===currLF?'selected':''}>${l}</option>`;
-            });
-        }
-
-        function getStatusColor(s) { if(s==='done') return '#dcfce7'; if(s==='doing') return '#fef3c7'; return '#fee2e2'; }
-        function updWBS(idx, f, v) { wbsData[idx][f] = v; saveAll(); }
-        function updStatus(idx, val) { 
-            const task = wbsData[idx];
-            task.status = val; 
-            if(val==='done') { 
-                task.lastReviewed = new Date().toISOString().split('T')[0]; task.decayFlag=false; 
-                task.level = (task.level || 0) + 1;
-                showToast(`👍 Manuell gelernt! Level ${task.level} erreicht.`);
-            } else if (val === 'todo') {
-                if(confirm("Hast du das Thema vergessen? Level wird auf 0 zurückgesetzt.")) {
-                    task.level = 0;
-                }
-            }
-            saveAll(); renderWBS(); 
-        }
-        function addWbsRow() { wbsData.push({ id:Date.now()+Math.random(), examId:activeExamId, mod:"", task:"", time:"30", imp:"5", status:"todo", level:0, lf:[], examPart:"Sonstiges" }); saveAll(); renderWBS(); }
-        function checkEnter(e, idx) { if(e.key==='Enter') { wbsData.splice(idx+1, 0, { id:Date.now()+Math.random(), examId:activeExamId, mod:wbsData[idx].mod, task:"", time:"30", imp:"5", status:"todo", level:0, lf:[], examPart:"Sonstiges" }); saveAll(); renderWBS(); } }
-        function delWBS(idx) { if(confirm("Löschen?")) { wbsData.splice(idx,1); saveAll(); renderWBS(); } }
-        function pushToCockpit(idx) { const r = wbsData[idx]; if(cockpitTasks.some(c=>c.originId===r.id)) return alert("Schon drin!"); cockpitTasks.push({ id:Date.now(), originId:r.id, examId:activeExamId, modul:r.mod, task:r.task, imp:r.imp, time:r.time, done:false, score:calcScore(r.imp,r.time,r.decayFlag,'doing', r.level) }); r.status='doing'; saveAll(); renderAll(); }
-        function sortBacklogByScore() { wbsData.sort((a,b) => calcScore(b.imp,b.time,b.decayFlag,b.status,b.level) - calcScore(a.imp,a.time,a.decayFlag,a.status,a.level)); saveAll(); renderWBS(); }
-
-        // --- IHK DATA LOADER (COMPRESSED) ---
-        function loadIHKData(filterPart) {
-            if(!confirm("Katalog '" + filterPart + "' importieren?")) return;
-            
-            const lines = IHK_RAW_DATA.trim().split('\n');
+        /* --- IMPORT ENGINE (Unified) --- */
+        function importEngine(items, defaultTime) {
             let added = 0;
-
-            lines.forEach(line => {
-                const [part, mod, task, lfStr] = line.split('|');
-                
-                // Filter by Exam Part (AP1, AP2, WISO) or load all if empty
-                if(filterPart && part !== filterPart && filterPart !== 'AP2' && filterPart !== 'AP1') {
-                    if(!part.includes(filterPart)) return;
+            items.forEach(item => {
+                const exists = tasks.some(t => t.examId === activeExamId && t.task === item.task);
+                if (!exists) {
+                    tasks.push({
+                        id: Date.now() + Math.random(),
+                        examId: activeExamId,
+                        part: item.part || "Import",
+                        mod: item.mod || "Sonstiges",
+                        task: item.task,
+                        status: 'todo',
+                        imp: 5,
+                        time: defaultTime || (isUniMode ? 60 : 30),
+                        level: 0,
+                        decayFlag: false
+                    });
+                    
+                    // Uni ECTS Logic
+                    if(isUniMode && item.ects && !moduleSettings[item.mod]) {
+                         moduleSettings[item.mod] = { ects: item.ects, grade: '' };
+                    }
+                    added++;
                 }
-                
-                if(filterPart === 'AP2' && !part.startsWith('AP2')) return;
-                if(filterPart === 'AP1' && !part.startsWith('AP1')) return;
-                if(filterPart === 'WISO' && !part.startsWith('WISO')) return;
-
-                const exists = wbsData.some(e => e.examId === activeExamId && e.task === task);
-                if(exists) return;
-
-                let lfs = lfStr ? lfStr.split(',').map(s => s.trim()) : [];
-                
-                // SMART PRIORITY CALCULATION
-                const smartImp = getAutoPriority(task);
-
-                wbsData.push({
-                    id: Date.now() + Math.random(),
-                    examId: activeExamId,
-                    mod: mod,
-                    task: task,
-                    time: "30",
-                    imp: smartImp,
-                    status: "todo",
-                    level: 0,
-                    decayFlag: false,
-                    lf: lfs,
-                    examPart: part
-                });
-                added++;
             });
-
-            saveAll();
-            renderAll();
-            document.getElementById('templateModal').style.display='none';
-            showToast(`${added} Aufgaben aus ${filterPart} geladen.`);
+            save(); renderAll(); closeImport();
+            toast(`${added} Aufgaben importiert!`);
         }
 
-        // --- EXTRAS ---
-        function initStreak() {
-            const today = new Date().toISOString().split('T')[0];
-            let s = JSON.parse(localStorage.getItem('streakData')) || { count: 0, lastLogin: null };
-            if(s.lastLogin !== today) {
-                const yest = new Date(); yest.setDate(yest.getDate()-1);
-                if(s.lastLogin === yest.toISOString().split('T')[0]) s.count++; else s.count = 1;
-                s.lastLogin = today; localStorage.setItem('streakData', JSON.stringify(s));
-            }
-            document.getElementById('streakCount').innerText = s.count;
+        // Specific Loaders using Engine
+        function loadIHKData(filterPart) {
+            if(!confirm(`Katalog "${filterPart}" importieren?`)) return;
+            const filtered = IHK_FULL_DATA.filter(i => i.part === filterPart);
+            importEngine(filtered, 30);
         }
-        function openTemplateModal() { document.getElementById('templateModal').style.display='flex'; }
+
+        function loadAP2Smart() {
+            const job = prompt("Beruf?\n1=FISI, 2=FIAE, 3=KAUF");
+            if(!job) return;
+            const targetJob = (job==="1")?"FISI" : (job==="2")?"FIAE" : "KIDG"; // Fixed KIDG mapping
+            
+            const filtered = IHK_FULL_DATA.filter(i => {
+                if(i.part !== "AP2") return false;
+                return !i.job || i.job === targetJob;
+            });
+            importEngine(filtered, 30);
+        }
+
+        function loadUniData(key) {
+            if(!confirm("Uni-Daten importieren?")) return;
+            const data = UNI_DATA[key];
+            if(data) importEngine(data, 60);
+        }
+
+        function handleCatalogImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if(Array.isArray(data)) importEngine(data, 30);
+                    else alert("Ungültiges Format");
+                } catch(err) { alert("Fehler"); }
+            };
+            reader.readAsText(file);
+        }
+
+        /* --- LOGIC & UI --- */
+        function getInterval(l){ if(l===0)return 1;if(l===1)return 3;if(l===2)return 7;if(l===3)return 14;return 30;}
+        function getDaysDiff(d){ if(!d)return 999; return Math.floor((new Date()-new Date(d))/(864e5));}
+        function applyDecay(){
+            let c=false; tasks.forEach(t=>{
+                if(t.status==='done'&&t.lastReviewed){ if(getDaysDiff(t.lastReviewed)>getInterval(t.level)){t.status='doing';t.decayFlag=true;c=true;}}
+                else if(t.status==='doing'&&t.lastReviewed){ if(getDaysDiff(t.lastReviewed)>7){t.status='todo';t.decayFlag=true;c=true;}}
+            }); if(c){save();toast("Wiedervorlage aktualisiert");}
+        }
+        function dateToISO(s){if(!s)return "";const p=s.split(/[\.\/\-]/);if(p.length<3||p[0].length===4)return s;return `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;}
+        function isoToDisplay(s){if(!s)return "";const p=s.split('-');if(p.length<3)return s;return `${p[2]}.${p[1]}.${p[0]}`;}
+
+        function renderHeader(){
+            const s=document.getElementById('examSelect'); s.innerHTML='';
+            exams.forEach(e=>{const o=document.createElement('option');o.value=e.id;o.text=e.name;if(e.id===activeExamId)o.selected=true;s.appendChild(o);});
+            const ex=exams.find(e=>e.id===activeExamId);
+            document.getElementById('daysLeft').innerText = (ex&&ex.date) ? (Math.ceil((new Date(ex.date)-new Date())/864e5)>0?`Noch ${Math.ceil((new Date(ex.date)-new Date())/864e5)} Tage`:"Vorbei") : "Kein Datum";
+        }
+        function switchExam(){ activeExamId=document.getElementById('examSelect').value; save(); renderAll(); }
+        function addExam(){ const n=prompt("Name:");if(!n)return;const d=dateToISO(prompt("Datum (TT.MM.JJJJ):"));const s=dateToISO(prompt("Start (TT.MM.JJJJ):"));exams.push({id:'ex-'+Date.now(),name:n,date:d,start:s});activeExamId=exams[exams.length-1].id;save();renderAll(); }
+        function editExam(){ const e=exams.find(x=>x.id===activeExamId);if(!e)return;const n=prompt("Name",e.name);if(n)e.name=n;const d=prompt("Datum",isoToDisplay(e.date));if(d)e.date=dateToISO(d);const s=prompt("Start",isoToDisplay(e.start));if(s)e.start=dateToISO(s);save();renderAll();}
         
-        function openInstallModal() { document.getElementById('installModal').style.display='flex'; }
-        function hardReset() { if(confirm("⚠️ Alles löschen?")) { localStorage.clear(); location.reload(); } }
-        function downloadBackup() { const d={exams,activeExamId,cockpitTasks,wbsData,streak:JSON.parse(localStorage.getItem('streakData'))}; const b=new Blob([JSON.stringify(d)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='backup.json'; a.click(); }
-        function restoreBackup() { document.getElementById('fileInput').click(); }
-        function handleFileSelect(e) { const fr=new FileReader(); fr.onload=(ev)=>{ const d=JSON.parse(ev.target.result); localStorage.setItem('exams',JSON.stringify(d.exams)); localStorage.setItem('activeExamId',d.activeExamId); localStorage.setItem('wbsData',JSON.stringify(d.wbsData)); localStorage.setItem('cockpitTasks',JSON.stringify(d.cockpitTasks)); location.reload(); }; fr.readAsText(e.target.files[0]); }
+        function renderCockpit(){
+            const l=document.getElementById('cockpitList'); l.innerHTML='';
+            const m=cockpit.filter(c=>c.examId===activeExamId);
+            document.getElementById('emptyCockpit').style.display=m.length===0?'block':'none';
+            m.forEach(c=>{
+                const d=document.createElement('div'); d.className='cockpit-card'; if(c.done)d.style.opacity=0.5;
+                d.innerHTML=`<div><div style="font-size:0.75rem;color:var(--primary);font-weight:bold;">${c.mod}</div><div style="font-weight:600;">${c.task}</div></div><div class="check-btn ${c.done?'checked':''}" onclick="toggleDone('${c.id}')">✓</div>`;
+                l.appendChild(d);
+            });
+            const tot=tasks.filter(t=>t.examId===activeExamId).length; const don=tasks.filter(t=>t.examId===activeExamId&&t.status==='done').length;
+            document.getElementById('progressText').innerText=tot>0?Math.round((don/tot)*100)+'%':'0%';
+        }
+        function toggleDone(id){
+            const c=cockpit.find(x=>x.id===id); if(c){
+                c.done=!c.done; const t=tasks.find(x=>x.id===c.originId);
+                if(t){ if(c.done){ t.status='done'; t.lastReviewed=new Date().toISOString().split('T')[0]; t.level=(t.level||0)+1; t.decayFlag=false; } else { t.status='doing'; }}
+                save(); renderAll();
+                if(c.done) setTimeout(()=>{cockpit=cockpit.filter(x=>x.id!==id);save();renderCockpit();},800);
+            }
+        }
+        function autoFill(){
+            const p=tasks.filter(t=>t.examId===activeExamId&&t.status!=='done'&&!cockpit.some(c=>c.originId===t.id));
+            if(p.length===0)return toast("Nichts gefunden.");
+            p.slice(0,3).forEach(t=>{ cockpit.push({id:'cp-'+Math.random(),originId:t.id,examId:activeExamId,mod:t.mod,task:t.task,done:false}); t.status='doing'; });
+            save(); renderAll(); toast("Gefüllt!");
+        }
 
-        window.onload = initApp;
+        function renderDashboard(){
+            const ds=tasks.filter(t=>t.examId===activeExamId); const tot=ds.length;
+            document.getElementById('uniStats').style.display=isUniMode?'block':'none';
+            document.getElementById('statsDetails').style.display=isUniMode?'none':'block';
+            if(tot===0){ document.getElementById('mainPercent').innerText="0%"; return;}
+            const don=ds.filter(t=>t.status==='done').length; const perc=Math.round((don/tot)*100);
+            document.getElementById('mainPieChart').style.background=`conic-gradient(var(--chart-done) 0deg ${Math.round(perc*3.6)}deg, var(--border) 0deg 360deg)`;
+            document.getElementById('mainPercent').innerText=perc+"%";
+            
+            if(isUniMode){
+                const mods=[...new Set(ds.map(t=>t.mod))].sort(); let h=''; let sumG=0, sumE=0, totE=0;
+                mods.forEach(m=>{
+                    const s=moduleSettings[m]||{ects:5,grade:''}; const e=parseFloat(s.ects)||0; const g=parseFloat(s.grade);
+                    h+=`<tr><td>${m}</td><td><input type="number" value="${s.ects}" onchange="updMod('${m}','ects',this.value)"></td><td><input type="number" step="0.1" value="${s.grade}" placeholder="-" onchange="updMod('${m}','grade',this.value)"></td></tr>`;
+                    totE+=e; if(g>0){sumG+=g*e; sumE+=e;}
+                });
+                document.getElementById('moduleTable').innerHTML=h;
+                document.getElementById('gpaValue').innerText=sumE>0?(sumG/sumE).toFixed(1):"-";
+                document.getElementById('ectsBar').style.width=(totE>0?(sumE/totE)*100:0)+"%";
+                document.getElementById('ectsCount').innerText=`${sumE} / ${totE}`;
+            } else {
+                const parts={}; ds.forEach(t=>{const p=t.part||'Sonstiges'; if(!parts[p])parts[p]={t:0,d:0}; parts[p].t++; if(t.status==='done')parts[p].d++;});
+                let h=''; for(const[k,v]of Object.entries(parts)){const p=Math.round((v.d/v.t)*100); h+=`<div class="progress-row"><div class="progress-header"><span>${k}</span><span>${v.d}/${v.t}</span></div><div class="progress-track"><div class="progress-fill" style="width:${p}%"></div></div></div>`;}
+                document.getElementById('statsDetails').innerHTML=h;
+            }
+            const map={}; ds.forEach(t=>{if(t.status!=='done'){const m=t.mod||'Sonstiges'; map[m]=(map[m]||0)+1;}});
+            const sort=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,3);
+            let ph=''; sort.forEach(([m,c])=>ph+=`<div class="stat-list-item"><span>${m}</span><span style="font-weight:bold;color:var(--danger)">${c} offen</span></div>`);
+            document.getElementById('problemZonesList').innerHTML=ph||"<div style='text-align:center;color:var(--success)'>Alles sauber!</div>";
+        }
+        function updMod(m,f,v){ if(!moduleSettings[m])moduleSettings[m]={ects:5,grade:''}; moduleSettings[m][f]=v; save(); renderDashboard();}
+
+        function renderBacklog(){
+            const c=document.getElementById('backlogTree'); c.innerHTML='';
+            let ds=tasks.filter(t=>t.examId===activeExamId);
+            const ps=[...new Set(ds.map(t=>t.part))].sort(); const ms=[...new Set(ds.map(t=>t.mod))].sort();
+            const sp=document.getElementById('filterPart'); const sm=document.getElementById('filterMod');
+            const op=sp.value; const om=sm.value;
+            sp.innerHTML='<option value="all">Alle Bereiche</option>'; ps.forEach(p=>sp.innerHTML+=`<option value="${p}">${p}</option>`); sp.value=ps.includes(op)?op:'all';
+            sm.innerHTML='<option value="all">Alle Themen</option>'; ms.forEach(m=>sm.innerHTML+=`<option value="${m}">${m}</option>`); sm.value=ms.includes(om)?om:'all';
+            if(sp.value!=='all')ds=ds.filter(t=>t.part===sp.value); if(sm.value!=='all')ds=ds.filter(t=>t.mod===sm.value);
+            document.getElementById('emptyBacklog').style.display=ds.length===0?'block':'none';
+
+            const gr={}; ds.forEach(t=>{if(!gr[t.part])gr[t.part]={}; if(!gr[t.part][t.mod])gr[t.part][t.mod]=[]; gr[t.part][t.mod].push(t);});
+
+            for(const[p,mods]of Object.entries(gr)){
+                const d1=document.createElement('details'); d1.className='tree-level-1'; d1.open=true;
+                d1.innerHTML=`<summary style="justify-content:space-between"><span>${p}</span><button class="action-btn del" style="width:26px;height:26px" onclick="delPart('${p}',event)">×</button></summary>`;
+                for(const[m,ts]of Object.entries(mods)){
+                    const d2=document.createElement('details'); d2.className='tree-level-2'; d2.open=true;
+                    d2.innerHTML=`<summary style="justify-content:space-between"><span style="display:flex;gap:8px;align-items:center">📂 ${m} <small>(${ts.length})</small></span><button class="action-btn del" style="width:26px;height:26px" onclick="delMod('${p}','${m}',event)">×</button></summary>`;
+                    ts.forEach(t=>{
+                        const r=document.createElement('div'); r.className='tree-item';
+                        const pc=t.imp>=8?'red':(t.imp>=5?'orange':'green');
+                        r.innerHTML=`<div class="status-dot ${t.status}" onclick="cycleStatus('${t.id}')"></div><div><input id="input-${t.id}" class="item-input" value="${t.task}" onchange="updTask('${t.id}','task',this.value)" onkeydown="checkEnter(event,'${p}','${m}')"><div class="item-meta-row"><span class="prio-dot" style="background:${pc}"></span><select class="mini-select" onchange="updTask('${t.id}','imp',this.value)"><option value="10" ${t.imp==10?'selected':''}>10</option><option value="8" ${t.imp==8?'selected':''}>8</option><option value="5" ${t.imp==5?'selected':''}>5</option><option value="3" ${t.imp==3?'selected':''}>3</option></select><span style="opacity:0.3">|</span><input type="number" class="mini-input" value="${t.time||30}" onchange="updTask('${t.id}','time',this.value)"> min</div></div><div style="display:flex;gap:5px"><button class="action-btn" onclick="toCockpit('${t.id}')">🚀</button><button class="action-btn" onclick="moveTask('${t.id}')">📂</button><button class="action-btn del" onclick="delTask('${t.id}')">✕</button></div>`;
+                        d2.appendChild(r);
+                    });
+                    d1.appendChild(d2);
+                }
+                c.appendChild(d1);
+            }
+        }
+        
+        function checkEnter(e,p,m){ if(e.key==='Enter'){ e.preventDefault(); const nid='t-'+Date.now(); tasks.push({id:nid,examId:activeExamId,part:p,mod:m,task:"",status:'todo',imp:5,time:30,level:0}); save(); renderAll(); setTimeout(()=>{const el=document.getElementById('input-'+nid);if(el)el.focus();},50); }}
+
+        function addTask(){ const p=prompt("Bereich",document.getElementById('filterPart').value!=='all'?document.getElementById('filterPart').value:'Allgemein'); if(!p)return; const m=prompt("Thema",document.getElementById('filterMod').value!=='all'?document.getElementById('filterMod').value:'Unsortiert'); if(!m)return; tasks.push({id:'t-'+Date.now(),examId:activeExamId,part:p,mod:m,task:"Neu",status:'todo',imp:5,time:30,level:0}); save(); renderAll();}
+        function cycleStatus(id){ const t=tasks.find(x=>x.id===id); if(t){ if(t.status==='todo')t.status='doing'; else if(t.status==='doing'){t.status='done';t.lastReviewed=new Date().toISOString().split('T')[0];t.level=(t.level||0)+1;}else t.status='todo'; save(); renderAll();}}
+        function toCockpit(id){ if(cockpit.some(c=>c.originId===id))return toast("Schon geplant"); const t=tasks.find(x=>x.id===id); cockpit.push({id:'cp-'+Date.now(),originId:t.id,examId:activeExamId,mod:t.mod,task:t.task,done:false}); t.status='doing'; save(); renderAll(); toast("Geplant");}
+        function delTask(id){ if(confirm("Löschen?")){tasks=tasks.filter(t=>t.id!==id);cockpit=cockpit.filter(c=>c.originId!==id);save();renderAll();}}
+        function delPart(p,e){e.preventDefault();e.stopPropagation(); if(confirm("Bereich löschen?")){const ids=tasks.filter(t=>t.part===p).map(t=>t.id); tasks=tasks.filter(t=>t.part!==p); cockpit=cockpit.filter(c=>!ids.includes(c.originId)); save(); renderAll();}}
+        function delMod(p,m,e){e.preventDefault();e.stopPropagation(); if(confirm("Ordner löschen?")){const ids=tasks.filter(t=>t.part===p&&t.mod===m).map(t=>t.id); tasks=tasks.filter(t=>!(t.part===p&&t.mod===m)); cockpit=cockpit.filter(c=>!ids.includes(c.originId)); save(); renderAll();}}
+        function moveTask(id){const t=tasks.find(x=>x.id===id);const p=prompt("Bereich",t.part);if(p)t.part=p;const m=prompt("Thema",t.mod);if(m)t.mod=m;save();renderBacklog();}
+        function updTask(id,f,v){const t=tasks.find(x=>x.id===id);if(t){t[f]=v;save();if(f==='imp')renderBacklog();}}
+
+        function updateGanttView(){ ganttView=document.getElementById('ganttZoomSelect').value; renderPlan(); }
+        function renderPlan(){
+            const l=document.getElementById('agendaList'); const c=document.getElementById('ganttChart'); l.innerHTML=''; c.innerHTML='';
+            const ve=exams.filter(e=>e.date).sort((a,b)=>new Date(a.date)-new Date(b.date));
+            if(ve.length===0){c.innerHTML='<div style="text-align:center;padding:20px;color:#999">Keine Daten</div>';return;}
+            ve.forEach(e=>{
+                const bs=e.id===activeExamId?'border-left:4px solid var(--primary)':'border-left:4px solid #999';
+                l.innerHTML+=`<div class="agenda-item" style="${bs}"><span><strong>${e.name}</strong><br><small>${isoToDisplay(e.start||'')} -> ${isoToDisplay(e.date)}</small></span><span>${getDaysDiff(e.date)} T</span></div>`;
+            });
+            const today=new Date(); let vs,ve_d;
+            if(ganttView==='all'){ 
+                let min=new Date(ve[0].start||today).getTime(), max=new Date(ve[ve.length-1].date).getTime();
+                vs=new Date(min); vs.setDate(vs.getDate()-7); ve_d=new Date(max); ve_d.setDate(ve_d.getDate()+7);
+            } else { vs=new Date(today); vs.setDate(vs.getDate()-3); ve_d=new Date(today); ve_d.setDate(ve_d.getDate()+parseInt(ganttView));}
+            const tot=ve_d-vs;
+            if(today>=vs&&today<=ve_d) c.innerHTML+=`<div class="today-line" style="left:${((today-vs)/tot)*100}%"></div>`;
+            ve.forEach(e=>{
+                const s=new Date(e.start||today), d=new Date(e.date); if(d<vs||s>ve_d)return;
+                const L=Math.max(0,((s-vs)/tot)*100), W=Math.min(100,((d-vs)/tot)*100)-L;
+                const col=e.id===activeExamId?'var(--primary)':'#94a3b8'; const op=e.id===activeExamId?'1':'0.5';
+                c.innerHTML+=`<div class="bar-row"><div class="bar" style="left:${L}%;width:${W}%;background:${col};opacity:${op}">${e.name}</div></div>`;
+            });
+        }
+
+        function toggleUniMode(){ isUniMode=!isUniMode; save(); updateModeUI(); renderAll(); toast(isUniMode?"Uni":"IHK");}
+        function updateModeUI(){ document.getElementById('modeBadge').innerText=isUniMode?"Student":"Azubi"; document.getElementById('footerMode').innerText=isUniMode?"Uni":"IHK"; document.getElementById('ihkTemplates').style.display=isUniMode?'none':'block'; document.getElementById('uniTemplates').style.display=isUniMode?'block':'none';}
+        function openImport(){ document.getElementById('importModal').style.display='flex'; }
+        function closeImport(){ document.getElementById('importModal').style.display='none'; }
+        
+        function showTab(id){ document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active')); document.getElementById('tab-'+id).classList.add('active'); document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active')); document.getElementById('btn-'+id).classList.add('active'); if(id==='plan')renderPlan();}
+        function toggleDark(){ document.body.classList.toggle('dark-mode'); localStorage.setItem('theme',document.body.classList.contains('dark-mode')?'dark':'light'); }
+        function toast(m){ const t=document.getElementById('toast');t.innerText=m;t.className='show';setTimeout(()=>t.className='',2000); }
+        function downloadBackup(){ const d={exams,tasks,cockpit,activeExamId,isUniMode,moduleSettings}; const b=new Blob([JSON.stringify(d)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='backup.json'; a.click(); }
+        function restoreBackup(){ document.getElementById('fileInput').click(); }
+        function loadFile(e){ const fr=new FileReader(); fr.onload=(ev)=>{try{const d=JSON.parse(ev.target.result); exams=d.exams||[]; tasks=d.tasks||[]; cockpit=d.cockpit||[]; activeExamId=d.activeExamId; isUniMode=d.isUniMode; moduleSettings=d.moduleSettings||{}; save(); location.reload();}catch(x){alert("Fehler")}}; fr.readAsText(e.target.files[0]); }
+        function hardReset(){ if(confirm("Alles löschen?")){localStorage.clear(); location.reload();} }
     </script>
 </body>
 </html>

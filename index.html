@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ultimate Lern-Suite V31.9 (Clean Code)</title>
+    <title>Ultimate Lern-Suite V32.3 (Robust Logic)</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -37,24 +37,27 @@
         .header-info h1 { margin: 0; font-size: 1.4rem; }
         .header-controls-wrapper { display: flex; gap: 8px; align-items: center; }
         
-        .btn-icon { background: rgba(255,255,255,0.2); border: none; color: white; width: 36px; height: 36px; border-radius: 8px; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .btn-icon.sm { width: 32px; font-size: 0.9rem; } /* Cleaned up inline styles */
-        #examSelect { flex-grow: 1; padding: 0 10px; border-radius: 6px; border: none; font-weight: bold; color: #333; height: 36px; }
+        .btn-icon { background: rgba(255,255,255,0.2); border: none; color: white; width: 36px; height: 36px; border-radius: 8px; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; }
+        .btn-icon:hover { background: rgba(255,255,255,0.3); }
+        .btn-icon.sm { width: 32px; font-size: 0.9rem; }
+        #examSelect { flex-grow: 1; padding: 0 10px; border-radius: 6px; border: none; font-weight: bold; color: #333; height: 36px; cursor: pointer; }
 
         .tabs { display: flex; gap: 5px; overflow-x: auto; margin-top: 15px; padding-bottom: 2px; }
-        .tab-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; white-space: nowrap; }
-        .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .tab-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; white-space: nowrap; cursor: pointer; transition: all 0.2s; }
+        .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); transform: translateY(-1px); }
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
 
         /* --- VIEWS --- */
         .phase-display { background: var(--card-bg); padding: 15px; border-radius: 12px; border-left: 5px solid var(--primary); margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
-        .btn-magic { background: linear-gradient(135deg, #7c3aed, #db2777); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; width: 100%; margin-bottom: 15px; cursor: pointer; }
+        .btn-magic { background: linear-gradient(135deg, #7c3aed, #db2777); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: bold; width: 100%; margin-bottom: 15px; cursor: pointer; transition: transform 0.1s; }
+        .btn-magic:active { transform: scale(0.98); }
         
         .task-list { display: flex; flex-direction: column; gap: 8px; }
         .cockpit-card { background: var(--card-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); transition: opacity 0.3s ease; }
         .check-btn { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--border); background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; font-size: 1.2rem; transition: all 0.2s; }
+        .check-btn:hover { border-color: var(--success); color: var(--success); }
         .check-btn.checked { background: var(--success); border-color: var(--success); color: white; }
 
         .dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
@@ -76,7 +79,7 @@
         .stat-list-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
 
         .filter-row { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; background: var(--header-cell-bg); padding: 10px; border-radius: 10px; border: 1px solid var(--border); }
-        .filter-select { flex-grow: 1; padding: 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); font-weight: bold; }
+        .filter-select { flex-grow: 1; padding: 8px; border-radius: 6px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); font-weight: bold; cursor: pointer; }
         #wbsTreeContainer { display: flex; flex-direction: column; gap: 10px; }
         details.tree-level-1 { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
         details.tree-level-1 > summary { padding: 12px; background: var(--header-cell-bg); font-weight: bold; cursor: pointer; list-style: none; display: flex; justify-content: space-between; }
@@ -85,17 +88,19 @@
         details.tree-level-2 > summary { padding: 10px 12px; font-weight: 600; cursor: pointer; color: var(--primary); background: var(--card-bg); display: flex; align-items: center; gap: 8px; }
         
         .tree-item { display: grid; grid-template-columns: 25px 1fr auto; gap: 10px; align-items: center; background: var(--card-bg); padding: 8px 12px; border-top: 1px solid var(--border); }
-        .status-dot { width: 10px; height: 10px; border-radius: 50%; cursor: pointer; margin: 0 auto; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; cursor: pointer; margin: 0 auto; transition: transform 0.2s; }
+        .status-dot:hover { transform: scale(1.2); }
         .status-dot.todo { background: var(--danger); }
         .status-dot.doing { background: var(--warning-text); }
         .status-dot.done { background: var(--success); }
         .item-input { width: 100%; border: none; background: transparent; font-weight: 500; color: var(--text); padding: 2px 0; }
+        .item-input:focus { border-bottom: 1px solid var(--primary); }
         .item-meta-row { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-muted); }
         .mini-select { border: none; background: transparent; font-size: inherit; color: inherit; font-weight: 600; cursor: pointer; padding: 0; }
         .mini-input { border: none; background: transparent; font-size: inherit; color: inherit; width: 30px; text-align: center; border-bottom: 1px dashed var(--border); }
         .prio-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:2px; flex-shrink:0; }
-        .action-btn { width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 6px; background: white; color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .action-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .action-btn { width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 6px; background: white; color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+        .action-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--hover-bg); }
         .action-btn.del:hover { border-color: var(--danger); color: var(--danger); background: #fee2e2; }
 
         .gantt-box { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; padding: 10px; margin-bottom: 20px; }
@@ -109,11 +114,14 @@
 
         .footer-tools { margin-top: 40px; text-align: center; display: flex; flex-direction: column; gap: 10px; opacity: 0.9; }
         .footer-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        .footer-link { border: 1px solid var(--border); padding: 8px 15px; border-radius: 20px; color: var(--text); text-decoration: none; font-size: 0.85rem; background: var(--card-bg); cursor: pointer; }
+        .footer-link { border: 1px solid var(--border); padding: 8px 15px; border-radius: 20px; color: var(--text); text-decoration: none; font-size: 0.85rem; background: var(--card-bg); cursor: pointer; transition: all 0.2s; }
+        .footer-link:hover { border-color: var(--primary); color: var(--primary); }
         
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-card { background: var(--card-bg); width: 100%; max-width: 400px; padding: 20px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        .template-btn { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid var(--border); border-radius: 8px; text-align: left; background: var(--bg); cursor: pointer; color: var(--text); font-weight: bold; }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(2px); }
+        .modal-card { background: var(--card-bg); width: 100%; max-width: 400px; padding: 25px; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); animation: popIn 0.2s ease-out; }
+        @keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .template-btn { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid var(--border); border-radius: 8px; text-align: left; background: var(--bg); cursor: pointer; color: var(--text); font-weight: bold; transition: background 0.2s; }
+        .template-btn:hover { background: var(--hover-bg); }
         .file-upload-label { display: block; width: 100%; padding: 15px; border: 2px dashed var(--primary); border-radius: 8px; text-align: center; color: var(--primary); cursor: pointer; margin-bottom: 10px; font-weight: bold; background: var(--hover-bg); }
         .file-upload-label:hover { background: #e0f2fe; }
         
@@ -132,45 +140,44 @@
     <div class="suite-header">
         <div class="header-top">
             <div class="header-info">
-                <h1>🎓 Lern-Suite V31.9</h1>
+                <h1>🎓 Lern-Suite V32.3</h1>
                 <p id="modeBadge">Azubi Edition</p>
             </div>
             <div class="header-controls-wrapper">
-                <button class="btn-icon" onclick="toggleDark()">🌙</button>
+                <button class="btn-icon" id="btnToggleDark">🌙</button>
                 <div style="background:rgba(255,255,255,0.15); padding:4px; border-radius:8px; display:flex; gap:4px; flex-grow:1;">
-                    <select id="examSelect" onchange="switchExam()"></select>
-                    <button class="btn-icon sm" onclick="editExam()" title="Datum ändern">✏️</button>
-                    <button class="btn-icon sm" onclick="addExam()" title="Neu">+</button>
+                    <select id="examSelect"></select>
+                    <button class="btn-icon sm" id="btnEditExam" title="Datum ändern">✏️</button>
+                    <button class="btn-icon sm" id="btnAddExam" title="Neu">+</button>
                 </div>
             </div>
         </div>
         
-        <div class="tabs">
-            <button class="tab-btn active" onclick="showTab('cockpit')" id="btn-cockpit">🚀 Cockpit</button>
-            <button class="tab-btn" onclick="showTab('plan')" id="btn-plan">📅 Zeitplan</button>
-            <button class="tab-btn" onclick="showTab('stats')" id="btn-stats">📊 Stats</button>
-            <button class="tab-btn" onclick="showTab('backlog')" id="btn-backlog">📚 Katalog</button>
-            <button class="tab-btn" onclick="showTab('info')" id="btn-info">ℹ️ Info</button>
+        <div class="tabs" id="mainTabs">
+            <button class="tab-btn active" data-tab="cockpit">🚀 Cockpit</button>
+            <button class="tab-btn" data-tab="plan">📅 Zeitplan</button>
+            <button class="tab-btn" data-tab="stats">📊 Stats</button>
+            <button class="tab-btn" data-tab="backlog">📚 Katalog</button>
+            <button class="tab-btn" data-tab="info">ℹ️ Info</button>
         </div>
     </div>
 
-    <!-- 1. COCKPIT -->
+    <!-- VIEWS -->
     <div id="tab-cockpit" class="tab-content active">
         <div class="phase-display">
             <div><strong>Aktuelle Phase</strong><div style="font-size:0.8rem; opacity:0.7" id="daysLeft">...</div></div>
             <div id="progressText" style="font-weight:bold; color:var(--primary)">0%</div>
         </div>
-        <button class="btn-magic" onclick="autoFill()">🪄 Smart Auto-Fill (Lernplan füllen)</button>
+        <button class="btn-magic" id="btnAutoFill">🪄 Smart Auto-Fill (Lernplan füllen)</button>
         <div id="cockpitList" class="task-list"></div>
         <div id="emptyCockpit" style="text-align:center; padding:30px; display:none; color:var(--text-muted)">Nichts zu tun. Hol dir Aufgaben aus dem Katalog.</div>
     </div>
 
-    <!-- 2. ZEITPLAN -->
     <div id="tab-plan" class="tab-content">
         <div class="gantt-box">
             <div class="gantt-header">
                 <strong>Zeitstrahl</strong>
-                <select class="gantt-zoom-select" id="ganttZoomSelect" onchange="updateGanttView()">
+                <select class="gantt-zoom-select" id="ganttZoomSelect">
                     <option value="all">Gesamt</option>
                     <option value="30">30 Tage</option>
                     <option value="60">60 Tage</option>
@@ -183,7 +190,6 @@
         <div id="agendaList" class="task-list"></div>
     </div>
 
-    <!-- 3. STATS -->
     <div id="tab-stats" class="tab-content">
         <div class="dashboard-grid">
             <div class="stat-card">
@@ -197,7 +203,7 @@
                 <div id="uniStats" style="display:none; width:100%;">
                     <div class="gpa-box">∅ Note (GPA) <span class="gpa-value" id="gpaValue">-</span></div>
                     <div style="margin-top:15px; width:100%;">
-                        <div class="progress-header"><span>ECTS Fortschritt</span> <span id="ectsCount">0 / 180</span></div>
+                        <div class="progress-header"><span>ECTS (benotet)</span> <span id="ectsCount">0 / 180</span></div>
                         <div class="progress-track"><div class="progress-fill" id="ectsBar" style="width:0%"></div></div>
                     </div>
                     <h4 style="margin-top:10px;">🎓 Modul-Noten</h4>
@@ -212,21 +218,19 @@
         </div>
     </div>
 
-    <!-- 4. BACKLOG -->
     <div id="tab-backlog" class="tab-content">
         <div class="filter-row">
-            <select id="filterPart" class="filter-select" onchange="renderBacklog()"><option value="all">Alle Bereiche</option></select>
-            <select id="filterMod" class="filter-select" onchange="renderBacklog()"><option value="all">Alle Themen</option></select>
-            <button class="btn-icon sm" style="background:var(--primary); width:auto; padding:0 15px;" onclick="addTask()">+ Neu</button>
+            <select id="filterPart" class="filter-select"><option value="all">Alle Bereiche</option></select>
+            <select id="filterMod" class="filter-select"><option value="all">Alle Themen</option></select>
+            <button class="btn-icon sm" style="background:var(--primary); width:auto; padding:0 15px;" id="btnAddTask">+ Neu</button>
         </div>
         <div id="backlogTree"></div>
         <div id="emptyBacklog" style="text-align:center; padding:40px; display:none;">
             <p style="color:var(--text-muted)">Katalog ist leer.</p>
-            <button class="footer-link" style="background:var(--primary); color:white; border:none;" onclick="openImport()">Daten importieren</button>
+            <button class="footer-link" style="background:var(--primary); color:white; border:none;" id="btnOpenImport">Daten importieren</button>
         </div>
     </div>
 
-    <!-- 5. INFO -->
     <div id="tab-info" class="tab-content">
         <div class="phase-display" style="display:block;">
             <h3>📖 Handbuch & Guide</h3>
@@ -245,331 +249,733 @@
     <!-- FOOTER -->
     <div class="footer-tools">
         <div class="footer-row">
-            <a class="footer-link" onclick="toggleUniMode()">🔄 Modus: <span id="footerMode">IHK</span></a>
-            <a class="footer-link" onclick="downloadBackup()">💾 Backup</a>
-            <a class="footer-link" onclick="restoreBackup()">📂 Laden</a>
+            <a class="footer-link" id="btnToggleMode">🔄 Modus: <span id="footerMode">IHK</span></a>
+            <a class="footer-link" id="btnDownload">💾 Backup</a>
+            <a class="footer-link" id="btnRestore">📂 Laden</a>
         </div>
         <div class="footer-row">
-            <a class="footer-link" style="color:var(--danger); border-color:var(--danger)" onclick="hardReset()">⚠️ Reset</a>
+            <a class="footer-link" style="color:var(--danger); border-color:var(--danger)" id="btnReset">⚠️ Reset</a>
         </div>
-        <input type="file" id="fileInput" hidden onchange="loadFile(event)">
+        <input type="file" id="fileInput" hidden>
     </div>
 
-    <!-- IMPORT MODAL -->
+    <!-- MODALS -->
     <div id="importModal" class="modal-overlay">
         <div class="modal-card">
             <h3 style="margin-top:0">Katalog importieren</h3>
-            <p style="font-size:0.9rem; color:var(--text-muted);">Daten werden hinzugefügt (nicht überschrieben).</p>
-            
             <div id="ihkTemplates">
-                <button class="template-btn" style="border-left:5px solid #0052cc" onclick="loadIHKData('AP1')">🟦 AP1 Komplett (Basis)</button>
-                <button class="template-btn" style="border-left:5px solid #eab308" onclick="loadIHKData('WISO')">⚖️ WiSo Komplett</button>
-                <button class="template-btn" style="border-left:5px solid #a855f7" onclick="loadAP2Smart()">🟪 AP2 Spezial (FISI / KIDG)</button>
+                <button class="template-btn" style="border-left:5px solid #0052cc" data-import="IHK:AP1">🟦 AP1 Komplett (Basis)</button>
+                <button class="template-btn" style="border-left:5px solid #eab308" data-import="IHK:WISO">⚖️ WiSo Komplett</button>
+                <button class="template-btn" style="border-left:5px solid #a855f7" data-import="AP2Smart">🟪 AP2 Spezial (FISI / KIDG)</button>
             </div>
-            
             <div id="uniTemplates" style="display:none;">
-                <button class="template-btn" style="border-left:5px solid #10b981" onclick="loadUniData('INF_HWR')">💻 Informatik (HWR)</button>
-                <button class="template-btn" style="border-left:5px solid #f59e0b" onclick="loadUniData('WI_HWR')">📊 W-Info (HWR)</button>
-                <button class="template-btn" style="border-left:5px solid #3b82f6" onclick="loadUniData('WI_WILDAU')">🏭 W-Info (Wildau)</button>
+                <button class="template-btn" style="border-left:5px solid #10b981" data-import="UNI:INF_HWR">💻 Informatik (HWR)</button>
+                <button class="template-btn" style="border-left:5px solid #f59e0b" data-import="UNI:WI_HWR">📊 W-Info (HWR)</button>
+                <button class="template-btn" style="border-left:5px solid #3b82f6" data-import="UNI:WI_WILDAU">🏭 W-Info (Wildau)</button>
             </div>
-            
             <label class="file-upload-label">
                 📂 Eigene JSON Datei
-                <input type="file" id="catalogImportInput" hidden accept=".json" onchange="handleCatalogImport(event)">
+                <input type="file" id="catalogImportInput" hidden accept=".json">
             </label>
-
-            <button class="template-btn" style="text-align:center; margin-top:10px;" onclick="closeImport()">Abbrechen</button>
+            <button class="template-btn" style="text-align:center; margin-top:10px;" id="btnCloseImport">Abbrechen</button>
         </div>
     </div>
 
     <div id="toast">Info</div>
 
     <script>
-        /* --- DATA --- */
-        const IHK_FULL_DATA = [
-          {"part": "AP1", "mod": "Projektmanagement", "task": "Merkmale eines Projektes"}, {"part": "AP1", "mod": "Projektmanagement", "task": "Projektplanung"}, {"part": "AP1", "mod": "IT-Systeme", "task": "Hardware Komponenten"},
-          {"part": "WISO", "mod": "Recht", "task": "Arbeitsvertrag"}, {"part": "WISO", "mod": "Sozial", "task": "Versicherungen"},
-          {"part": "AP2", "mod": "Netzwerke", "task": "IPv4 Subnetting", "job": "FISI"}, {"part": "AP2", "mod": "Server", "task": "Virtualisierung", "job": "FISI"},
-          {"part": "AP2", "mod": "Prozesse", "task": "BPMN", "job": "KIDG"}, {"part": "AP2", "mod": "Rechnungswesen", "task": "KLR", "job": "KIDG"}
-        ];
-
-        const UNI_DATA = {
-            "WI_HWR": [{"part": "Sem 1", "mod": "BWL", "task": "Grundlagen", "ects": 5}, {"part": "Sem 1", "mod": "IT", "task": "Java", "ects": 5}],
-            "INF_HWR": [{"part": "Sem 1", "mod": "Mathe", "task": "Algebra", "ects": 7}, {"part": "Sem 1", "mod": "Prog", "task": "C", "ects": 5}],
-            "WI_WILDAU": [{"part": "Sem 1", "mod": "BWL", "task": "Grundlagen", "ects": 5}]
+        /* --- 1. DATA CATALOGS --- */
+        const CATALOGS = {
+            IHK: [
+              {"part": "AP1", "mod": "Projektmanagement", "task": "Merkmale eines Projektes"}, {"part": "AP1", "mod": "Projektmanagement", "task": "Projektplanung"}, {"part": "AP1", "mod": "IT-Systeme", "task": "Hardware Komponenten"},
+              {"part": "WISO", "mod": "Recht", "task": "Arbeitsvertrag"}, {"part": "WISO", "mod": "Sozial", "task": "Versicherungen"},
+              {"part": "AP2", "mod": "Netzwerke", "task": "IPv4 Subnetting", "job": "FISI"}, {"part": "AP2", "mod": "Server", "task": "Virtualisierung", "job": "FISI"},
+              {"part": "AP2", "mod": "Prozesse", "task": "BPMN", "job": "KIDG"}, {"part": "AP2", "mod": "Rechnungswesen", "task": "KLR", "job": "KIDG"}
+            ],
+            UNI: {
+                "WI_HWR": [{"part": "Sem 1", "mod": "BWL", "task": "Grundlagen", "ects": 5}, {"part": "Sem 1", "mod": "IT", "task": "Java", "ects": 5}],
+                "INF_HWR": [{"part": "Sem 1", "mod": "Mathe", "task": "Algebra", "ects": 7}, {"part": "Sem 1", "mod": "Prog", "task": "C", "ects": 5}],
+                "WI_WILDAU": [{"part": "Sem 1", "mod": "BWL", "task": "Grundlagen", "ects": 5}]
+            }
         };
 
-        let exams = [], tasks = [], cockpit = [], activeExamId = null, isUniMode = false, ganttView = 'all';
-        let moduleSettings = {};
+        /* --- 2. HELPERS --- */
+        const Utils = {
+            escapeHtml(unsafe) {
+                if (!unsafe) return "";
+                return String(unsafe)
+                      .replace(/&/g, "&amp;")
+                      .replace(/</g, "&lt;")
+                      .replace(/>/g, "&gt;")
+                      // Quotes are handled by attribute syntax usually, but for textContent safe
+                      .replace(/"/g, "&quot;")
+                      .replace(/'/g, "&#039;");
+            },
+            // FIX 1: Complete escapeAttr to handle all critical characters for attributes
+            escapeAttr(unsafe) {
+                if (!unsafe && unsafe !== 0) return "";
+                return String(unsafe)
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#39;");
+            }
+        };
 
-        // --- INIT ---
-        window.onload = function() {
-            try {
-                exams = JSON.parse(localStorage.getItem('exams')) || [];
-                tasks = JSON.parse(localStorage.getItem('wbsData')) || [];
-                cockpit = JSON.parse(localStorage.getItem('cockpitTasks')) || [];
-                moduleSettings = JSON.parse(localStorage.getItem('moduleSettings')) || {};
-                activeExamId = localStorage.getItem('activeExamId');
-                isUniMode = localStorage.getItem('isUniMode') === 'true';
+        /* --- 3. DATA STORE --- */
+        class Store {
+            constructor() {
+                this.exams = JSON.parse(localStorage.getItem('exams')) || [];
+                this.tasks = JSON.parse(localStorage.getItem('wbsData')) || [];
+                this.cockpit = JSON.parse(localStorage.getItem('cockpitTasks')) || [];
+                this.moduleSettings = JSON.parse(localStorage.getItem('moduleSettings')) || {};
+                this.activeExamId = localStorage.getItem('activeExamId');
+                this.isUniMode = localStorage.getItem('isUniMode') === 'true';
+                
+                // Init default exam if empty
+                if (this.exams.length === 0) {
+                    const id = 'ex-' + Date.now();
+                    this.exams.push({id, name: 'Standard Prüfung', date: '', start: new Date().toISOString().split('T')[0]});
+                    this.activeExamId = id;
+                    this.save();
+                } else if (!this.activeExamId || !this.exams.find(e => e.id === this.activeExamId)) {
+                    this.activeExamId = this.exams[0].id;
+                }
+            }
 
-                if (exams.length === 0) {
-                    const id = 'ex-'+Date.now();
-                    exams.push({id:id, name:'Meine Prüfung', date:'', start: new Date().toISOString().split('T')[0]});
-                    activeExamId = id;
-                    save();
-                } else if (!activeExamId || !exams.find(e => e.id === activeExamId)) { activeExamId = exams[0].id; }
+            save() {
+                localStorage.setItem('exams', JSON.stringify(this.exams));
+                localStorage.setItem('wbsData', JSON.stringify(this.tasks));
+                localStorage.setItem('cockpitTasks', JSON.stringify(this.cockpit));
+                localStorage.setItem('moduleSettings', JSON.stringify(this.moduleSettings));
+                localStorage.setItem('activeExamId', this.activeExamId);
+                localStorage.setItem('isUniMode', this.isUniMode);
+            }
 
+            addTask(task) { this.tasks.push(task); this.save(); }
+            
+            updateTask(id, field, val) { 
+                // Patch: Robust string comparison for IDs
+                const t = this.tasks.find(x => String(x.id) === String(id)); 
+                if(t) { 
+                    t[field] = val; 
+                    // Patch 3: Update lastTouched logic
+                    t.lastTouched = new Date().toISOString();
+                    this.save(); 
+                } 
+            }
+            
+            deleteTask(id) { 
+                // Patch: Robust string comparison for IDs
+                this.tasks = this.tasks.filter(t => String(t.id) !== String(id)); 
+                this.cockpit = this.cockpit.filter(c => String(c.originId) !== String(id));
+                this.save(); 
+            }
+            
+            get activeExam() { return this.exams.find(e => e.id === this.activeExamId); }
+            get currentTasks() { return this.tasks.filter(t => t.examId === this.activeExamId); }
+        }
+
+        const store = new Store();
+
+        /* --- 4. UI COMPONENTS & RENDERING --- */
+        const UI = {
+            formatDate(str) { 
+                if(!str) return ""; 
+                const p = str.split('-'); 
+                return p.length === 3 ? `${p[2]}.${p[1]}.${p[0]}` : str; 
+            },
+            
+            parseDate(str) {
+                if(!str) return "";
+                const p = str.split('.');
+                return p.length === 3 ? `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}` : str;
+            },
+
+            renderAll() {
+                this.renderHeader();
+                this.renderCockpit();
+                this.renderBacklog();
+                this.renderPlan();
+                if(App && App.renderDashboard) App.renderDashboard();
+            },
+
+            renderHeader() {
+                const sel = document.getElementById('examSelect');
+                sel.innerHTML = '';
+                store.exams.forEach(e => {
+                    const opt = document.createElement('option');
+                    opt.value = e.id;
+                    opt.text = e.name;
+                    if(e.id === store.activeExamId) opt.selected = true;
+                    sel.appendChild(opt);
+                });
+                
+                const ex = store.activeExam;
+                const daysEl = document.getElementById('daysLeft');
+                if (ex && ex.date) {
+                    const diff = Math.ceil((new Date(ex.date) - new Date()) / 864e5);
+                    daysEl.innerText = diff > 0 ? `Noch ${diff} Tage` : "Vorbei";
+                } else {
+                    daysEl.innerText = "Kein Datum";
+                }
+                
+                document.getElementById('modeBadge').innerText = store.isUniMode ? "Student" : "Azubi";
+                document.getElementById('footerMode').innerText = store.isUniMode ? "Uni" : "IHK";
+                document.getElementById('ihkTemplates').style.display = store.isUniMode ? 'none' : 'block';
+                document.getElementById('uniTemplates').style.display = store.isUniMode ? 'block' : 'none';
+            },
+
+            renderCockpit() {
+                const list = document.getElementById('cockpitList');
+                list.innerHTML = '';
+                const myTasks = store.cockpit.filter(c => c.examId === store.activeExamId);
+                document.getElementById('emptyCockpit').style.display = myTasks.length === 0 ? 'block' : 'none';
+
+                myTasks.forEach(c => {
+                    const el = document.createElement('div');
+                    el.className = 'cockpit-card';
+                    if (c.done) el.style.opacity = 0.5;
+                    // Safe render using escapeHtml for display
+                    el.innerHTML = `
+                        <div>
+                            <div style="font-size:0.75rem; color:var(--primary); font-weight:bold;">${Utils.escapeHtml(c.mod)}</div>
+                            <div style="font-weight:600;">${Utils.escapeHtml(c.task)}</div>
+                        </div>
+                        <div class="check-btn ${c.done ? 'checked' : ''}" data-id="${c.id}">✓</div>
+                    `;
+                    list.appendChild(el);
+                });
+                
+                const total = store.currentTasks.length;
+                const done = store.currentTasks.filter(t => t.status === 'done').length;
+                const p = total > 0 ? Math.round((done/total)*100) : 0;
+                document.getElementById('progressText').innerText = p + '%';
+            },
+
+            renderBacklog() {
+                const container = document.getElementById('backlogTree');
+                container.innerHTML = '';
+                let tasks = store.currentTasks;
+
+                // FIX 2: Clean Rebuild of Select Options
+                const sP = document.getElementById('filterPart');
+                const sM = document.getElementById('filterMod');
+                const oldP = sP.value; 
+                const oldM = sM.value;
+
+                // Reset and fill via DOM (prevents XSS in options)
+                sP.innerHTML = ''; 
+                sM.innerHTML = '';
+                
+                const defP = new Option('Alle Bereiche', 'all'); sP.add(defP);
+                const defM = new Option('Alle Themen', 'all'); sM.add(defM);
+
+                const parts = [...new Set(tasks.map(t => t.part))].sort();
+                const mods = [...new Set(tasks.map(t => t.mod))].sort();
+                
+                parts.forEach(p => sP.add(new Option(p, p)));
+                mods.forEach(m => sM.add(new Option(m, m)));
+                
+                if (parts.includes(oldP)) sP.value = oldP;
+                if (mods.includes(oldM)) sM.value = oldM;
+
+                if (sP.value !== 'all') tasks = tasks.filter(t => t.part === sP.value);
+                if (sM.value !== 'all') tasks = tasks.filter(t => t.mod === sM.value);
+
+                document.getElementById('emptyBacklog').style.display = tasks.length === 0 ? 'block' : 'none';
+
+                const grouped = {};
                 tasks.forEach(t => {
-                    if (!t.part) t.part = t.examPart || "Allgemein";
-                    if (!t.mod) t.mod = "Unsortiert";
-                    if (!t.level) t.level = 0;
-                    if (t.decayFlag === undefined) t.decayFlag = false;
+                    if (!grouped[t.part]) grouped[t.part] = {};
+                    if (!grouped[t.part][t.mod]) grouped[t.part][t.mod] = [];
+                    grouped[t.part][t.mod].push(t);
                 });
 
-                if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
-                applyDecay(); updateModeUI(); renderAll();
-            } catch(e) { console.error(e); }
+                for (const [part, modules] of Object.entries(grouped)) {
+                    const d1 = document.createElement('details');
+                    d1.className = 'tree-level-1';
+                    d1.open = true;
+                    // FIX BUG 1: data-part NOT in HTML string, but set via DOM
+                    d1.innerHTML = `<summary style="justify-content:space-between"><span>${Utils.escapeHtml(part)}</span><button class="action-btn del" data-action="delPart">×</button></summary>`;
+                    d1.querySelector('button[data-action="delPart"]').dataset.part = part;
+
+                    for (const [mod, tList] of Object.entries(modules)) {
+                        const d2 = document.createElement('details');
+                        d2.className = 'tree-level-2';
+                        d2.open = true;
+                        // FIX BUG 1: data-mod NOT in HTML string, but set via DOM
+                        d2.innerHTML = `<summary style="justify-content:space-between"><span style="display:flex;gap:8px;align-items:center">📂 ${Utils.escapeHtml(mod)} <small>(${tList.length})</small></span><button class="action-btn del" data-action="delMod">×</button></summary>`;
+                        const b2 = d2.querySelector('button[data-action="delMod"]');
+                        b2.dataset.part = part;
+                        b2.dataset.mod = mod;
+
+                        tList.forEach(t => {
+                            const r = document.createElement('div');
+                            r.className = 'tree-item';
+                            const pc = t.imp >= 8 ? 'red' : (t.imp >= 5 ? 'orange' : 'green');
+                            
+                            // FIX BUG 2: Value NOT in innerHTML. FIX BUG 1: data-part/mod NOT in innerHTML.
+                            r.innerHTML = `
+                                <div class="status-dot ${t.status}" data-action="cycleStatus" data-id="${t.id}"></div>
+                                <div>
+                                    <input id="input-${t.id}" class="item-input" data-action="updateTask" data-id="${t.id}" data-field="task">
+                                    <div class="item-meta-row">
+                                        <span class="prio-dot" style="background:${pc}"></span>
+                                        <select class="mini-select" data-action="updateTask" data-id="${t.id}" data-field="imp">
+                                            <option value="10" ${t.imp==10?'selected':''}>10</option>
+                                            <option value="8" ${t.imp==8?'selected':''}>8</option>
+                                            <option value="5" ${t.imp==5?'selected':''}>5</option>
+                                            <option value="3" ${t.imp==3?'selected':''}>3</option>
+                                        </select>
+                                        <span style="opacity:0.3">|</span>
+                                        <input type="number" class="mini-input" value="${t.time||30}" data-action="updateTask" data-id="${t.id}" data-field="time"> min
+                                    </div>
+                                </div>
+                                <div style="display:flex; gap:5px;">
+                                    <button class="action-btn" data-action="toCockpit" data-id="${t.id}">🚀</button>
+                                    <button class="action-btn" data-action="moveTask" data-id="${t.id}">📂</button>
+                                    <button class="action-btn del" data-action="delTask" data-id="${t.id}">✕</button>
+                                </div>
+                            `;
+                            // FIX BUG 1 & 2: Set raw values via DOM
+                            const inp = r.querySelector('.item-input');
+                            inp.dataset.part = part;
+                            inp.dataset.mod = mod;
+                            inp.value = t.task || "";
+                            
+                            d2.appendChild(r);
+                        });
+                        d1.appendChild(d2);
+                    }
+                    container.appendChild(d1);
+                }
+            },
+
+            renderPlan(view = 'all') {
+                const list = document.getElementById('agendaList');
+                const chart = document.getElementById('ganttChart');
+                list.innerHTML = ''; chart.innerHTML = '';
+                
+                const ve = store.exams.filter(e => e.date).sort((a,b) => new Date(a.date) - new Date(b.date));
+                if (ve.length === 0) {
+                    chart.innerHTML = '<div style="text-align:center;padding:20px;color:#999">Keine Daten</div>';
+                    return;
+                }
+
+                ve.forEach(e => {
+                    const bs = e.id === store.activeExamId ? 'border-left:4px solid var(--primary)' : 'border-left:4px solid #999';
+                    const diff = Math.ceil((new Date(e.date) - new Date()) / 864e5);
+                    list.innerHTML += `<div class="agenda-item" style="${bs}"><span><strong>${Utils.escapeHtml(e.name)}</strong><br><small>${UI.formatDate(e.start||'')} -> ${UI.formatDate(e.date)}</small></span><span>${diff} T</span></div>`;
+                });
+
+                const today = new Date();
+                let vs, ve_d;
+                if (view === 'all') {
+                    let min = new Date(ve[0].start || today).getTime();
+                    let max = new Date(ve[ve.length-1].date).getTime();
+                    vs = new Date(min); vs.setDate(vs.getDate() - 7);
+                    ve_d = new Date(max); ve_d.setDate(ve_d.getDate() + 7);
+                } else {
+                    vs = new Date(today); vs.setDate(vs.getDate() - 3);
+                    ve_d = new Date(today); ve_d.setDate(ve_d.getDate() + parseInt(view));
+                }
+                const tot = ve_d - vs;
+                
+                if (today >= vs && today <= ve_d) {
+                    chart.innerHTML += `<div class="today-line" style="left:${((today - vs) / tot) * 100}%"></div>`;
+                }
+
+                ve.forEach(e => {
+                    const s = new Date(e.start || today);
+                    const d = new Date(e.date);
+                    if (d < vs || s > ve_d) return;
+                    const L = Math.max(0, ((s - vs) / tot) * 100);
+                    const W = Math.min(100, ((d - vs) / tot) * 100) - L;
+                    const col = e.id === store.activeExamId ? 'var(--primary)' : '#94a3b8';
+                    const op = e.id === store.activeExamId ? '1' : '0.5';
+                    chart.innerHTML += `<div class="bar-row"><div class="bar" style="left:${L}%;width:${W}%;background:${col};opacity:${op}">${Utils.escapeHtml(e.name)}</div></div>`;
+                });
+            }
         };
 
-        function save() {
-            localStorage.setItem('exams', JSON.stringify(exams));
-            localStorage.setItem('wbsData', JSON.stringify(tasks));
-            localStorage.setItem('cockpitTasks', JSON.stringify(cockpit));
-            localStorage.setItem('moduleSettings', JSON.stringify(moduleSettings));
-            localStorage.setItem('activeExamId', activeExamId);
-            localStorage.setItem('isUniMode', isUniMode);
-        }
-
-        function renderAll() { renderHeader(); renderCockpit(); renderBacklog(); renderPlan(); renderDashboard(); }
-
-        /* --- IMPORT ENGINE (Unified) --- */
-        function importEngine(items, defaultTime) {
-            let added = 0;
-            items.forEach(item => {
-                const exists = tasks.some(t => t.examId === activeExamId && t.task === item.task);
-                if (!exists) {
-                    tasks.push({
-                        id: Date.now() + Math.random(),
-                        examId: activeExamId,
-                        part: item.part || "Import",
-                        mod: item.mod || "Sonstiges",
-                        task: item.task,
-                        status: 'todo',
-                        imp: 5,
-                        time: defaultTime || (isUniMode ? 60 : 30),
-                        level: 0,
-                        decayFlag: false
-                    });
-                    
-                    // Uni ECTS Logic
-                    if(isUniMode && item.ects && !moduleSettings[item.mod]) {
-                         moduleSettings[item.mod] = { ects: item.ects, grade: '' };
-                    }
-                    added++;
-                }
-            });
-            save(); renderAll(); closeImport();
-            toast(`${added} Aufgaben importiert!`);
-        }
-
-        // Specific Loaders using Engine
-        function loadIHKData(filterPart) {
-            if(!confirm(`Katalog "${filterPart}" importieren?`)) return;
-            const filtered = IHK_FULL_DATA.filter(i => i.part === filterPart);
-            importEngine(filtered, 30);
-        }
-
-        function loadAP2Smart() {
-            const job = prompt("Beruf?\n1=FISI, 2=FIAE, 3=KAUF");
-            if(!job) return;
-            const targetJob = (job==="1")?"FISI" : (job==="2")?"FIAE" : "KIDG"; // Fixed KIDG mapping
-            
-            const filtered = IHK_FULL_DATA.filter(i => {
-                if(i.part !== "AP2") return false;
-                return !i.job || i.job === targetJob;
-            });
-            importEngine(filtered, 30);
-        }
-
-        function loadUniData(key) {
-            if(!confirm("Uni-Daten importieren?")) return;
-            const data = UNI_DATA[key];
-            if(data) importEngine(data, 60);
-        }
-
-        function handleCatalogImport(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    if(Array.isArray(data)) importEngine(data, 30);
-                    else alert("Ungültiges Format");
-                } catch(err) { alert("Fehler"); }
-            };
-            reader.readAsText(file);
-        }
-
-        /* --- LOGIC & UI --- */
-        function getInterval(l){ if(l===0)return 1;if(l===1)return 3;if(l===2)return 7;if(l===3)return 14;return 30;}
-        function getDaysDiff(d){ if(!d)return 999; return Math.floor((new Date()-new Date(d))/(864e5));}
-        function applyDecay(){
-            let c=false; tasks.forEach(t=>{
-                if(t.status==='done'&&t.lastReviewed){ if(getDaysDiff(t.lastReviewed)>getInterval(t.level)){t.status='doing';t.decayFlag=true;c=true;}}
-                else if(t.status==='doing'&&t.lastReviewed){ if(getDaysDiff(t.lastReviewed)>7){t.status='todo';t.decayFlag=true;c=true;}}
-            }); if(c){save();toast("Wiedervorlage aktualisiert");}
-        }
-        function dateToISO(s){if(!s)return "";const p=s.split(/[\.\/\-]/);if(p.length<3||p[0].length===4)return s;return `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;}
-        function isoToDisplay(s){if(!s)return "";const p=s.split('-');if(p.length<3)return s;return `${p[2]}.${p[1]}.${p[0]}`;}
-
-        function renderHeader(){
-            const s=document.getElementById('examSelect'); s.innerHTML='';
-            exams.forEach(e=>{const o=document.createElement('option');o.value=e.id;o.text=e.name;if(e.id===activeExamId)o.selected=true;s.appendChild(o);});
-            const ex=exams.find(e=>e.id===activeExamId);
-            document.getElementById('daysLeft').innerText = (ex&&ex.date) ? (Math.ceil((new Date(ex.date)-new Date())/864e5)>0?`Noch ${Math.ceil((new Date(ex.date)-new Date())/864e5)} Tage`:"Vorbei") : "Kein Datum";
-        }
-        function switchExam(){ activeExamId=document.getElementById('examSelect').value; save(); renderAll(); }
-        function addExam(){ const n=prompt("Name:");if(!n)return;const d=dateToISO(prompt("Datum (TT.MM.JJJJ):"));const s=dateToISO(prompt("Start (TT.MM.JJJJ):"));exams.push({id:'ex-'+Date.now(),name:n,date:d,start:s});activeExamId=exams[exams.length-1].id;save();renderAll(); }
-        function editExam(){ const e=exams.find(x=>x.id===activeExamId);if(!e)return;const n=prompt("Name",e.name);if(n)e.name=n;const d=prompt("Datum",isoToDisplay(e.date));if(d)e.date=dateToISO(d);const s=prompt("Start",isoToDisplay(e.start));if(s)e.start=dateToISO(s);save();renderAll();}
-        
-        function renderCockpit(){
-            const l=document.getElementById('cockpitList'); l.innerHTML='';
-            const m=cockpit.filter(c=>c.examId===activeExamId);
-            document.getElementById('emptyCockpit').style.display=m.length===0?'block':'none';
-            m.forEach(c=>{
-                const d=document.createElement('div'); d.className='cockpit-card'; if(c.done)d.style.opacity=0.5;
-                d.innerHTML=`<div><div style="font-size:0.75rem;color:var(--primary);font-weight:bold;">${c.mod}</div><div style="font-weight:600;">${c.task}</div></div><div class="check-btn ${c.done?'checked':''}" onclick="toggleDone('${c.id}')">✓</div>`;
-                l.appendChild(d);
-            });
-            const tot=tasks.filter(t=>t.examId===activeExamId).length; const don=tasks.filter(t=>t.examId===activeExamId&&t.status==='done').length;
-            document.getElementById('progressText').innerText=tot>0?Math.round((don/tot)*100)+'%':'0%';
-        }
-        function toggleDone(id){
-            const c=cockpit.find(x=>x.id===id); if(c){
-                c.done=!c.done; const t=tasks.find(x=>x.id===c.originId);
-                if(t){ if(c.done){ t.status='done'; t.lastReviewed=new Date().toISOString().split('T')[0]; t.level=(t.level||0)+1; t.decayFlag=false; } else { t.status='doing'; }}
-                save(); renderAll();
-                if(c.done) setTimeout(()=>{cockpit=cockpit.filter(x=>x.id!==id);save();renderCockpit();},800);
-            }
-        }
-        function autoFill(){
-            const p=tasks.filter(t=>t.examId===activeExamId&&t.status!=='done'&&!cockpit.some(c=>c.originId===t.id));
-            if(p.length===0)return toast("Nichts gefunden.");
-            p.slice(0,3).forEach(t=>{ cockpit.push({id:'cp-'+Math.random(),originId:t.id,examId:activeExamId,mod:t.mod,task:t.task,done:false}); t.status='doing'; });
-            save(); renderAll(); toast("Gefüllt!");
-        }
-
-        function renderDashboard(){
-            const ds=tasks.filter(t=>t.examId===activeExamId); const tot=ds.length;
-            document.getElementById('uniStats').style.display=isUniMode?'block':'none';
-            document.getElementById('statsDetails').style.display=isUniMode?'none':'block';
-            if(tot===0){ document.getElementById('mainPercent').innerText="0%"; return;}
-            const don=ds.filter(t=>t.status==='done').length; const perc=Math.round((don/tot)*100);
-            document.getElementById('mainPieChart').style.background=`conic-gradient(var(--chart-done) 0deg ${Math.round(perc*3.6)}deg, var(--border) 0deg 360deg)`;
-            document.getElementById('mainPercent').innerText=perc+"%";
-            
-            if(isUniMode){
-                const mods=[...new Set(ds.map(t=>t.mod))].sort(); let h=''; let sumG=0, sumE=0, totE=0;
-                mods.forEach(m=>{
-                    const s=moduleSettings[m]||{ects:5,grade:''}; const e=parseFloat(s.ects)||0; const g=parseFloat(s.grade);
-                    h+=`<tr><td>${m}</td><td><input type="number" value="${s.ects}" onchange="updMod('${m}','ects',this.value)"></td><td><input type="number" step="0.1" value="${s.grade}" placeholder="-" onchange="updMod('${m}','grade',this.value)"></td></tr>`;
-                    totE+=e; if(g>0){sumG+=g*e; sumE+=e;}
+        /* --- 5. APP CONTROLLER --- */
+        const App = {
+            init() {
+                if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+                
+                App.applyDecay(); 
+                
+                document.getElementById('btnToggleDark').addEventListener('click', App.toggleDark);
+                document.getElementById('examSelect').addEventListener('change', App.switchExam);
+                document.getElementById('btnAddExam').addEventListener('click', App.addExam);
+                document.getElementById('btnEditExam').addEventListener('click', App.editExam);
+                
+                document.getElementById('mainTabs').addEventListener('click', (e) => {
+                    if (e.target.classList.contains('tab-btn')) App.switchTab(e.target.dataset.tab);
                 });
-                document.getElementById('moduleTable').innerHTML=h;
-                document.getElementById('gpaValue').innerText=sumE>0?(sumG/sumE).toFixed(1):"-";
-                document.getElementById('ectsBar').style.width=(totE>0?(sumE/totE)*100:0)+"%";
-                document.getElementById('ectsCount').innerText=`${sumE} / ${totE}`;
-            } else {
-                const parts={}; ds.forEach(t=>{const p=t.part||'Sonstiges'; if(!parts[p])parts[p]={t:0,d:0}; parts[p].t++; if(t.status==='done')parts[p].d++;});
-                let h=''; for(const[k,v]of Object.entries(parts)){const p=Math.round((v.d/v.t)*100); h+=`<div class="progress-row"><div class="progress-header"><span>${k}</span><span>${v.d}/${v.t}</span></div><div class="progress-track"><div class="progress-fill" style="width:${p}%"></div></div></div>`;}
-                document.getElementById('statsDetails').innerHTML=h;
-            }
-            const map={}; ds.forEach(t=>{if(t.status!=='done'){const m=t.mod||'Sonstiges'; map[m]=(map[m]||0)+1;}});
-            const sort=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,3);
-            let ph=''; sort.forEach(([m,c])=>ph+=`<div class="stat-list-item"><span>${m}</span><span style="font-weight:bold;color:var(--danger)">${c} offen</span></div>`);
-            document.getElementById('problemZonesList').innerHTML=ph||"<div style='text-align:center;color:var(--success)'>Alles sauber!</div>";
-        }
-        function updMod(m,f,v){ if(!moduleSettings[m])moduleSettings[m]={ects:5,grade:''}; moduleSettings[m][f]=v; save(); renderDashboard();}
+                
+                document.getElementById('btnAutoFill').addEventListener('click', App.autoFill);
+                document.getElementById('ganttZoomSelect').addEventListener('change', (e) => UI.renderPlan(e.target.value));
+                
+                document.getElementById('filterPart').addEventListener('change', UI.renderBacklog);
+                document.getElementById('filterMod').addEventListener('change', UI.renderBacklog);
+                document.getElementById('btnAddTask').addEventListener('click', App.addTask);
+                
+                document.getElementById('btnOpenImport').addEventListener('click', () => document.getElementById('importModal').style.display='flex');
+                document.getElementById('btnCloseImport').addEventListener('click', () => document.getElementById('importModal').style.display='none');
+                
+                document.getElementById('btnToggleMode').addEventListener('click', App.toggleMode);
+                document.getElementById('btnDownload').addEventListener('click', App.backup);
+                document.getElementById('btnRestore').addEventListener('click', () => document.getElementById('fileInput').click());
+                document.getElementById('btnReset').addEventListener('click', App.reset);
+                
+                document.getElementById('fileInput').addEventListener('change', App.loadFile);
+                document.getElementById('catalogImportInput').addEventListener('change', App.importFile);
+                
+                document.getElementById('tab-stats').addEventListener('change', (e) => {
+                    if(e.target.dataset.action === 'updMod') {
+                        App.updMod(e.target.dataset.mod, e.target.dataset.field, e.target.value);
+                    }
+                });
+                
+                document.querySelectorAll('.template-btn[data-import]').forEach(btn => {
+                    btn.addEventListener('click', (e) => App.runTemplateImport(e.target.dataset.import));
+                });
+                
+                document.getElementById('cockpitList').addEventListener('click', (e) => {
+                    if(e.target.classList.contains('check-btn')) App.toggleDone(e.target.dataset.id);
+                });
 
-        function renderBacklog(){
-            const c=document.getElementById('backlogTree'); c.innerHTML='';
-            let ds=tasks.filter(t=>t.examId===activeExamId);
-            const ps=[...new Set(ds.map(t=>t.part))].sort(); const ms=[...new Set(ds.map(t=>t.mod))].sort();
-            const sp=document.getElementById('filterPart'); const sm=document.getElementById('filterMod');
-            const op=sp.value; const om=sm.value;
-            sp.innerHTML='<option value="all">Alle Bereiche</option>'; ps.forEach(p=>sp.innerHTML+=`<option value="${p}">${p}</option>`); sp.value=ps.includes(op)?op:'all';
-            sm.innerHTML='<option value="all">Alle Themen</option>'; ms.forEach(m=>sm.innerHTML+=`<option value="${m}">${m}</option>`); sm.value=ms.includes(om)?om:'all';
-            if(sp.value!=='all')ds=ds.filter(t=>t.part===sp.value); if(sm.value!=='all')ds=ds.filter(t=>t.mod===sm.value);
-            document.getElementById('emptyBacklog').style.display=ds.length===0?'block':'none';
+                document.getElementById('backlogTree').addEventListener('click', (e) => {
+                    const action = e.target.dataset.action;
+                    const id = e.target.dataset.id;
+                    
+                    // Patch 4: Safe click handler for summary buttons
+                    if (action === 'delPart') { e.preventDefault(); e.stopPropagation(); App.deletePart(e.target.dataset.part); return; }
+                    if (action === 'delMod') { e.preventDefault(); e.stopPropagation(); App.deleteMod(e.target.dataset.part, e.target.dataset.mod); return; }
 
-            const gr={}; ds.forEach(t=>{if(!gr[t.part])gr[t.part]={}; if(!gr[t.part][t.mod])gr[t.part][t.mod]=[]; gr[t.part][t.mod].push(t);});
+                    if (!action || !id) return;
+                    
+                    if (action === 'cycleStatus') App.cycleStatus(id);
+                    if (action === 'toCockpit') App.toCockpit(id);
+                    if (action === 'delTask') App.deleteTask(id);
+                    if (action === 'moveTask') App.moveTask(id);
+                });
+                
+                document.getElementById('backlogTree').addEventListener('change', (e) => {
+                    if(e.target.dataset.action === 'updateTask') {
+                        store.updateTask(e.target.dataset.id, e.target.dataset.field, e.target.value);
+                        if(e.target.dataset.field === 'imp') UI.renderBacklog();
+                    }
+                });
+                
+                document.getElementById('backlogTree').addEventListener('keydown', (e) => {
+                    if(e.key === 'Enter' && e.target.classList.contains('item-input')) {
+                        e.preventDefault();
+                        App.quickAdd(e.target.dataset.part, e.target.dataset.mod);
+                    }
+                });
 
-            for(const[p,mods]of Object.entries(gr)){
-                const d1=document.createElement('details'); d1.className='tree-level-1'; d1.open=true;
-                d1.innerHTML=`<summary style="justify-content:space-between"><span>${p}</span><button class="action-btn del" style="width:26px;height:26px" onclick="delPart('${p}',event)">×</button></summary>`;
-                for(const[m,ts]of Object.entries(mods)){
-                    const d2=document.createElement('details'); d2.className='tree-level-2'; d2.open=true;
-                    d2.innerHTML=`<summary style="justify-content:space-between"><span style="display:flex;gap:8px;align-items:center">📂 ${m} <small>(${ts.length})</small></span><button class="action-btn del" style="width:26px;height:26px" onclick="delMod('${p}','${m}',event)">×</button></summary>`;
-                    ts.forEach(t=>{
-                        const r=document.createElement('div'); r.className='tree-item';
-                        const pc=t.imp>=8?'red':(t.imp>=5?'orange':'green');
-                        r.innerHTML=`<div class="status-dot ${t.status}" onclick="cycleStatus('${t.id}')"></div><div><input id="input-${t.id}" class="item-input" value="${t.task}" onchange="updTask('${t.id}','task',this.value)" onkeydown="checkEnter(event,'${p}','${m}')"><div class="item-meta-row"><span class="prio-dot" style="background:${pc}"></span><select class="mini-select" onchange="updTask('${t.id}','imp',this.value)"><option value="10" ${t.imp==10?'selected':''}>10</option><option value="8" ${t.imp==8?'selected':''}>8</option><option value="5" ${t.imp==5?'selected':''}>5</option><option value="3" ${t.imp==3?'selected':''}>3</option></select><span style="opacity:0.3">|</span><input type="number" class="mini-input" value="${t.time||30}" onchange="updTask('${t.id}','time',this.value)"> min</div></div><div style="display:flex;gap:5px"><button class="action-btn" onclick="toCockpit('${t.id}')">🚀</button><button class="action-btn" onclick="moveTask('${t.id}')">📂</button><button class="action-btn del" onclick="delTask('${t.id}')">✕</button></div>`;
-                        d2.appendChild(r);
-                    });
-                    d1.appendChild(d2);
+                UI.renderAll();
+            },
+
+            switchTab(tabId) {
+                document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active'));
+                document.getElementById('tab-'+tabId).classList.add('active');
+                document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active'));
+                document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add('active');
+                if(tabId === 'plan') UI.renderPlan();
+                if(tabId === 'stats') App.renderDashboard();
+            },
+            
+            toggleDark() {
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+            },
+            
+            toggleMode() {
+                store.isUniMode = !store.isUniMode;
+                store.save();
+                UI.renderAll();
+            },
+
+            switchExam() { store.activeExamId = document.getElementById('examSelect').value; store.save(); UI.renderAll(); },
+            
+            addExam() {
+                const n = prompt("Name:"); if(!n) return;
+                const d = UI.parseDate(prompt("Datum (TT.MM.JJJJ):"));
+                const s = UI.parseDate(prompt("Start (TT.MM.JJJJ):"));
+                const id = 'ex-'+Date.now();
+                store.exams.push({id, name:n, date:d, start:s});
+                store.activeExamId = id;
+                store.save(); UI.renderAll();
+            },
+
+            editExam() {
+                const ex = store.activeExam;
+                const n = prompt("Name", ex.name); if(n) ex.name = n;
+                const d = prompt("Datum", UI.formatDate(ex.date)); if(d) ex.date = UI.parseDate(d);
+                const s = prompt("Start", UI.formatDate(ex.start)); if(s) ex.start = UI.parseDate(s);
+                store.save(); UI.renderAll();
+            },
+
+            addTask() {
+                const p = prompt("Bereich", document.getElementById('filterPart').value !== 'all' ? document.getElementById('filterPart').value : (store.isUniMode ? "Semester 1" : "Allgemein"));
+                if(!p) return;
+                const m = prompt("Thema", "Unsortiert");
+                if(!m) return;
+                store.addTask({id:'t-'+Date.now(), examId:store.activeExamId, part:p, mod:m, task:"Neue Aufgabe", status:'todo', imp:5, time:30, level:0, decayFlag:false, lastTouched:new Date().toISOString()});
+                UI.renderBacklog();
+            },
+
+            quickAdd(part, mod) {
+                const id = 't-'+Date.now();
+                store.addTask({id, examId:store.activeExamId, part, mod, task:"", status:'todo', imp:5, time:30, level:0, decayFlag:false, lastTouched:new Date().toISOString()});
+                UI.renderBacklog();
+                setTimeout(() => document.getElementById('input-'+id)?.focus(), 50);
+            },
+
+            deleteTask(id) {
+                if(confirm("Löschen?")) { store.deleteTask(id); UI.renderBacklog(); UI.renderCockpit(); }
+            },
+
+            // Patch 1: Filter on Current Exam only
+            deletePart(part) {
+                if(confirm(`Bereich ${part} löschen?`)) {
+                    const ids = store.currentTasks.filter(t => t.part === part).map(t => t.id);
+                    ids.forEach(id => store.deleteTask(id));
+                    UI.renderBacklog();
                 }
-                c.appendChild(d1);
+            },
+            
+            deleteMod(part, mod) {
+                if(confirm(`Ordner ${mod} löschen?`)) {
+                    const ids = store.currentTasks.filter(t => t.part === part && t.mod === mod).map(t => t.id);
+                    ids.forEach(id => store.deleteTask(id));
+                    UI.renderBacklog();
+                }
+            },
+
+            moveTask(id) {
+                const t = store.tasks.find(x => String(x.id) === String(id));
+                const p = prompt("Bereich", t.part); if(p) t.part = p;
+                const m = prompt("Thema", t.mod); if(m) t.mod = m;
+                store.save(); UI.renderBacklog();
+            },
+
+            toCockpit(id) {
+                // Patch: Robust string comparison for IDs
+                if(store.cockpit.some(c => String(c.originId) === String(id))) return App.toast("Schon geplant");
+                const t = store.tasks.find(x => String(x.id) === String(id));
+                store.cockpit.push({id:'cp-'+Date.now(), originId:id, examId:store.activeExamId, mod:t.mod, task:t.task, done:false});
+                // Patch 3: Last Touched Logic
+                t.status = 'doing';
+                t.lastTouched = new Date().toISOString();
+                store.save(); UI.renderAll();
+            },
+
+            toggleDone(cpId) {
+                // Patch: Robust string comparison for IDs
+                const c = store.cockpit.find(x => String(x.id) === String(cpId));
+                if(!c) return;
+                c.done = !c.done;
+                const t = store.tasks.find(x => String(x.id) === String(c.originId));
+                if(t) {
+                    if(c.done) { 
+                        t.status='done'; 
+                        t.lastReviewed=new Date().toISOString().split('T')[0]; 
+                        t.level=(t.level||0)+1; 
+                        t.decayFlag=false;
+                    } else { 
+                        t.status='doing';
+                        t.lastTouched = new Date().toISOString();
+                    }
+                }
+                store.save(); UI.renderAll();
+                if(c.done) setTimeout(() => { 
+                    store.cockpit = store.cockpit.filter(x => String(x.id) !== String(cpId)); 
+                    store.save(); 
+                    UI.renderCockpit(); 
+                }, 800);
+            },
+
+            cycleStatus(id) {
+                // Patch: Robust string comparison for IDs
+                const t = store.tasks.find(x => String(x.id) === String(id));
+                if(t.status === 'todo') { t.status='doing'; t.lastTouched = new Date().toISOString(); }
+                else if(t.status === 'doing') { t.status='done'; t.lastReviewed=new Date().toISOString().split('T')[0]; t.level=(t.level||0)+1; t.decayFlag=false; }
+                else t.status='todo';
+                store.save(); UI.renderBacklog();
+            },
+
+            autoFill() {
+                // Patch: Robust string comparison for IDs
+                const p = store.currentTasks.filter(t => t.status !== 'done' && !store.cockpit.some(c => String(c.originId) === String(t.id)));
+                if(p.length === 0) return App.toast("Nichts gefunden");
+                p.slice(0,3).forEach(t => {
+                    store.cockpit.push({id:'cp-'+Math.random(), originId:t.id, examId:store.activeExamId, mod:t.mod, task:t.task, done:false});
+                    t.status='doing';
+                    t.lastTouched = new Date().toISOString();
+                });
+                store.save(); UI.renderAll(); App.toast("Gefüllt");
+            },
+
+            runTemplateImport(type) {
+                if(!confirm("Importieren?")) return;
+                let data = [];
+                
+                if(type.startsWith('IHK:')) {
+                    const part = type.split(':')[1];
+                    data = CATALOGS.IHK.filter(i => i.part === part);
+                } else if (type === 'AP2Smart') {
+                    const job = prompt("Beruf? 1=FISI, 2=FIAE, 3=KAUF");
+                    if(!job) return;
+                    const target = (job==="1")?"FISI":(job==="2")?"FIAE":"KIDG";
+                    data = CATALOGS.IHK.filter(i => i.part === "AP2" && (!i.job || i.job === target));
+                } else if (type.startsWith('UNI:')) {
+                    data = CATALOGS.UNI[type.split(':')[1]];
+                }
+
+                if(data) App.importEngine(data, type.includes('UNI') ? 60 : 30);
+            },
+
+            importEngine(items, time) {
+                let count = 0;
+                items.forEach(i => {
+                    // Patch 2: Deduplication using normalized values
+                    const p = i.part || "Import";
+                    const m = i.mod || "Sonstiges";
+                    const t = i.task;
+                    
+                    if(!store.currentTasks.some(exist => exist.part === p && exist.mod === m && exist.task === t)) {
+                        // Patch: Ensure string ID generation
+                        store.addTask({id: 't-' + Date.now() + '-' + Math.random().toString(16).slice(2), examId:store.activeExamId, part:p, mod:m, task:t, status:'todo', imp:5, time, level:0, decayFlag:false, lastTouched: new Date().toISOString()});
+                        if(store.isUniMode && i.ects && !store.moduleSettings[m]) {
+                            store.moduleSettings[m] = {ects: i.ects, grade:''};
+                        }
+                        count++;
+                    }
+                });
+                store.save(); UI.renderAll(); 
+                document.getElementById('importModal').style.display='none';
+                App.toast(`${count} Importiert`);
+            },
+            
+            importFile(e) {
+                const f = e.target.files[0];
+                if(!f) return;
+                const r = new FileReader();
+                r.onload = (ev) => {
+                    try {
+                        const d = JSON.parse(ev.target.result);
+                        if(Array.isArray(d)) App.importEngine(d, 30);
+                    } catch(x) { alert("Fehler"); }
+                };
+                r.readAsText(f);
+            },
+
+            backup() {
+                // Versioned backup
+                const blob = new Blob([JSON.stringify({schemaVersion: 1, exams:store.exams, tasks:store.tasks, cockpit:store.cockpit, settings:store.moduleSettings, meta:{active:store.activeExamId, uni:store.isUniMode}})], {type:'application/json'});
+                const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'backup.json'; a.click();
+            },
+            
+            loadFile(e) {
+                const f = e.target.files[0]; if(!f) return;
+                const r = new FileReader();
+                r.onload = (ev) => {
+                    try {
+                        const d = JSON.parse(ev.target.result);
+                        store.exams=d.exams; store.tasks=d.tasks; store.cockpit=d.cockpit; store.moduleSettings=d.settings||{}; store.activeExamId=d.meta.active; store.isUniMode=d.meta.uni;
+                        store.save(); location.reload();
+                    } catch(x) { alert("Datei defekt"); }
+                };
+                r.readAsText(f);
+            },
+
+            reset() { if(confirm("Alles löschen?")) { localStorage.clear(); location.reload(); } },
+            toast(m) { const t = document.getElementById('toast'); t.innerText=m; t.className='show'; setTimeout(()=>t.className='', 2000); },
+
+            applyDecay() {
+                let changed = false;
+                store.tasks.forEach(t => {
+                    // Decay Done -> Doing
+                    if(t.status === 'done' && t.lastReviewed) {
+                        const diff = Math.floor((new Date() - new Date(t.lastReviewed)) / 864e5);
+                        
+                        // NEW TIERED LOGIC (3, 7, 14, 30 days)
+                        let limit = 3;
+                        const lvl = t.level || 0;
+                        if (lvl >= 4) limit = 30;
+                        else if (lvl === 3) limit = 14;
+                        else if (lvl === 2) limit = 7;
+                        
+                        if(diff > limit) { t.status = 'doing'; t.decayFlag = true; changed = true; }
+                    } 
+                    // Decay Doing -> Todo (Patch 3 logic applied)
+                    else if (t.status === 'doing' && t.lastTouched) {
+                         const diff = Math.floor((new Date() - new Date(t.lastTouched)) / 864e5);
+                         if (diff > 7) { t.status = 'todo'; t.decayFlag = true; changed = true; }
+                    }
+                });
+                if(changed) { store.save(); }
+            },
+
+            renderDashboard() {
+                const ds = store.currentTasks;
+                const tot = ds.length;
+                
+                document.getElementById('uniStats').style.display = store.isUniMode ? 'block' : 'none';
+                document.getElementById('statsDetails').style.display = store.isUniMode ? 'none' : 'block';
+
+                if(tot === 0) { document.getElementById('mainPercent').innerText="0%"; return; }
+                
+                const done = ds.filter(t => t.status === 'done').length;
+                const perc = Math.round((done/tot)*100);
+                document.getElementById('mainPieChart').style.background = `conic-gradient(var(--chart-done) 0deg ${Math.round(perc*3.6)}deg, var(--border) 0deg 360deg)`;
+                document.getElementById('mainPercent').innerText = perc + "%";
+
+                if (store.isUniMode) {
+                    const mods=[...new Set(ds.map(t=>t.mod))].sort(); let h=''; let sumG=0, sumE=0, totE=0;
+                    mods.forEach((m, index)=>{
+                        const s=store.moduleSettings[m]||{ects:5,grade:''}; const e=parseFloat(s.ects)||0; const g=parseFloat(s.grade);
+                        // FIX BUG 3: data-mod NOT in HTML string. Use index to link back.
+                        h+=`<tr><td>${Utils.escapeHtml(m)}</td><td><input type="number" value="${s.ects}" data-action="updMod" data-idx="${index}" data-field="ects"></td><td><input type="number" step="0.1" value="${s.grade}" placeholder="-" data-action="updMod" data-idx="${index}" data-field="grade"></td></tr>`;
+                        totE+=e; if(g>0){sumG+=g*e; sumE+=e;}
+                    });
+                    const table = document.getElementById('moduleTable');
+                    table.innerHTML=h;
+                    // FIX BUG 3: Set raw data-mod via DOM
+                    table.querySelectorAll('input[data-action="updMod"]').forEach(inp => {
+                        const i = inp.getAttribute('data-idx');
+                        if(mods[i]) inp.dataset.mod = mods[i];
+                    });
+
+                    document.getElementById('gpaValue').innerText=sumE>0?(sumG/sumE).toFixed(1):"-";
+                    document.getElementById('ectsBar').style.width=(totE>0?(sumE/totE)*100:0)+"%";
+                    document.getElementById('ectsCount').innerText=`${sumE} / ${totE}`; // Label updated
+                } else {
+                    const parts={}; ds.forEach(t=>{const p=t.part||'Sonstiges'; if(!parts[p])parts[p]={t:0,d:0}; parts[p].t++; if(t.status==='done')parts[p].d++;});
+                    let h=''; for(const[k,v]of Object.entries(parts)){const p=Math.round((v.d/v.t)*100); h+=`<div class="progress-row"><div class="progress-header"><span>${Utils.escapeHtml(k)}</span><span>${v.d}/${v.t}</span></div><div class="progress-track"><div class="progress-fill" style="width:${p}%"></div></div></div>`;}
+                    document.getElementById('statsDetails').innerHTML=h;
+                }
+                const map={}; ds.forEach(t=>{if(t.status!=='done'){const m=t.mod||'Sonstiges'; map[m]=(map[m]||0)+1;}});
+                const sort=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,3);
+                let ph=''; sort.forEach(([m,c])=>ph+=`<div class="stat-list-item"><span>${Utils.escapeHtml(m)}</span><span style="font-weight:bold;color:var(--danger)">${c} offen</span></div>`);
+                document.getElementById('problemZonesList').innerHTML=ph||"<div style='text-align:center;color:var(--success)'>Alles sauber!</div>";
+            },
+
+            updMod(m, f, v) {
+                if(!store.moduleSettings[m]) store.moduleSettings[m]={ects:5, grade:''};
+                store.moduleSettings[m][f] = v;
+                store.save();
+                App.renderDashboard();
             }
-        }
-        
-        function checkEnter(e,p,m){ if(e.key==='Enter'){ e.preventDefault(); const nid='t-'+Date.now(); tasks.push({id:nid,examId:activeExamId,part:p,mod:m,task:"",status:'todo',imp:5,time:30,level:0}); save(); renderAll(); setTimeout(()=>{const el=document.getElementById('input-'+nid);if(el)el.focus();},50); }}
+        };
 
-        function addTask(){ const p=prompt("Bereich",document.getElementById('filterPart').value!=='all'?document.getElementById('filterPart').value:'Allgemein'); if(!p)return; const m=prompt("Thema",document.getElementById('filterMod').value!=='all'?document.getElementById('filterMod').value:'Unsortiert'); if(!m)return; tasks.push({id:'t-'+Date.now(),examId:activeExamId,part:p,mod:m,task:"Neu",status:'todo',imp:5,time:30,level:0}); save(); renderAll();}
-        function cycleStatus(id){ const t=tasks.find(x=>x.id===id); if(t){ if(t.status==='todo')t.status='doing'; else if(t.status==='doing'){t.status='done';t.lastReviewed=new Date().toISOString().split('T')[0];t.level=(t.level||0)+1;}else t.status='todo'; save(); renderAll();}}
-        function toCockpit(id){ if(cockpit.some(c=>c.originId===id))return toast("Schon geplant"); const t=tasks.find(x=>x.id===id); cockpit.push({id:'cp-'+Date.now(),originId:t.id,examId:activeExamId,mod:t.mod,task:t.task,done:false}); t.status='doing'; save(); renderAll(); toast("Geplant");}
-        function delTask(id){ if(confirm("Löschen?")){tasks=tasks.filter(t=>t.id!==id);cockpit=cockpit.filter(c=>c.originId!==id);save();renderAll();}}
-        function delPart(p,e){e.preventDefault();e.stopPropagation(); if(confirm("Bereich löschen?")){const ids=tasks.filter(t=>t.part===p).map(t=>t.id); tasks=tasks.filter(t=>t.part!==p); cockpit=cockpit.filter(c=>!ids.includes(c.originId)); save(); renderAll();}}
-        function delMod(p,m,e){e.preventDefault();e.stopPropagation(); if(confirm("Ordner löschen?")){const ids=tasks.filter(t=>t.part===p&&t.mod===m).map(t=>t.id); tasks=tasks.filter(t=>!(t.part===p&&t.mod===m)); cockpit=cockpit.filter(c=>!ids.includes(c.originId)); save(); renderAll();}}
-        function moveTask(id){const t=tasks.find(x=>x.id===id);const p=prompt("Bereich",t.part);if(p)t.part=p;const m=prompt("Thema",t.mod);if(m)t.mod=m;save();renderBacklog();}
-        function updTask(id,f,v){const t=tasks.find(x=>x.id===id);if(t){t[f]=v;save();if(f==='imp')renderBacklog();}}
-
-        function updateGanttView(){ ganttView=document.getElementById('ganttZoomSelect').value; renderPlan(); }
-        function renderPlan(){
-            const l=document.getElementById('agendaList'); const c=document.getElementById('ganttChart'); l.innerHTML=''; c.innerHTML='';
-            const ve=exams.filter(e=>e.date).sort((a,b)=>new Date(a.date)-new Date(b.date));
-            if(ve.length===0){c.innerHTML='<div style="text-align:center;padding:20px;color:#999">Keine Daten</div>';return;}
-            ve.forEach(e=>{
-                const bs=e.id===activeExamId?'border-left:4px solid var(--primary)':'border-left:4px solid #999';
-                l.innerHTML+=`<div class="agenda-item" style="${bs}"><span><strong>${e.name}</strong><br><small>${isoToDisplay(e.start||'')} -> ${isoToDisplay(e.date)}</small></span><span>${getDaysDiff(e.date)} T</span></div>`;
-            });
-            const today=new Date(); let vs,ve_d;
-            if(ganttView==='all'){ 
-                let min=new Date(ve[0].start||today).getTime(), max=new Date(ve[ve.length-1].date).getTime();
-                vs=new Date(min); vs.setDate(vs.getDate()-7); ve_d=new Date(max); ve_d.setDate(ve_d.getDate()+7);
-            } else { vs=new Date(today); vs.setDate(vs.getDate()-3); ve_d=new Date(today); ve_d.setDate(ve_d.getDate()+parseInt(ganttView));}
-            const tot=ve_d-vs;
-            if(today>=vs&&today<=ve_d) c.innerHTML+=`<div class="today-line" style="left:${((today-vs)/tot)*100}%"></div>`;
-            ve.forEach(e=>{
-                const s=new Date(e.start||today), d=new Date(e.date); if(d<vs||s>ve_d)return;
-                const L=Math.max(0,((s-vs)/tot)*100), W=Math.min(100,((d-vs)/tot)*100)-L;
-                const col=e.id===activeExamId?'var(--primary)':'#94a3b8'; const op=e.id===activeExamId?'1':'0.5';
-                c.innerHTML+=`<div class="bar-row"><div class="bar" style="left:${L}%;width:${W}%;background:${col};opacity:${op}">${e.name}</div></div>`;
-            });
-        }
-
-        function toggleUniMode(){ isUniMode=!isUniMode; save(); updateModeUI(); renderAll(); toast(isUniMode?"Uni":"IHK");}
-        function updateModeUI(){ document.getElementById('modeBadge').innerText=isUniMode?"Student":"Azubi"; document.getElementById('footerMode').innerText=isUniMode?"Uni":"IHK"; document.getElementById('ihkTemplates').style.display=isUniMode?'none':'block'; document.getElementById('uniTemplates').style.display=isUniMode?'block':'none';}
-        function openImport(){ document.getElementById('importModal').style.display='flex'; }
-        function closeImport(){ document.getElementById('importModal').style.display='none'; }
-        
-        function showTab(id){ document.querySelectorAll('.tab-content').forEach(e=>e.classList.remove('active')); document.getElementById('tab-'+id).classList.add('active'); document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active')); document.getElementById('btn-'+id).classList.add('active'); if(id==='plan')renderPlan();}
-        function toggleDark(){ document.body.classList.toggle('dark-mode'); localStorage.setItem('theme',document.body.classList.contains('dark-mode')?'dark':'light'); }
-        function toast(m){ const t=document.getElementById('toast');t.innerText=m;t.className='show';setTimeout(()=>t.className='',2000); }
-        function downloadBackup(){ const d={exams,tasks,cockpit,activeExamId,isUniMode,moduleSettings}; const b=new Blob([JSON.stringify(d)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='backup.json'; a.click(); }
-        function restoreBackup(){ document.getElementById('fileInput').click(); }
-        function loadFile(e){ const fr=new FileReader(); fr.onload=(ev)=>{try{const d=JSON.parse(ev.target.result); exams=d.exams||[]; tasks=d.tasks||[]; cockpit=d.cockpit||[]; activeExamId=d.activeExamId; isUniMode=d.isUniMode; moduleSettings=d.moduleSettings||{}; save(); location.reload();}catch(x){alert("Fehler")}}; fr.readAsText(e.target.files[0]); }
-        function hardReset(){ if(confirm("Alles löschen?")){localStorage.clear(); location.reload();} }
+        window.onload = App.init;
     </script>
 </body>
 </html>

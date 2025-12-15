@@ -122,7 +122,8 @@
         @keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .template-btn { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid var(--border); border-radius: 8px; text-align: left; background: var(--bg); cursor: pointer; color: var(--text); font-weight: bold; transition: background 0.2s; }
         .template-btn:hover { background: var(--hover-bg); }
-        .file-upload-label { display: block; width: 100%; padding: 15px; border: 2px dashed var(--primary); border-radius: 8px; text-align: center; color: var(--primary); cursor: pointer; margin-bottom: 10px; font-weight: bold; background: var(--hover-bg); }
+        /* Add box-sizing to fix overflow */
+        .file-upload-label { display: block; width: 100%; padding: 15px; border: 2px dashed var(--primary); border-radius: 8px; text-align: center; color: var(--primary); cursor: pointer; margin-bottom: 10px; font-weight: bold; background: var(--hover-bg); box-sizing: border-box; }
         .file-upload-label:hover { background: #e0f2fe; }
         
         .guide-box { margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
@@ -209,7 +210,7 @@
                     <h4 style="margin-top:10px;">🎓 Modul-Noten</h4>
                     <table class="module-table" id="moduleTable"></table>
                 </div>
-                <div class="progress-section" id="statsDetails"></div>
+                <div class="progress-section" id="statsDetails" style="width:100%"></div>
             </div>
             <div class="stat-card" style="align-items: flex-start;">
                 <h3 style="margin-top:0;">⚠️ Fokus-Bereiche</h3>
@@ -264,14 +265,14 @@
         <div class="modal-card">
             <h3 style="margin-top:0">Katalog importieren</h3>
             <div id="ihkTemplates">
-                <button class="template-btn" style="border-left:5px solid #0052cc" data-import="IHK:AP1">🟦 AP1 Komplett (Basis)</button>
-                <button class="template-btn" style="border-left:5px solid #eab308" data-import="IHK:WISO">⚖️ WiSo Komplett</button>
-                <button class="template-btn" style="border-left:5px solid #a855f7" data-import="AP2Smart">🟪 AP2 Spezial (FISI / KIDG)</button>
+                <button class="template-btn" style="border-left:5px solid #0052cc" data-import="IHK:AP1">AP1 Komplett (Basis)</button>
+                <button class="template-btn" style="border-left:5px solid #eab308" data-import="IHK:WISO">WiSo Komplett</button>
+                <button class="template-btn" style="border-left:5px solid #a855f7" data-import="AP2Smart">AP2 Spezial (FISI / KIDG)</button>
             </div>
             <div id="uniTemplates" style="display:none;">
-                <button class="template-btn" style="border-left:5px solid #10b981" data-import="UNI:INF_HWR">💻 Informatik (HWR)</button>
-                <button class="template-btn" style="border-left:5px solid #f59e0b" data-import="UNI:WI_HWR">📊 W-Info (HWR)</button>
-                <button class="template-btn" style="border-left:5px solid #3b82f6" data-import="UNI:WI_WILDAU">🏭 W-Info (Wildau)</button>
+                <button class="template-btn" style="border-left:5px solid #10b981" data-import="UNI:INF_HWR">Informatik (HWR)</button>
+                <button class="template-btn" style="border-left:5px solid #f59e0b" data-import="UNI:WI_HWR">W-Info (HWR)</button>
+                <button class="template-btn" style="border-left:5px solid #3b82f6" data-import="UNI:WI_WILDAU">W-Info (Wildau)</button>
             </div>
             <label class="file-upload-label">
                 📂 Eigene JSON Datei
@@ -957,9 +958,64 @@
                     document.getElementById('ectsBar').style.width=(totE>0?(sumE/totE)*100:0)+"%";
                     document.getElementById('ectsCount').innerText=`${sumE} / ${totE}`; // Label updated
                 } else {
-                    const parts={}; ds.forEach(t=>{const p=t.part||'Sonstiges'; if(!parts[p])parts[p]={t:0,d:0}; parts[p].t++; if(t.status==='done')parts[p].d++;});
-                    let h=''; for(const[k,v]of Object.entries(parts)){const p=Math.round((v.d/v.t)*100); h+=`<div class="progress-row"><div class="progress-header"><span>${Utils.escapeHtml(k)}</span><span>${v.d}/${v.t}</span></div><div class="progress-track"><div class="progress-fill" style="width:${p}%"></div></div></div>`;}
-                    document.getElementById('statsDetails').innerHTML=h;
+                    // AZUBI / IHK DASHBOARD LOGIC (NEW)
+                    const partsMap = {};
+                    let countDoing = 0;
+
+                    ds.forEach(t => {
+                        if (t.status === 'doing') countDoing++;
+                        const p = t.part || 'Sonstiges';
+                        if (!partsMap[p]) partsMap[p] = { name: p, total: 0, done: 0 };
+                        partsMap[p].total++;
+                        if (t.status === 'done') partsMap[p].done++;
+                    });
+
+                    // Sort: Lowest % first (focus needed), then most open tasks
+                    const sortedParts = Object.values(partsMap).map(p => {
+                        p.pct = p.total > 0 ? Math.round((p.done / p.total) * 100) : 0;
+                        p.open = p.total - p.done;
+                        return p;
+                    }).sort((a, b) => {
+                        if (a.pct !== b.pct) return a.pct - b.pct;
+                        return b.open - a.open;
+                    });
+
+                    const totalOpen = tot - done;
+                    let h = `
+                    <div style="display:flex; gap:8px; margin-bottom:20px; justify-content:space-between; text-align:center;">
+                        <div style="background:var(--hover-bg); padding:8px; border-radius:8px; flex:1;">
+                            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">Erledigt</div>
+                            <div style="font-weight:800; font-size:1.1rem; color:var(--success)">${done} <span style="font-size:0.8rem; color:var(--text-muted); font-weight:normal">/ ${tot}</span></div>
+                        </div>
+                        <div style="background:var(--hover-bg); padding:8px; border-radius:8px; flex:1;">
+                            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">Offen</div>
+                            <div style="font-weight:800; font-size:1.1rem; color:var(--danger)">${totalOpen}</div>
+                        </div>
+                        <div style="background:var(--hover-bg); padding:8px; border-radius:8px; flex:1;">
+                            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">Doing</div>
+                            <div style="font-weight:800; font-size:1.1rem; color:var(--warning-text)">${countDoing}</div>
+                        </div>
+                    </div>
+                    <h4 style="margin-top:0; margin-bottom:12px; color:var(--text-muted); font-size:0.85rem; text-transform:uppercase; letter-spacing:1px;">Bereiche (Priorität)</h4>
+                    `;
+
+                    sortedParts.forEach(p => {
+                        const barColor = p.pct === 100 ? 'var(--success)' : (p.pct < 50 ? '#ef4444' : 'var(--primary)');
+                        h += `
+                        <div class="progress-row">
+                            <div class="progress-header" style="align-items:center;">
+                                <span>${Utils.escapeHtml(p.name)}</span>
+                                <span style="font-size:0.8rem; font-weight:bold; color:var(--text-muted)">${p.done}/${p.total} (${p.pct}%)</span>
+                            </div>
+                            <div class="progress-track">
+                                <div class="progress-fill" style="width:${p.pct}%; background:${barColor}"></div>
+                            </div>
+                        </div>`;
+                    });
+
+                    if (sortedParts.length === 0) h += '<div style="color:var(--text-muted); text-align:center; padding:10px;">Keine Aufgaben im Katalog.</div>';
+                    
+                    document.getElementById('statsDetails').innerHTML = h;
                 }
                 const map={}; ds.forEach(t=>{if(t.status!=='done'){const m=t.mod||'Sonstiges'; map[m]=(map[m]||0)+1;}});
                 const sort=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,3);

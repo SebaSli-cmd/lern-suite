@@ -42,6 +42,9 @@
         .btn-icon.sm { width: 32px; font-size: 0.9rem; }
         #examSelect { flex-grow: 1; padding: 0 10px; border-radius: 6px; border: none; font-weight: bold; color: #333; height: 36px; cursor: pointer; }
 
+        /* NEU: Streak Badge */
+        .streak-badge { background: rgba(255,255,255,0.2); color: #fbbf24; padding: 0 12px; height: 36px; border-radius: 8px; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 1rem; border: 1px solid rgba(255,255,255,0.3); text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+
         .tabs { display: flex; gap: 5px; overflow-x: auto; margin-top: 15px; padding-bottom: 2px; }
         .tab-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; white-space: nowrap; cursor: pointer; transition: all 0.2s; }
         .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.1); transform: translateY(-1px); }
@@ -97,7 +100,7 @@
         .item-input:focus { border-bottom: 1px solid var(--primary); }
         .item-meta-row { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--text-muted); }
         .mini-select { border: none; background: transparent; font-size: inherit; color: inherit; font-weight: 600; cursor: pointer; padding: 0; }
-        .mini-input { border: none; background: transparent; font-size: inherit; color: inherit; width: 30px; text-align: center; border-bottom: 1px dashed var(--border); }
+        .mini-input { border: none; background: transparent; font-size: inherit; color: inherit; width: 50px; text-align: center; border-bottom: 1px dashed var(--border); box-sizing: border-box; }
         .prio-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:2px; flex-shrink:0; }
         .action-btn { width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 6px; background: white; color: var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
         .action-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--hover-bg); }
@@ -145,6 +148,7 @@
                 <p id="modeBadge">Azubi Edition</p>
             </div>
             <div class="header-controls-wrapper">
+                <div class="streak-badge" id="streakDisplay" title="Tage in Folge gelernt">🔥 0</div>
                 <button class="btn-icon" id="btnToggleDark">🌙</button>
                 <div style="background:rgba(255,255,255,0.15); padding:4px; border-radius:8px; display:flex; gap:4px; flex-grow:1;">
                     <select id="examSelect"></select>
@@ -235,15 +239,66 @@
     <div id="tab-info" class="tab-content">
         <div class="phase-display" style="display:block;">
             <h3>📖 Handbuch & Guide</h3>
+            
             <div class="guide-box">
-                <div class="guide-title">1. Der Start</div>
-                <div class="guide-text">Lege zuerst oben rechts über das <strong>+</strong> eine Prüfung an und setze das Datum.</div>
+                <div class="guide-title">1. Der Start: Prüfung anlegen</div>
+                <div class="guide-text">
+                    Klicke oben rechts auf das <strong>+</strong>, um eine neue Prüfung zu erstellen (z. B. "Abschlussprüfung Sommer 2025"). 
+                    Gib das Datum an – der Planer berechnet automatisch die verbleibenden Tage. Du kannst oben zwischen verschiedenen Prüfungen wechseln.
+                </div>
             </div>
+
             <div class="guide-box">
-                <div class="guide-title">2. Katalog & Import</div>
-                <div class="guide-text">Nutze "Daten importieren", um IHK- oder Uni-Module zu laden. Drücke <strong>ENTER</strong> in einer Zeile, um schnell neue Aufgaben hinzuzufügen.</div>
+                <div class="guide-title">2. Katalog füllen (Import & Manuell)</div>
+                <div class="guide-text">
+                    Gehe in den Tab <strong>Katalog</strong>. Ist er leer, nutze den Button "Daten importieren" unten oder im Footer "Laden".
+                    <ul>
+                        <li><strong>IHK-Modus:</strong> Wähle Vorlagen wie "AP1", "WISO" oder "AP2 (FISI/Kaufleute)".</li>
+                        <li><strong>Uni-Modus:</strong> Wähle Vorlagen für HWR oder Wildau.</li>
+                        <li><strong>Manuell:</strong> Drücke <strong>+ Neu</strong> oder nutze die <strong>ENTER</strong>-Taste in einem Eingabefeld, um blitzschnell neue Unteraufgaben anzulegen.</li>
+                    </ul>
+                </div>
             </div>
-            <div class="guide-tip">💡 Tipp: Importierte Zeilen dienen oft als "Anker". Breche sie mit ENTER in kleine Aufgaben auf.</div>
+
+            <div class="guide-box">
+                <div class="guide-title">3. Planen: Vom Katalog ins Cockpit</div>
+                <div class="guide-text">
+                    Der <strong>Katalog</strong> ist dein "Backlog" (alles, was theoretisch ansteht).
+                    <ul>
+                        <li>Klicke auf 🚀 bei einer Aufgabe im Katalog, um sie ins <strong>Cockpit</strong> zu verschieben. Das Cockpit ist dein Fokus für den aktuellen Tag oder die Woche.</li>
+                        <li>Nutze den Button <strong>🪄 Smart Auto-Fill</strong> im Cockpit, wenn du nicht weißt, was du tun sollst. Der Planer zieht sich dann automatisch offene Aufgaben.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="guide-box">
+                <div class="guide-title">4. Lernen & Status-Logik</div>
+                <div class="guide-text">
+                    Klicke auf den Status-Punkt vor einer Aufgabe oder den Haken im Cockpit, um den Status zu ändern:
+                    <ul>
+                        <li>🔴 <strong>Todo:</strong> Aufgabe ist offen.</li>
+                        <li>🟠 <strong>Doing:</strong> In Bearbeitung / Gelernt, aber noch nicht sicher.</li>
+                        <li>🟢 <strong>Done:</strong> Sicher beherrscht.</li>
+                    </ul>
+                    <em>Wichtig (Decay-Logik):</em> Wissen verfällt! Erledigte Aufgaben (Done) fallen nach einer gewissen Zeit (3, 7, 14 oder 30 Tage, je nach Level) automatisch zurück auf "Doing", damit du sie wiederholst.
+                </div>
+            </div>
+
+            <div class="guide-box">
+                <div class="guide-title">5. Statistik & Analyse</div>
+                <div class="guide-text">
+                    Im Tab <strong>Stats</strong> siehst du die nackten Zahlen.
+                    <ul>
+                        <li><strong>Kreisdiagramm:</strong> Dein Gesamtfortschritt für die ausgewählte Prüfung.</li>
+                        <li><strong>Bereiche:</strong> Eine detaillierte Auflistung nach Themengebieten. Sortiert nach Dringlichkeit (niedrigster %-Wert zuerst).</li>
+                        <li><strong>Uni-Modus:</strong> Hier kannst du zusätzlich ECTS und Noten eintragen, um deinen aktuellen Schnitt (GPA) zu sehen.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="guide-tip">
+                💡 <strong>Pro-Tipp:</strong> Nutze regelmäßig den Button <strong>💾 Backup</strong> im Footer, um deinen kompletten Lernstand als Datei auf deinem Gerät zu sichern.
+            </div>
         </div>
     </div>
 
@@ -288,15 +343,201 @@
         /* --- 1. DATA CATALOGS --- */
         const CATALOGS = {
             IHK: [
-              {"part": "AP1", "mod": "Projektmanagement", "task": "Merkmale eines Projektes"}, {"part": "AP1", "mod": "Projektmanagement", "task": "Projektplanung"}, {"part": "AP1", "mod": "IT-Systeme", "task": "Hardware Komponenten"},
-              {"part": "WISO", "mod": "Recht", "task": "Arbeitsvertrag"}, {"part": "WISO", "mod": "Sozial", "task": "Versicherungen"},
-              {"part": "AP2", "mod": "Netzwerke", "task": "IPv4 Subnetting", "job": "FISI"}, {"part": "AP2", "mod": "Server", "task": "Virtualisierung", "job": "FISI"},
-              {"part": "AP2", "mod": "Prozesse", "task": "BPMN", "job": "KIDG"}, {"part": "AP2", "mod": "Rechnungswesen", "task": "KLR", "job": "KIDG"}
+                // --- AP1: Projektmanagement & Grundlagen ---
+                {"part": "AP1", "mod": "Projektmanagement", "task": "Merkmale eines Projektes"},
+                {"part": "AP1", "mod": "Projektmanagement", "task": "Projektplanung (Strukturplan, Netzplan, Gantt)"},
+                {"part": "AP1", "mod": "Projektmanagement", "task": "Kritischer Pfad & Pufferzeiten"},
+                {"part": "AP1", "mod": "Projektmanagement", "task": "SMART-Prinzip & Meilensteine"},
+                {"part": "AP1", "mod": "Projektmanagement", "task": "Projektphasen (Wasserfall / SCRUM)"},
+                {"part": "AP1", "mod": "Projektmanagement", "task": "Teambildung & Feedback-Kultur"},
+                {"part": "AP1", "mod": "Wirtschaftlichkeit", "task": "Machbarkeitsanalyse & Budgetierung"},
+                {"part": "AP1", "mod": "Wirtschaftlichkeit", "task": "Vor- und Nachkalkulation"},
+                {"part": "AP1", "mod": "Wirtschaftlichkeit", "task": "Risikoanalyse & Stakeholder-Analyse"},
+                {"part": "AP1", "mod": "Service & Support", "task": "Kundenkommunikation & Fehlermanagement"},
+                {"part": "AP1", "mod": "Service & Support", "task": "Ticketsysteme & Eskalationsstufen"},
+                {"part": "AP1", "mod": "Service & Support", "task": "First/Second/Third-Level-Support"},
+                
+                // --- AP1: Marktanalyse & Kundenberatung ---
+                {"part": "AP1", "mod": "Kundenberatung", "task": "Marktformen (Monopol, Oligopol, Polypol)"},
+                {"part": "AP1", "mod": "Kundenberatung", "task": "Zielgruppenanalyse & Bedarfsermittlung"},
+                {"part": "AP1", "mod": "Kundenberatung", "task": "Nutzwertanalyse & Angebotsvergleich"},
+                {"part": "AP1", "mod": "Kundenberatung", "task": "Kommunikationsmodelle (4-Ohren, Sender-Empfänger)"},
+                {"part": "AP1", "mod": "Kundenberatung", "task": "Präsentationstechniken & Medienkompetenz"},
+                
+                // --- AP1: IT-Systeme & Technik ---
+                {"part": "AP1", "mod": "IT-Systeme", "task": "Hardware-Komponenten (CPU, RAM, SSD)"},
+                {"part": "AP1", "mod": "IT-Systeme", "task": "Schnittstellen & Peripherie"},
+                {"part": "AP1", "mod": "IT-Systeme", "task": "Betriebssysteme & Virtualisierung"},
+                {"part": "AP1", "mod": "IT-Systeme", "task": "Cloud-Modelle (SaaS, PaaS, IaaS)"},
+                {"part": "AP1", "mod": "IT-Systeme", "task": "Netzwerk-Grundlagen (OSI, IP, DNS)"},
+                {"part": "AP1", "mod": "IT-Systeme", "task": "Client-Server vs. Peer-to-Peer"},
+                {"part": "AP1", "mod": "IT-Systeme", "task": "Ergonomie & Barrierefreiheit"},
+                {"part": "AP1", "mod": "IT-Systeme", "task": "Green IT & Energieeffizienz"},
+                {"part": "AP1", "mod": "Beschaffung", "task": "Kauf, Leasing, Finanzierung"},
+                {"part": "AP1", "mod": "Beschaffung", "task": "Lizenzmodelle (Open Source vs. Proprietär)"},
+
+                // --- AP1: Entwicklung & Qualität ---
+                {"part": "AP1", "mod": "Entwicklung", "task": "Lastenheft vs. Pflichtenheft"},
+                {"part": "AP1", "mod": "Entwicklung", "task": "Installation & Konfiguration (OS, Software)"},
+                {"part": "AP1", "mod": "Entwicklung", "task": "Programmier-Grundlagen (Variablen, Schleifen)"},
+                {"part": "AP1", "mod": "Entwicklung", "task": "Objektorientierung (Klasse, Objekt, Vererbung)"},
+                {"part": "AP1", "mod": "Entwicklung", "task": "UML-Diagramme (Use Case, Aktivität)"},
+                {"part": "AP1", "mod": "Entwicklung", "task": "Datenbanken (ER-Modell, SQL-Basics)"},
+                {"part": "AP1", "mod": "Entwicklung", "task": "Testverfahren (Blackbox, Whitebox)"},
+                {"part": "AP1", "mod": "Entwicklung", "task": "Qualitätssicherung (PDCA, Normen)"},
+
+                // --- AP1: Sicherheit & Datenschutz ---
+                {"part": "AP1", "mod": "Security", "task": "Schutzziele (Vertraulichkeit, Integrität, Verfügbarkeit)"},
+                {"part": "AP1", "mod": "Security", "task": "Datensicherung (Backup-Strategien)"},
+                {"part": "AP1", "mod": "Security", "task": "Verschlüsselung (Symmetrisch/Asymmetrisch)"},
+                {"part": "AP1", "mod": "Security", "task": "Bedrohungen (Phishing, Malware, Ransomware)"},
+                {"part": "AP1", "mod": "Datenschutz", "task": "DSGVO Grundlagen & TOMs"},
+                {"part": "AP1", "mod": "Datenschutz", "task": "Rechte der Betroffenen"},
+
+                // --- WISO ---
+                {"part": "WISO", "mod": "Ausbildung", "task": "Rechte & Pflichten Azubi/Ausbilder"},
+                {"part": "WISO", "mod": "Ausbildung", "task": "Ausbildungsvertrag & Probezeit"},
+                {"part": "WISO", "mod": "Ausbildung", "task": "Duales System & Lernorte"},
+                {"part": "WISO", "mod": "Arbeitsrecht", "task": "Kündigungsschutz & Arbeitszeitgesetz"},
+                {"part": "WISO", "mod": "Arbeitsrecht", "task": "Jugendarbeitsschutz & Mutterschutz"},
+                {"part": "WISO", "mod": "Mitbestimmung", "task": "Betriebsrat & JAV"},
+                {"part": "WISO", "mod": "Tarifrecht", "task": "Tarifautonomie & Arbeitskampf"},
+                {"part": "WISO", "mod": "Sozialkunde", "task": "5 Säulen der Sozialversicherung"},
+                {"part": "WISO", "mod": "Sozialkunde", "task": "Lohnabrechnung (Brutto/Netto)"},
+                {"part": "WISO", "mod": "Wirtschaft", "task": "Rechtsformen (GmbH, AG, KG, OHG)"},
+                {"part": "WISO", "mod": "Wirtschaft", "task": "Unternehmensstrukturen (Aufbau-/Ablauforganisation)"},
+                {"part": "WISO", "mod": "Wirtschaft", "task": "Marktformen & Preisbildung"},
+                {"part": "WISO", "mod": "Vertragsrecht", "task": "Kaufvertrag & Mängelgewährleistung"},
+
+                // --- AP2: Allgemein ---
+                {"part": "AP2", "mod": "Recht", "task": "BGB, HGB, UWG, AGB"},
+                {"part": "AP2", "mod": "Recht", "task": "Compliance & Datenschutzmanagement"},
+                {"part": "AP2", "mod": "Präsentation", "task": "Visualisierung & Zielgruppenansprache"},
+                {"part": "AP2", "mod": "Entwicklung", "task": "Debugging & Testing (Unit, Integration)"},
+                {"part": "AP2", "mod": "Entwicklung", "task": "Versionsverwaltung (Git)"},
+                {"part": "AP2", "mod": "Datenbanken", "task": "SQL (JOINs, Aggregation, Normalisierung)"},
+                {"part": "AP2", "mod": "Datenbanken", "task": "Datentypen & Datenqualität"},
+
+                // --- AP2: Kaufleute (KDIG) ---
+                {"part": "AP2", "mod": "Verträge", "task": "Vertragsarten (Werk-, Dienst-, Mietvertrag)", "job": "KIDG"},
+                {"part": "AP2", "mod": "Verträge", "task": "SLA & Leistungsbeschreibung", "job": "KIDG"},
+                {"part": "AP2", "mod": "Verträge", "task": "Digitales Vertragsmanagement", "job": "KIDG"},
+                {"part": "AP2", "mod": "Finanzierung", "task": "Kredite, Leasing, Factoring", "job": "KIDG"},
+                {"part": "AP2", "mod": "Beschaffung", "task": "Bedarfsermittlung & Lieferantenauswahl", "job": "KIDG"},
+                {"part": "AP2", "mod": "Beschaffung", "task": "Nutzwertanalyse & Angebotsvergleich", "job": "KIDG"},
+                {"part": "AP2", "mod": "Rechnungswesen", "task": "KLR (Kostenarten, -stellen, -träger)", "job": "KIDG"},
+                {"part": "AP2", "mod": "Rechnungswesen", "task": "Deckungsbeitragsrechnung & BEP", "job": "KIDG"},
+                {"part": "AP2", "mod": "Rechnungswesen", "task": "Kalkulation (Vorwärts/Rückwärts)", "job": "KIDG"},
+                {"part": "AP2", "mod": "Rechnungswesen", "task": "Kennzahlen (ROI, Cashflow, Liquidität)", "job": "KIDG"},
+                {"part": "AP2", "mod": "Prozesse", "task": "BPMN & EPK Modellierung", "job": "KIDG"},
+                {"part": "AP2", "mod": "Prozesse", "task": "Prozessanalyse & Optimierung", "job": "KIDG"},
+                {"part": "AP2", "mod": "Geschäftsmodelle", "task": "Business Model Canvas", "job": "KIDG"},
+                {"part": "AP2", "mod": "Geschäftsmodelle", "task": "Digitale Transformation & Disruption", "job": "KIDG"},
+                {"part": "AP2", "mod": "Marketing", "task": "Marketing-Mix & Customer Journey", "job": "KIDG"},
+
+                // --- AP2: FISI ---
+                {"part": "AP2", "mod": "Netzwerk", "task": "VLAN, Routing (OSPF, BGP), Switching", "job": "FISI"},
+                {"part": "AP2", "mod": "Netzwerk", "task": "VPN (IPSec, SSL) & Tunneling", "job": "FISI"},
+                {"part": "AP2", "mod": "Netzwerk", "task": "IPv6 (Adressierung, Subnetting)", "job": "FISI"},
+                {"part": "AP2", "mod": "Netzwerk", "task": "Firewall-Konzepte (SPI, Proxy, NGFW)", "job": "FISI"},
+                {"part": "AP2", "mod": "Netzwerk", "task": "Monitoring (SNMP) & Analyse (Wireshark)", "job": "FISI"},
+                {"part": "AP2", "mod": "Server", "task": "Active Directory & GPOs", "job": "FISI"},
+                {"part": "AP2", "mod": "Server", "task": "DNS, DHCP, Webserver", "job": "FISI"},
+                {"part": "AP2", "mod": "Server", "task": "Virtualisierung (Hyper-V, ESXi)", "job": "FISI"},
+                {"part": "AP2", "mod": "Storage", "task": "RAID-Level & Storage-Technologien (SAN/NAS)", "job": "FISI"},
+                {"part": "AP2", "mod": "Storage", "task": "Backup-Strategien (3-2-1, GVS)", "job": "FISI"},
+                {"part": "AP2", "mod": "IT-Betrieb", "task": "Patchmanagement & Lifecycle", "job": "FISI"},
+                {"part": "AP2", "mod": "IT-Betrieb", "task": "Ausfallsicherheit & Redundanz", "job": "FISI"},
+                {"part": "AP2", "mod": "Security", "task": "Zugriffskontrolle (ACL, RADIUS)", "job": "FISI"},
+                {"part": "AP2", "mod": "Security", "task": "IDS/IPS & Härtung von Systemen", "job": "FISI"}
             ],
             UNI: {
-                "WI_HWR": [{"part": "Sem 1", "mod": "BWL", "task": "Grundlagen", "ects": 5}, {"part": "Sem 1", "mod": "IT", "task": "Java", "ects": 5}],
-                "INF_HWR": [{"part": "Sem 1", "mod": "Mathe", "task": "Algebra", "ects": 7}, {"part": "Sem 1", "mod": "Prog", "task": "C", "ects": 5}],
-                "WI_WILDAU": [{"part": "Sem 1", "mod": "BWL", "task": "Grundlagen", "ects": 5}]
+                "WI_HWR": [
+                    {"part": "Sem 1", "mod": "ABWL", "task": "Betriebswirtschaftliche Grundlagen", "ects": 5},
+                    {"part": "Sem 1", "mod": "VWL", "task": "Volkswirtschaftliche Grundlagen", "ects": 5},
+                    {"part": "Sem 1", "mod": "W-Informatik", "task": "Einführung in die Wirtschaftsinformatik", "ects": 5},
+                    {"part": "Sem 1", "mod": "Programmierung", "task": "Grundlagen der Programmierung", "ects": 5},
+                    {"part": "Sem 1", "mod": "Mathe", "task": "Wirtschaftsmathematik", "ects": 5},
+                    {"part": "Sem 2", "mod": "Rechnungswesen", "task": "Bilanzierung & Steuern (Externes ReWe)", "ects": 5},
+                    {"part": "Sem 2", "mod": "Rechnungswesen", "task": "Kosten- und Leistungsrechnung (Internes ReWe)", "ects": 5},
+                    {"part": "Sem 2", "mod": "Programmierung", "task": "Algorithmen & Datenstrukturen", "ects": 5},
+                    {"part": "Sem 2", "mod": "Datenbanken", "task": "Datenbanken", "ects": 5},
+                    {"part": "Sem 2", "mod": "Recht", "task": "Wirtschaftsprivatrecht", "ects": 5},
+                    {"part": "Sem 3", "mod": "Prozesse", "task": "Unternehmensmodellierung (BPMN)", "ects": 5},
+                    {"part": "Sem 3", "mod": "Software Eng", "task": "Software Engineering Methoden", "ects": 5},
+                    {"part": "Sem 3", "mod": "BWL", "task": "Finanzierung & Investition", "ects": 5},
+                    {"part": "Sem 3", "mod": "Softskills", "task": "Englisch / Business English", "ects": 5},
+                    {"part": "Sem 3", "mod": "IT-Infrastruktur", "task": "Betriebssysteme & Rechnernetze", "ects": 5},
+                    {"part": "Sem 4", "mod": "Web Dev", "task": "Full-Stack Web Development", "ects": 5},
+                    {"part": "Sem 4", "mod": "Mobile Dev", "task": "App Entwicklung (Android/iOS)", "ects": 5},
+                    {"part": "Sem 4", "mod": "IT-Security", "task": "IT-Sicherheit & Datenschutz", "ects": 5},
+                    {"part": "Sem 4", "mod": "Management", "task": "Projektmanagement & Controlling", "ects": 5},
+                    {"part": "Sem 4", "mod": "Wahlpflicht", "task": "Wahlpflichtmodul I (z.B. Data Science)", "ects": 5},
+                    {"part": "Sem 5", "mod": "Projekt", "task": "Großes Software-Projekt", "ects": 10},
+                    {"part": "Sem 5", "mod": "Wahlpflicht", "task": "Wahlpflichtmodul II (z.B. Cloud Computing)", "ects": 5},
+                    {"part": "Sem 5", "mod": "Management", "task": "Digitale Transformation & Change Management", "ects": 5},
+                    {"part": "Sem 5", "mod": "Praxis", "task": "Praxistransfer / Theorie-Praxis", "ects": 5},
+                    {"part": "Sem 6", "mod": "Abschluss", "task": "Bachelorarbeit", "ects": 12},
+                    {"part": "Sem 6", "mod": "Abschluss", "task": "Kolloquium / Verteidigung", "ects": 3},
+                    {"part": "Sem 6", "mod": "Wahlpflicht", "task": "Wahlpflichtmodul III / Studium Generale", "ects": 5}
+                ],
+                "INF_HWR": [
+                    {"part": "Sem 1", "mod": "Mathe", "task": "Diskrete Mathematik & Logik", "ects": 6},
+                    {"part": "Sem 1", "mod": "Mathe", "task": "Analysis für Informatiker", "ects": 6},
+                    {"part": "Sem 1", "mod": "Programmierung", "task": "Programmierung 1 (C/C++)", "ects": 6},
+                    {"part": "Sem 1", "mod": "Technische Inf", "task": "Rechnerarchitektur & Digitaltechnik", "ects": 5},
+                    {"part": "Sem 1", "mod": "Theoretische Inf", "task": "Automaten & Formale Sprachen", "ects": 5},
+                    {"part": "Sem 2", "mod": "Programmierung", "task": "Programmierung 2 (OOP / Java)", "ects": 6},
+                    {"part": "Sem 2", "mod": "Algorithmen", "task": "Algorithmen & Datenstrukturen", "ects": 6},
+                    {"part": "Sem 2", "mod": "Technische Inf", "task": "Betriebssysteme & Netze", "ects": 6},
+                    {"part": "Sem 2", "mod": "Software Eng", "task": "Software Engineering Grundlagen", "ects": 5},
+                    {"part": "Sem 2", "mod": "Datenbanken", "task": "Datenbanksysteme 1", "ects": 5},
+                    {"part": "Sem 3", "mod": "Technische Inf", "task": "Embedded Systems / Mikrocontroller", "ects": 5},
+                    {"part": "Sem 3", "mod": "Datenbanken", "task": "Datenbanksysteme 2 (NoSQL, Big Data)", "ects": 5},
+                    {"part": "Sem 3", "mod": "Software Eng", "task": "Software Engineering Methoden", "ects": 5},
+                    {"part": "Sem 3", "mod": "Mathe", "task": "Statistik & Wahrscheinlichkeitsrechnung", "ects": 5},
+                    {"part": "Sem 3", "mod": "Softskills", "task": "Technisches Englisch", "ects": 5},
+                    {"part": "Sem 4", "mod": "Web Tech", "task": "Web-Technologien & Frontend", "ects": 5},
+                    {"part": "Sem 4", "mod": "IT-Security", "task": "IT-Sicherheit & Kryptographie", "ects": 5},
+                    {"part": "Sem 4", "mod": "Verteilte Sys", "task": "Verteilte Systeme & Cloud Computing", "ects": 5},
+                    {"part": "Sem 4", "mod": "Wahlpflicht", "task": "Wahlpflichtmodul I", "ects": 5},
+                    {"part": "Sem 4", "mod": "Recht", "task": "IT-Recht & Datenschutz", "ects": 5},
+                    {"part": "Sem 5", "mod": "Projekt", "task": "Softwareprojekt (Teamarbeit)", "ects": 10},
+                    {"part": "Sem 5", "mod": "Advanced IT", "task": "Künstliche Intelligenz / Data Science", "ects": 5},
+                    {"part": "Sem 5", "mod": "Wahlpflicht", "task": "Wahlpflichtmodul II", "ects": 5},
+                    {"part": "Sem 5", "mod": "Praxis", "task": "Praxistransfer Informatik", "ects": 5},
+                    {"part": "Sem 6", "mod": "Abschluss", "task": "Bachelorarbeit", "ects": 12},
+                    {"part": "Sem 6", "mod": "Abschluss", "task": "Kolloquium", "ects": 3},
+                    {"part": "Sem 6", "mod": "Wahlpflicht", "task": "Wahlpflichtmodul III", "ects": 5}
+                ],
+                "WI_WILDAU": [
+                    {"part": "Sem 1", "mod": "BWL", "task": "Grundlagen der BWL & Unternehmensführung", "ects": 5},
+                    {"part": "Sem 1", "mod": "Rechnungswesen", "task": "Buchführung & Jahresabschluss", "ects": 5},
+                    {"part": "Sem 1", "mod": "Informatik", "task": "Einführung in die Wirtschaftsinformatik", "ects": 5},
+                    {"part": "Sem 1", "mod": "Informatik", "task": "Grundlagen der Programmierung", "ects": 5},
+                    {"part": "Sem 1", "mod": "Mathe", "task": "Mathematik für Wirtschaftswissenschaftler", "ects": 5},
+                    {"part": "Sem 1", "mod": "Recht", "task": "Wirtschaftsrecht & IT-Recht", "ects": 5},
+                    {"part": "Sem 2", "mod": "Informatik", "task": "Objektorientierte Programmierung", "ects": 5},
+                    {"part": "Sem 2", "mod": "Informatik", "task": "Datenbanken & Informationssysteme", "ects": 5},
+                    {"part": "Sem 2", "mod": "BWL", "task": "Marketing & Vertrieb", "ects": 5},
+                    {"part": "Sem 2", "mod": "VWL", "task": "Mikro- & Makroökonomie", "ects": 5},
+                    {"part": "Sem 3", "mod": "Prozesse", "task": "Geschäftsprozessmanagement", "ects": 5},
+                    {"part": "Sem 3", "mod": "Informatik", "task": "Softwareentwicklung II", "ects": 5},
+                    {"part": "Sem 3", "mod": "Mathe", "task": "Statistik & Operations Research", "ects": 5},
+                    {"part": "Sem 3", "mod": "Datenbanken", "task": "Datenbanken II / Applied Databases", "ects": 5},
+                    {"part": "Sem 3", "mod": "Management", "task": "Projektmanagement & Organisation", "ects": 5},
+                    {"part": "Sem 3", "mod": "IT-Infrastruktur", "task": "Betriebssysteme & IT-Sicherheit", "ects": 5},
+                    {"part": "Sem 4", "mod": "Wahlpflicht", "task": "Wahlpflichtmodul (Spezialisierung)", "ects": 5},
+                    {"part": "Sem 4", "mod": "IT-Recht", "task": "IT-Recht & Compliance", "ects": 5},
+                    {"part": "Sem 4", "mod": "Informatik", "task": "Webtechnologien / E-Business", "ects": 5},
+                    {"part": "Sem 4", "mod": "Management", "task": "IT-Management & Controlling", "ects": 5},
+                    {"part": "Sem 4", "mod": "Systeme", "task": "Betriebliche Anwendungssysteme (ERP)", "ects": 5},
+                    {"part": "Sem 5", "mod": "Praxis", "task": "Praxisprojekt / Praxisphase", "ects": 15},
+                    {"part": "Sem 5", "mod": "Softskills", "task": "Praxistransfer & Kommunikation", "ects": 5},
+                    {"part": "Sem 6", "mod": "Abschluss", "task": "Bachelorarbeit", "ects": 12},
+                    {"part": "Sem 6", "mod": "Abschluss", "task": "Kolloquium", "ects": 3},
+                    {"part": "Sem 6", "mod": "Wahlpflicht", "task": "Vertiefungsmodul", "ects": 5}
+                ]
             }
         };
 
@@ -333,6 +574,7 @@
                 this.moduleSettings = JSON.parse(localStorage.getItem('moduleSettings')) || {};
                 this.activeExamId = localStorage.getItem('activeExamId');
                 this.isUniMode = localStorage.getItem('isUniMode') === 'true';
+                this.streak = JSON.parse(localStorage.getItem('streak')) || { count: 0, lastDate: null };
                 
                 // Init default exam if empty
                 if (this.exams.length === 0) {
@@ -376,6 +618,24 @@
             
             get activeExam() { return this.exams.find(e => e.id === this.activeExamId); }
             get currentTasks() { return this.tasks.filter(t => t.examId === this.activeExamId); }
+
+            bumpStreak() {
+                const today = new Date().toISOString().split('T')[0];
+                if (this.streak.lastDate === today) return; // Schon gezählt
+
+                const yesterday = new Date(); 
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yStr = yesterday.toISOString().split('T')[0];
+
+                if (this.streak.lastDate === yStr) {
+                    this.streak.count++;
+                } else {
+                    this.streak.count = 1; // Reset
+                }
+                this.streak.lastDate = today;
+                localStorage.setItem('streak', JSON.stringify(this.streak));
+                UI.renderHeader(); // Update View
+            }
         }
 
         const store = new Store();
@@ -426,6 +686,14 @@
                 document.getElementById('footerMode').innerText = store.isUniMode ? "Uni" : "IHK";
                 document.getElementById('ihkTemplates').style.display = store.isUniMode ? 'none' : 'block';
                 document.getElementById('uniTemplates').style.display = store.isUniMode ? 'block' : 'none';
+
+                const s = store.streak;
+                const today = new Date().toISOString().split('T')[0];
+                const y = new Date(); y.setDate(y.getDate()-1);
+                const yStr = y.toISOString().split('T')[0];
+                // Show 0 if broken (last date older than yesterday)
+                const show = (s.lastDate === today || s.lastDate === yStr) ? s.count : 0;
+                document.getElementById('streakDisplay').innerText = `🔥 ${show}`;
             },
 
             renderCockpit() {
@@ -789,6 +1057,7 @@
                         t.lastReviewed=new Date().toISOString().split('T')[0]; 
                         t.level=(t.level||0)+1; 
                         t.decayFlag=false;
+                        store.bumpStreak();
                     } else { 
                         t.status='doing';
                         t.lastTouched = new Date().toISOString();
@@ -806,7 +1075,13 @@
                 // Patch: Robust string comparison for IDs
                 const t = store.tasks.find(x => String(x.id) === String(id));
                 if(t.status === 'todo') { t.status='doing'; t.lastTouched = new Date().toISOString(); }
-                else if(t.status === 'doing') { t.status='done'; t.lastReviewed=new Date().toISOString().split('T')[0]; t.level=(t.level||0)+1; t.decayFlag=false; }
+                else if(t.status === 'doing') { 
+                    t.status='done'; 
+                    t.lastReviewed=new Date().toISOString().split('T')[0]; 
+                    t.level=(t.level||0)+1; 
+                    t.decayFlag=false; 
+                    store.bumpStreak();
+                }
                 else t.status='todo';
                 store.save(); UI.renderBacklog();
             },
